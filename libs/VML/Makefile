@@ -6,12 +6,13 @@
 #    By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/10/13 17:53:01 by gpinchon          #+#    #+#              #
-#    Updated: 2016/10/13 18:03:07 by gpinchon         ###   ########.fr        #
+#    Updated: 2016/10/13 18:19:28 by gpinchon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	= VML.a
 SRC		=	./src/mat_init.c		\
+			./src/mat_convert.c		\
 			./src/mat_operations.c	\
 			./src/vec_init.c		\
 			./src/vec_add.c			\
@@ -20,7 +21,7 @@ SRC		=	./src/mat_init.c		\
 			./src/vec_length.c		\
 			./src/vec_normalize.c	\
 			./src/vec_sub.c			\
-			./src/vecmat_convert.c	\
+			./src/vec_convert.c		\
 			./src/vecmat_mult.c
 
 OBJ		= $(SRC:.c=.o)
