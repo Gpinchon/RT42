@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/10/12 17:13:36 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/10/13 18:20:20 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/10/13 18:58:42 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,12 @@ t_vec3	vec3_sub_vec3(t_vec3 v, t_vec3 v1);
 t_vec4	vec4_sub_vec4(t_vec4 v, t_vec4 v1);
 t_vec2	vec3_to_vec2(t_vec3 v);
 t_vec3	vec2_to_vec3(t_vec2 v);
+t_vec3	vec3_interp(float (*interp_function)(float, float, float),
+	t_vec3 start, t_vec3 end, float percent);
+t_vec4	vec4_interp(float (*interp_function)(float, float, float),
+	t_vec4 start, t_vec4 end, float percent);
+float	lerp(float start, float end, float percent);
+float	cubic(float start, float end, float percent);
 
 t_mat4	mat4_identity(void);
 t_mat4	mat4_zero(void);
