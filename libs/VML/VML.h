@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/10/12 17:13:36 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/10/13 17:57:12 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/10/13 18:04:54 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,8 @@ typedef struct	s_mat3
 	float		m[9];
 }				t_mat3;
 
+t_vec3	new_vec3(float x, float y, float z);
+t_vec4	new_vec4(float x, float y, float z, float w);
 t_vec3	vec3_add_vec3(t_vec3 v, t_vec3 v1);
 t_vec4	vec4_add_vec4(t_vec4 v, t_vec4 v1);
 t_vec3	vec4_to_vec3(t_vec4 v);

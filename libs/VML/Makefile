@@ -6,13 +6,14 @@
 #    By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/10/13 17:53:01 by gpinchon          #+#    #+#              #
-#    Updated: 2016/10/13 17:55:38 by gpinchon         ###   ########.fr        #
+#    Updated: 2016/10/13 18:03:07 by gpinchon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	= VML.a
 SRC		=	./src/mat_init.c		\
 			./src/mat_operations.c	\
+			./src/vec_init.c		\
 			./src/vec_add.c			\
 			./src/vec_cross.c		\
 			./src/vec_dot.c			\
