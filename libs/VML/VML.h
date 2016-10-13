@@ -6,12 +6,14 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/10/12 17:13:36 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/10/13 16:40:55 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/10/13 17:57:12 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef VML_H
 # define VML_H
+
+#include <math.h>
 
 typedef struct	s_vec4
 {

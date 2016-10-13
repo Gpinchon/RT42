@@ -6,9 +6,11 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/10/12 19:38:09 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/10/13 16:36:18 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/10/13 17:56:53 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "../VML.h"
 
 static void	m4_inverse1(t_mat4 *t, const t_mat4 i)
 {
@@ -68,15 +70,15 @@ static void	m4_inverse2(t_mat4 *t, const t_mat4 i)
 
 t_mat4	mat4_inverse(const t_mat4 i)
 {
-	t_mat4 t;
-	GLfloat det;
-	int j;
+	t_mat4	t;
+	float	det;
+	int		j;
 
 	m4_inverse1(&t, i);
 	m4_inverse2(&t, i);
 	det = i.m[0] * t.m[0] + i.m[1] * t.m[4] + i.m[2] * t.m[8] + i.m[3] * t.m[12];
 	if (det == 0)
-		return m4_zero();
+		return (mat4_zero());
 	det = 1.0 / det;
 	j = 0;
 	while (j < 16)

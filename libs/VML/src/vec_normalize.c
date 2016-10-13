@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   normalize.c                                        :+:      :+:    :+:   */
+/*   vec_normalize.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/10/13 16:03:56 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/10/13 16:32:06 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/10/13 17:57:24 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ t_vec3	vec3_normalize(t_vec3 v)
 			v.z /= length
 		});
 	}
-	return (*v);
+	return (v);
 }
 
 t_vec4	vec4_normalize(t_vec4 v)
@@ -41,5 +41,5 @@ t_vec4	vec4_normalize(t_vec4 v)
 		});
 		
 	}
-	return (*v);
+	return (v);
 }
