@@ -1,22 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cross.c                                            :+:      :+:    :+:   */
+/*   length.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/10/12 19:04:06 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/10/12 19:25:57 by gpinchon         ###   ########.fr       */
+/*   Created: 2016/10/13 16:07:41 by gpinchon          #+#    #+#             */
+/*   Updated: 2016/10/13 16:31:13 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../VML.h"
+#include "../VML.h"
 
-t_vec3	vec3_cross_vec3(t_vec3 vector1, t_vec3 vector2)
+float	vec3_length(t_vec3 v)
 {
-	return ((t_vec3){
-		vector1.y * vector2.z - vector1.z * vector2.y,
-		vector1.z * vector2.x - vector1.x * vector2.z,
-		vector1.x * vector2.y - vector1.y * vector2.x
-	});
+	return (sqrt(v.x * v.x + v.y * v.y + v.z * v.z));
+}
+
+float	vec4_length(t_vec4 v)
+{
+	return (sqrt(v.x * v.x + v.y * v.y + v.z * v.z + v.w * v.w));
 }

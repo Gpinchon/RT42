@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/10/12 19:38:09 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/10/12 19:39:07 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/10/13 16:36:18 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ static void	m4_inverse2(t_mat4 *t, const t_mat4 i)
 		i.m[8] * i.m[1] * i.m[6] - i.m[8] * i.m[2] * i.m[5];
 }
 
-t_mat4	m4_inverse(const t_mat4 i)
+t_mat4	mat4_inverse(const t_mat4 i)
 {
 	t_mat4 t;
 	GLfloat det;
@@ -87,7 +87,7 @@ t_mat4	m4_inverse(const t_mat4 i)
 	return (t);
 }
 
-t_mat4	mat4_transpose(t_mat4 in)
+t_mat4	mat4_transpose(const t_mat4 in)
 {
 	int		x;
 	int		z;
