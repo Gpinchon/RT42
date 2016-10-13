@@ -6,11 +6,9 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/10/13 18:41:14 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/10/13 18:58:27 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/10/13 19:00:41 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-#include "../VML.h"
 
 float	lerp(float start, float end, float percent)
 {
@@ -19,6 +17,6 @@ float	lerp(float start, float end, float percent)
 
 float	cubic(float start, float end, float percent)
 {
-	percent = pow(percent, 2) * (3.f - (2.f * percent));
+	percent = (percent * percent) * (3.f - (2.f * percent));
 	return (lerp(start, end, percent));
 }
