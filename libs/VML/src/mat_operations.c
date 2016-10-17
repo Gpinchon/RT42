@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/10/12 19:38:09 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/10/13 17:56:53 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/10/17 12:17:54 by agadiffe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,45 +14,45 @@
 
 static void	m4_inverse1(t_mat4 *t, const t_mat4 i)
 {
-	t->m[0] = i.m[5]  * i.m[10] * i.m[15] - i.m[5]  * i.m[11] * i.m[14] -
-		i.m[9]  * i.m[6]  * i.m[15] + i.m[9]  * i.m[7]  * i.m[14] +
-		i.m[13] * i.m[6]  * i.m[11] - i.m[13] * i.m[7]  * i.m[10];
-	t->m[4] = -i.m[4]  * i.m[10] * i.m[15] + i.m[4]  * i.m[11] * i.m[14] +
-		i.m[8]  * i.m[6]  * i.m[15] - i.m[8]  * i.m[7]  * i.m[14] -
-		i.m[12] * i.m[6]  * i.m[11] + i.m[12] * i.m[7]  * i.m[10];
-	t->m[8] = i.m[4]  * i.m[9] * i.m[15] - i.m[4]  * i.m[11] * i.m[13] -
-		i.m[8]  * i.m[5] * i.m[15] + i.m[8]  * i.m[7] * i.m[13] +
+	t->m[0] = i.m[5] * i.m[10] * i.m[15] - i.m[5] * i.m[11] * i.m[14] -
+		i.m[9] * i.m[6] * i.m[15] + i.m[9] * i.m[7] * i.m[14] +
+		i.m[13] * i.m[6] * i.m[11] - i.m[13] * i.m[7] * i.m[10];
+	t->m[4] = -i.m[4] * i.m[10] * i.m[15] + i.m[4] * i.m[11] * i.m[14] +
+		i.m[8] * i.m[6] * i.m[15] - i.m[8] * i.m[7] * i.m[14] -
+		i.m[12] * i.m[6] * i.m[11] + i.m[12] * i.m[7] * i.m[10];
+	t->m[8] = i.m[4] * i.m[9] * i.m[15] - i.m[4] * i.m[11] * i.m[13] -
+		i.m[8] * i.m[5] * i.m[15] + i.m[8] * i.m[7] * i.m[13] +
 		i.m[12] * i.m[5] * i.m[11] - i.m[12] * i.m[7] * i.m[9];
-	t->m[12] = -i.m[4]  * i.m[9] * i.m[14] + i.m[4]  * i.m[10] * i.m[13] +
-		i.m[8]  * i.m[5] * i.m[14] - i.m[8]  * i.m[6] * i.m[13] -
+	t->m[12] = -i.m[4] * i.m[9] * i.m[14] + i.m[4] * i.m[10] * i.m[13] +
+		i.m[8] * i.m[5] * i.m[14] - i.m[8] * i.m[6] * i.m[13] -
 		i.m[12] * i.m[5] * i.m[10] + i.m[12] * i.m[6] * i.m[9];
-	t->m[1] = -i.m[1]  * i.m[10] * i.m[15] + i.m[1]  * i.m[11] * i.m[14] +
-		i.m[9]  * i.m[2] * i.m[15] - i.m[9]  * i.m[3] * i.m[14] -
+	t->m[1] = -i.m[1] * i.m[10] * i.m[15] + i.m[1] * i.m[11] * i.m[14] +
+		i.m[9] * i.m[2] * i.m[15] - i.m[9] * i.m[3] * i.m[14] -
 		i.m[13] * i.m[2] * i.m[11] + i.m[13] * i.m[3] * i.m[10];
-	t->m[5] = i.m[0]  * i.m[10] * i.m[15] - i.m[0]  * i.m[11] * i.m[14] -
-		i.m[8]  * i.m[2] * i.m[15] + i.m[8]  * i.m[3] * i.m[14] +
+	t->m[5] = i.m[0] * i.m[10] * i.m[15] - i.m[0] * i.m[11] * i.m[14] -
+		i.m[8] * i.m[2] * i.m[15] + i.m[8] * i.m[3] * i.m[14] +
 		i.m[12] * i.m[2] * i.m[11] - i.m[12] * i.m[3] * i.m[10];
-	t->m[9] = -i.m[0]  * i.m[9] * i.m[15] + i.m[0]  * i.m[11] * i.m[13] +
-		i.m[8]  * i.m[1] * i.m[15] - i.m[8]  * i.m[3] * i.m[13] -
+	t->m[9] = -i.m[0] * i.m[9] * i.m[15] + i.m[0] * i.m[11] * i.m[13] +
+		i.m[8] * i.m[1] * i.m[15] - i.m[8] * i.m[3] * i.m[13] -
 		i.m[12] * i.m[1] * i.m[11] + i.m[12] * i.m[3] * i.m[9];
-	t->m[13] = i.m[0]  * i.m[9] * i.m[14] - i.m[0]  * i.m[10] * i.m[13] -
-		i.m[8]  * i.m[1] * i.m[14] + i.m[8]  * i.m[2] * i.m[13] +
+	t->m[13] = i.m[0] * i.m[9] * i.m[14] - i.m[0] * i.m[10] * i.m[13] -
+		i.m[8] * i.m[1] * i.m[14] + i.m[8] * i.m[2] * i.m[13] +
 		i.m[12] * i.m[1] * i.m[10] - i.m[12] * i.m[2] * i.m[9];
 }
 
 static void	m4_inverse2(t_mat4 *t, const t_mat4 i)
 {
-	t->m[2] = i.m[1]  * i.m[6] * i.m[15] - i.m[1]  * i.m[7] * i.m[14] -
-		i.m[5]  * i.m[2] * i.m[15] + i.m[5]  * i.m[3] * i.m[14] +
+	t->m[2] = i.m[1] * i.m[6] * i.m[15] - i.m[1] * i.m[7] * i.m[14] -
+		i.m[5] * i.m[2] * i.m[15] + i.m[5] * i.m[3] * i.m[14] +
 		i.m[13] * i.m[2] * i.m[7] - i.m[13] * i.m[3] * i.m[6];
-	t->m[6] = -i.m[0]  * i.m[6] * i.m[15] + i.m[0]  * i.m[7] * i.m[14] +
-		i.m[4]  * i.m[2] * i.m[15] - i.m[4]  * i.m[3] * i.m[14] -
+	t->m[6] = -i.m[0] * i.m[6] * i.m[15] + i.m[0] * i.m[7] * i.m[14] +
+		i.m[4] * i.m[2] * i.m[15] - i.m[4] * i.m[3] * i.m[14] -
 		i.m[12] * i.m[2] * i.m[7] + i.m[12] * i.m[3] * i.m[6];
-	t->m[10] = i.m[0]  * i.m[5] * i.m[15] - i.m[0]  * i.m[7] * i.m[13] -
-		i.m[4]  * i.m[1] * i.m[15] + i.m[4]  * i.m[3] * i.m[13] +
+	t->m[10] = i.m[0] * i.m[5] * i.m[15] - i.m[0] * i.m[7] * i.m[13] -
+		i.m[4] * i.m[1] * i.m[15] + i.m[4] * i.m[3] * i.m[13] +
 		i.m[12] * i.m[1] * i.m[7] - i.m[12] * i.m[3] * i.m[5];
-	t->m[14] = -i.m[0]  * i.m[5] * i.m[14] + i.m[0]  * i.m[6] * i.m[13] +
-		i.m[4]  * i.m[1] * i.m[14] - i.m[4]  * i.m[2] * i.m[13] -
+	t->m[14] = -i.m[0] * i.m[5] * i.m[14] + i.m[0] * i.m[6] * i.m[13] +
+		i.m[4] * i.m[1] * i.m[14] - i.m[4] * i.m[2] * i.m[13] -
 		i.m[12] * i.m[1] * i.m[6] + i.m[12] * i.m[2] * i.m[5];
 	t->m[3] = -i.m[1] * i.m[6] * i.m[11] + i.m[1] * i.m[7] * i.m[10] +
 		i.m[5] * i.m[2] * i.m[11] - i.m[5] * i.m[3] * i.m[10] -
@@ -68,7 +68,7 @@ static void	m4_inverse2(t_mat4 *t, const t_mat4 i)
 		i.m[8] * i.m[1] * i.m[6] - i.m[8] * i.m[2] * i.m[5];
 }
 
-t_mat4	mat4_inverse(const t_mat4 i)
+t_mat4		mat4_inverse(const t_mat4 i)
 {
 	t_mat4	t;
 	float	det;
@@ -76,7 +76,8 @@ t_mat4	mat4_inverse(const t_mat4 i)
 
 	m4_inverse1(&t, i);
 	m4_inverse2(&t, i);
-	det = i.m[0] * t.m[0] + i.m[1] * t.m[4] + i.m[2] * t.m[8] + i.m[3] * t.m[12];
+	det = i.m[0] * t.m[0] + i.m[1] * t.m[4] +
+		i.m[2] * t.m[8] + i.m[3] * t.m[12];
 	if (det == 0)
 		return (mat4_zero());
 	det = 1.0 / det;
@@ -89,7 +90,7 @@ t_mat4	mat4_inverse(const t_mat4 i)
 	return (t);
 }
 
-t_mat4	mat4_transpose(const t_mat4 in)
+t_mat4		mat4_transpose(const t_mat4 in)
 {
 	int		x;
 	int		z;

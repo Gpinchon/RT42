@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/10/13 16:03:56 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/10/13 17:57:24 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/10/17 12:11:45 by agadiffe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ t_vec4	vec4_normalize(t_vec4 v)
 			v.z /= length,
 			v.w /= length
 		});
-		
 	}
 	return (v);
 }
