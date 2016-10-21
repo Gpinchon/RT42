@@ -1,0 +1,59 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2016/06/27 21:27:07 by gpinchon          #+#    #+#              #
+#    Updated: 2016/07/02 14:06:00 by gpinchon         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+#NAME	=	libsdl_framework.a
+NA
+SRC		=	srcs/new_window.c		\
+			#srcs/windows.c			\
+			#srcs/objects.c			\
+			#srcs/framework.c 		\
+			#srcs/callback.c			\
+			#srcs/rgba.c				\
+			#srcs/rgb.c				\
+			#srcs/errors.c			\
+			#srcs/keys.c				\
+			#srcs/internal_memory.c	\
+			#srcs/internal_string.c
+			#srcs/images.c			\
+			#srcs/images2.c			\
+
+OBJ		= $(SRC:.c=.o)
+CC		= gcc
+CFLAGS	= -Ofast -Wall -Wextra -Werror -I ./include
+
+define colorecho
+      @tput setaf 2
+      @echo $1
+      @tput sgr0
+endef
+
+$(NAME): $(OBJ)
+	ar -rc $(NAME) $(OBJ)
+
+NO_COLOR=\033[0m
+OK_COLOR=\033[32;01m
+OK_STRING=$(OK_COLOR)[OK]$(NO_COLOR)
+%.o: %.c
+	@echo -n Compiling $@...
+	@($(CC) $(CFLAGS) -o $@ -c $<)
+	@echo "$(OK_STRING)"
+
+all: $(NAME)
+
+clean:
+	rm -rf $(OBJ)
+
+fclean:
+	rm -rf $(OBJ) $(NAME)
+
+re: fclean;
+	@make -s
