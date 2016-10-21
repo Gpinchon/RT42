@@ -160,14 +160,30 @@ void		print_error(int error_code, const char *function_name);
 Uint8		get_key_status(void *framework, Uint32 keycode);
 t_point2	get_mouse_pos(void *framework);
 void		framework_loop(void *framework);
+/*
+** loop_hook prototype == void callback(void *arg);
+*/
 void		assign_loop_hook(void *framework, t_callback callback);
+/*
+** keyup/down/press_hook prototype == void callback(void *arg, Uint32 keycode);
+*/
 void		assign_keyup_hook(void *framework, void *window,
 	Uint32 keycode, t_callback callback);
 void		assign_keyrepeat_hook(void *framework, void *window,
 	Uint32 keycode, t_callback callback);
 void		assign_keypress_hook(void *framework, void *window,
 	Uint32 keycode, t_callback callback);
+/*
+** mousemove_hook prototype == void callback(void *arg, t_point2 mouse_position);
+*/
 void	assign_mousemove_hook(void *framework, void *window,
 	t_callback callback);
+/*
+** mousedown/up_hook prototype == void callback(void *arg, Uint8 button);
+*/
+void	assign_mousedown_hook(void *framework, void *window,
+	Uint8 button, t_callback callback);
+void	assign_mouseup_hook(void *framework, void *window,
+	Uint8 button, t_callback callback);
 
 #endif

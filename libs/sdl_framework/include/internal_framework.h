@@ -67,7 +67,8 @@ typedef struct	s_framework
 	t_callback	loop;
 	t_callback	keydown[MAX_WIN][MAX_SCAN][MAX_REPEAT];
 	t_callback	keyup[MAX_WIN][MAX_SCAN];
-	t_callback	mouseclic[MAX_WIN][MAX_BUTTON];
+	t_callback	mousedown[MAX_WIN][MAX_BUTTON];
+	t_callback	mouseup[MAX_WIN][MAX_BUTTON];
 	t_callback	mousemove[MAX_WIN];
 	Uint8		keys[MAX_SCAN];
 	Uint8		buttons[MAX_BUTTON];

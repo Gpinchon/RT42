@@ -71,3 +71,23 @@ void	assign_mousemove_hook(void *framework, void *window,
 	win = get_data_pointer(window, sizeof(t_window));
 	((t_framework*)framework)->mousemove[win->id] = callback;
 }
+
+void	assign_mousedown_hook(void *framework, void *window,
+	Uint8 button, t_callback callback)
+{
+	t_window	*win;
+
+	FRAMEWORK_DEBUG(!framework, NULL_FRAMEWORK_POINTER, "assign_keyup_hook");
+	win = get_data_pointer(window, sizeof(t_window));
+	((t_framework*)framework)->mousedown[win->id][button] = callback;
+}
+
+void	assign_mouseup_hook(void *framework, void *window,
+	Uint8 button, t_callback callback)
+{
+	t_window	*win;
+
+	FRAMEWORK_DEBUG(!framework, NULL_FRAMEWORK_POINTER, "assign_keyup_hook");
+	win = get_data_pointer(window, sizeof(t_window));
+	((t_framework*)framework)->mouseup[win->id][button] = callback;
+}
