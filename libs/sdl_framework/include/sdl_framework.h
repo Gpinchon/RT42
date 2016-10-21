@@ -145,7 +145,7 @@ void		*put_image_stretched(void *window, void *image);
 void		get_image_size(void *image, int *width, int *heigth);
 IMGDATA		get_image_data(void *image);
 /*
-** Pixel put functions, use to put a color to image/window
+** Pixel put functions, use to put a color (pointer to an rgb(a) struct) to image/window
 */
 void		*put_image_pixel(void *image, void *color, t_point2 position);
 void		*put_window_pixel(void *window, void *color, t_point2 position);
