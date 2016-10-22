@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/07/02 14:17:20 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/10/22 23:00:27 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/10/22 23:04:15 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,13 +45,15 @@ void		*new_window(void *framework,
 	return (refresh_window(gstruct));
 }
 
-void	new_gl_context(void *window)
+void		*new_gl_context(void *window)
 {
 	if (!((t_window*)((GSTRUCT*)window)->data)->gl_context)
-		((t_window*)((GSTRUCT*)window)->data)->gl_context = SDL_GL_CreateContext(((t_window*)((GSTRUCT*)window)->data)->sdl_window);
+		return (((t_window*)((GSTRUCT*)window)->data)->gl_context =
+			SDL_GL_CreateContext(((t_window*)((GSTRUCT*)window)->data)->sdl_window));
+	return (NULL);
 }
 
-void	set_window_clear_bits(void *window, GLbitfield clear_bits)
+void		set_window_clear_bits(void *window, GLbitfield clear_bits)
 {
 	t_window *win;
 	FRAMEWORK_DEBUG(!window, NULL_WINDOW_POINTER, "set_window_clear_bits");
