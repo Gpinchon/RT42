@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/07/02 14:15:47 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/10/22 23:05:10 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/10/22 23:18:10 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,6 +153,7 @@ IMGDATA		get_image_data(void *image);
 */
 void		*put_image_pixel(void *image, void *color, t_point2 position);
 void		*put_window_pixel(void *window, void *color, t_point2 position);
+void		*put_window_image_pixel(void *window, void *color, t_point2 position);
 /*
 ** Print error to standard error file descriptor
 */

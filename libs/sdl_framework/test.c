@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/07/02 15:31:54 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/10/22 22:48:41 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/10/23 00:00:54 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,14 +67,16 @@ void	mousemove(void *win, t_point2 mousepos)
 	t_rgba	color;
 
 	color = rgba(rand() / (float)RAND_MAX * 255, rand() / (float)RAND_MAX * 255, rand() / (float)RAND_MAX * 255, rand() / (float)RAND_MAX * 255);
-	put_window_pixel(win, &color, mousepos);
+	//put_image_pixel(get_attached_image(win), &color, mousepos);
+	//put_window_pixel(win, &color, mousepos);
+	put_window_image_pixel(win, &color, mousepos);
 }
 
 int main(int argc, char **argv)
 {
 	void	*framework;
 	void	*winwin;
-	//void	*image;
+	void	*image;
 	//t_rgba	color;
 	//color = rgba(0, 125, 125, 100);
 	framework = new_framework();
@@ -82,10 +84,10 @@ int main(int argc, char **argv)
 	set_window_clear_bits(winwin, GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	printf("Current OpenGL version\n%s\n", glGetString(GL_VERSION));
 	//image = new_image(framework, 4096, 4096);
-	//image = load_image_file(framework, "./Graphics_duck.bmp");
+	image = load_image_file(framework, "./Graphics_duck.bmp");
 	//fill_image(image, &color);
 	//color = rgba(255, 125, 125, 255);
-	//attach_image_to_window(winwin, image);
+	attach_image_to_window(winwin, image);
 	refresh_window(winwin);
 	assign_loop_hook(framework, new_callback(refresh, winwin));
 	assign_keypress_hook(framework, winwin, SDL_SCANCODE_ESCAPE, new_callback(exit_framework, framework));

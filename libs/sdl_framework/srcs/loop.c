@@ -6,12 +6,34 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/07/06 18:59:58 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/07/06 21:37:21 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/10/23 00:00:20 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <internal_framework.h>
 #include <stdio.h>
+
+void	check_mouse(void *framework, SDL_Event	e)
+{
+	t_framework	*f;
+
+	f = framework;
+	if (e.type == SDL_MOUSEMOTION
+		&& f->mousemove[e.key.windowID].function
+		&& (f->lastmousepos.x != get_mouse_pos(framework).x
+		|| f->lastmousepos.y != get_mouse_pos(framework).y))
+		f->mousemove[e.key.windowID].
+		function(f->mousemove[e.key.windowID].arg, f->lastmousepos = get_mouse_pos(framework));
+	if (e.type == SDL_MOUSEBUTTONDOWN
+		&& f->mousedown[e.key.windowID][e.button.button].function)
+		f->mousedown[e.key.windowID][e.button.button].
+		function(f->mousedown[e.key.windowID][e.button.button].arg, e.button.button);
+	else if (e.type == SDL_MOUSEBUTTONUP
+		&& f->mouseup[e.key.windowID][e.button.button].function)
+		f->mouseup[e.key.windowID][e.button.button].
+		function(f->mouseup[e.key.windowID][e.button.button].arg, e.button.button);
+}
+
 void	framework_loop(void *framework)
 {
 	SDL_Event	e;
@@ -30,20 +52,7 @@ void	framework_loop(void *framework)
 			break ;
 		if (f->loop.function)
 			f->loop.function(f->loop.arg);
-		if (e.type == SDL_MOUSEMOTION
-			&& f->mousemove[i[0]].function)
-			f->mousemove[i[0]].
-			function(f->mousemove[i[0]].arg, get_mouse_pos(framework));
-		//if (e.type == SDL_MOUSEBUTTONDOWN)
-		//	printf("%i\n", e.button.button);
-		if (e.type == SDL_MOUSEBUTTONDOWN
-			&& f->mousedown[i[0]][e.button.button].function)
-			f->mousedown[i[0]][e.button.button].
-			function(f->mousedown[i[0]][e.button.button].arg, e.button.button);
-		else if (e.type == SDL_MOUSEBUTTONUP
-			&& f->mouseup[i[0]][e.button.button].function)
-			f->mouseup[i[0]][e.button.button].
-			function(f->mouseup[i[0]][e.button.button].arg, e.button.button);
+		check_mouse(framework, e);
 		if (e.type == SDL_KEYDOWN
 			&& f->keydown[i[0]][i[1]][i[2]].function)
 		{

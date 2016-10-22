@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/06/13 14:18:46 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/10/22 22:52:35 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/10/22 23:58:34 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ typedef struct	s_framework
 	Uint8		keys[MAX_SCAN];
 	Uint8		buttons[MAX_BUTTON];
 	t_point2	mousepos;
+	t_point2	lastmousepos;
 }				t_framework;
 
 void	*add_image(t_framework *framework, GSTRUCT *img);
