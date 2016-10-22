@@ -6,14 +6,14 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/07/02 15:31:54 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/07/07 17:30:00 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/10/22 22:48:41 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
 #include <stdlib.h>
 #include <sdl_framework.h>
-//#include <GL/gl.h>
+#include <GL/gl.h>
 #include <stdio.h>
 
 void	press(void *image)

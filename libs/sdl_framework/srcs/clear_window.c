@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/07/03 20:57:30 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/07/24 18:51:47 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/10/22 22:56:24 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,6 @@ void	*clear_window(void *window)
 	FRAMEWORK_DEBUG(!win, NULL_WINDOW_POINTER, "clear_window");
 	SDL_FillRect(win->sdl_surface, NULL,
 		map_color(win->sdl_surface, &win->clear_color));
-	glClearColor(win->clear_color.r, win->clear_color.g, win->clear_color.b, 1);
-	glClear(win->clear_bits);
 	return (window);
 }
 

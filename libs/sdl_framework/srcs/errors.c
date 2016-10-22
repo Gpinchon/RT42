@@ -6,13 +6,12 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/06/22 13:02:30 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/07/06 22:04:57 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/10/22 22:17:28 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <sdl_framework.h>
 #include <internal_framework.h>
-#define STDERR_FILENO 1
 
 void	init_errors(void)
 {

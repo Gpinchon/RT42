@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/07/02 14:15:47 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/07/24 19:38:06 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/10/22 22:18:15 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,9 @@
 # define RGBCOL					0x24
 # define RGBACOL				0x32
 # define IMGDATA				t_img_data
+# ifndef STDERR_FILENO
+#  define STDERR_FILENO 1
+# endif
 
 /*
 ** Error codes

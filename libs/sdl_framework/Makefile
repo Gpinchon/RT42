@@ -1,13 +1,14 @@
 OBJ		= $(SRC:.c=.o)
 CC		= gcc
 CFLAGS	= -Ofast -Wall -Wextra -Werror -I ./include
-LIBS	= -lmingw32 -lSDL2main -lSDL2 -lopengl32
 NAME 	= libSDLframework.a
 
 ifeq ($(OS), Windows_NT)
+	LIBS	= -lmingw32 -lSDL2main -lSDL2 -lopengl32
 	TEST	= sdl_framework.exe
 	MAKE	= mingw32-make
 	RM		= del
+	RMDIR	= rmdir
 	MV		= move
 	SRC		=	srcs\new_framework.c		\
 				srcs\new_window.c			\
@@ -31,9 +32,11 @@ ifeq ($(OS), Windows_NT)
 				srcs\internal_string.c		\
 				srcs\errors.c
 else
+	LIBS	= -lSDL2main -lSDL2 -lGL
 	TEST 	= sdl_framework
 	MAKE	= make
 	RM		= rm -rf
+	RMDIR	= rm -rf
 	MV		= mv
 	SRC		=	srcs/new_framework.c		\
 				srcs/new_window.c			\
@@ -61,7 +64,7 @@ endif
 $(NAME): $(OBJ) test.o
 	@echo $(OS)
 	ar rc $(NAME) $(OBJ)
-	mkdir lib && move libSDLframework.a lib\libSDLframework.a
+	mkdir lib && $(MV) libSDLframework.a lib\libSDLframework.a
 	@$(CC) $(CFLAGS) $(OBJ) test.o $(LIBS) -o $(TEST)
 
 printos:
@@ -69,7 +72,7 @@ printos:
 
 fclean:
 	$(RM) $(OBJ) $(NAME) $(TEST)
-	rmdir lib /s /q
+	$(RMDIR) lib
 
 re:fclean
 	$(MAKE)

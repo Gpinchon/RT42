@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/07/02 14:17:20 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/07/24 18:54:28 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/10/22 23:00:27 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,11 +38,17 @@ void		*new_window(void *framework,
 	((t_window*)gstruct->data)->sdl_surface = SDL_GetWindowSurface(((t_window*)gstruct->data)->sdl_window);
 	((t_window*)gstruct->data)->id = SDL_GetWindowID(((t_window*)gstruct->data)->sdl_window);
 	((t_window*)gstruct->data)->clear_color = rgb(255, 0, 0);
-	((t_window*)gstruct->data)->gl_context = SDL_GL_CreateContext(((t_window*)gstruct->data)->sdl_window);
+	((t_window*)gstruct->data)->gl_context = NULL;
 	((t_window*)gstruct->data)->clear_bits = GL_COLOR_BUFFER_BIT;
 	add_window(framework, gstruct);
 	clear_window(gstruct);
 	return (refresh_window(gstruct));
+}
+
+void	new_gl_context(void *window)
+{
+	if (!((t_window*)((GSTRUCT*)window)->data)->gl_context)
+		((t_window*)((GSTRUCT*)window)->data)->gl_context = SDL_GL_CreateContext(((t_window*)((GSTRUCT*)window)->data)->sdl_window);
 }
 
 void	set_window_clear_bits(void *window, GLbitfield clear_bits)
