@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include <internal_framework.h>
-
+#include <stdio.h>
 void	framework_loop(void *framework)
 {
 	SDL_Event	e;
@@ -34,14 +34,16 @@ void	framework_loop(void *framework)
 			&& f->mousemove[i[0]].function)
 			f->mousemove[i[0]].
 			function(f->mousemove[i[0]].arg, get_mouse_pos(framework));
+		//if (e.type == SDL_MOUSEBUTTONDOWN)
+		//	printf("%i\n", e.button.button);
 		if (e.type == SDL_MOUSEBUTTONDOWN
-			&& f->mousedown[i[0]][e.key.button].function)
-			f->mousedown[i[0]][e.key.button].
-			function(f->mousedown[i[0]][e.key.button].arg, e.key.button)
+			&& f->mousedown[i[0]][e.button.button].function)
+			f->mousedown[i[0]][e.button.button].
+			function(f->mousedown[i[0]][e.button.button].arg, e.button.button);
 		else if (e.type == SDL_MOUSEBUTTONUP
-			&& f->mouseup[i[0]][e.key.button].function)
-			f->mouseup[i[0]][e.key.button].
-			function(f->mouseup[i[0]][e.key.button].arg, e.key.button)
+			&& f->mouseup[i[0]][e.button.button].function)
+			f->mouseup[i[0]][e.button.button].
+			function(f->mouseup[i[0]][e.button.button].arg, e.button.button);
 		if (e.type == SDL_KEYDOWN
 			&& f->keydown[i[0]][i[1]][i[2]].function)
 		{
