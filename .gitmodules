@@ -4,3 +4,6 @@
 [submodule "libs/sdl_framework"]
 	path = libs/sdl_framework
 	url = https://github.com/Gpinchon/sdl_framework.git
+[submodule "libs/VML"]
+	path = libs/VML
+	url = https://github.com/Gpinchon/VML.git
