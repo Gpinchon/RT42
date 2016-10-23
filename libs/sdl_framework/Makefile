@@ -64,7 +64,7 @@ endif
 $(NAME): $(OBJ) test.o
 	@echo $(OS)
 	ar rc $(NAME) $(OBJ)
-	mkdir lib && $(MV) libSDLframework.a lib\libSDLframework.a
+	mkdir lib && $(MV) libSDLframework.a lib/libSDLframework.a
 	@$(CC) $(CFLAGS) $(OBJ) test.o $(LIBS) -o $(TEST)
 
 printos:
