@@ -6,13 +6,14 @@
 #    By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/11/13 17:17:47 by gpinchon          #+#    #+#              #
-#    Updated: 2016/11/14 18:43:19 by gpinchon         ###   ########.fr        #
+#    Updated: 2016/11/15 10:45:35 by gpinchon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	=	RT
 SRC		=	./src/main.c				\
-			./src/light_computation.c
+			./src/light_computation.c	\
+			./src/new.c
 OBJ		=	$(SRC:.c=.o)
 CC		=	gcc
 INCLUDE	=	$(addprefix -I, $(wildcard ./libs/*/include/)) -I./include/

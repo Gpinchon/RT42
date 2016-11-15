@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/14 18:14:04 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/11/14 23:45:35 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/11/15 09:31:33 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,5 @@ t_vec3	compute_lightdir(t_light l, t_vec3 position)
 {
 	if (l.type == POINT || l.type == SPOT)
 		return (vec3_normalize(vec3_sub(l.position, position)));
-	else if (l.type == DIRECTIONAL)
-		return (vec3_normalize(l.position));
 	return (vec3_normalize(l.position));
 }
