@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:32:51 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/11/15 10:45:23 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/11/15 11:29:24 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,14 +34,6 @@ void		blit_buffer(FRAMEBUFFER buffer, void *image)
 		}
 }
 
-void		destroy_engine(ENGINE *engine)
-{
-	destroy_ezarray(&engine->framebuffer.array);
-	destroy_ezarray(&engine->depthbuffer.array);
-	destroy_ezarray(&engine->normalbuffer.array);
-	destroy_ezarray(&engine->mtlbuffer.array);
-}
-
 int main(void)
 {
 	ENGINE	engine;
@@ -52,5 +44,6 @@ int main(void)
 	refresh_window(engine.window);
 	framework_loop(engine.framework);
 	destroy_engine(&engine);
+	destroy_scene(&engine.scene);
 	return (0);
 }

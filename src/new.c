@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/15 10:44:45 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/11/15 10:47:40 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/11/15 11:04:15 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,17 +29,6 @@ SCENE		new_scene()
 
 	memset(&scene, 0, sizeof(SCENE));
 	return (scene);
-}
-
-TRANSFORM	new_transform(VEC3 position, VEC3 rotation, VEC3 scale)
-{
-	TRANSFORM	transform;
-
-	memset(&transform, 0, sizeof(TRANSFORM));
-	transform.position = position;
-	transform.rotation = rotation;
-	transform.scale = scale;
-	return (transform);
 }
 
 ENGINE		new_engine()

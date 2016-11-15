@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:06:34 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/11/15 10:50:52 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/11/15 11:29:42 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,9 @@ typedef struct	s_light
 	float		attenuation;
 	float		falloff;
 	float		spot_size;
-	t_rgb		color;
-	t_vec3		position;
-	t_vec3		direction;
+	VEC3		color;
+	VEC3		position;
+	VEC3		direction;
 }				t_light;
 
 typedef struct	s_mtl
@@ -73,9 +73,9 @@ typedef struct	s_rtprim
 
 typedef struct	s_camera
 {
+	TRANSFORM	*transform;
 	RAY			ray;
 	MAT4		m4_view;
-	TRANSFORM	transform;
 }				t_camera;
 
 typedef struct	s_scene
@@ -83,7 +83,7 @@ typedef struct	s_scene
 	UINT		active_camera;
 	ARRAY		primitive;
 	ARRAY		light;
-	ARRAY		mtl;
+	ARRAY		material;
 	ARRAY		camera;
 	ARRAY		transform;
 }				t_scene;
@@ -105,11 +105,19 @@ typedef struct	s_engine
 	FRAMEBUFFER	depthbuffer;
 	FRAMEBUFFER	normalbuffer;
 	FRAMEBUFFER	mtlbuffer;
+	SCENE		scene;
 }				t_engine;
 
 FRAMEBUFFER		new_framebuffer(TYPE type, t_point2 size, Uint8 depth);
-TRANSFORM		new_transform(VEC3 position, VEC3 rotation, VEC3 scale);
 SCENE			new_scene();
 ENGINE			new_engine();
+
+void			destroy_scene(SCENE *scene);
+void			destroy_engine(ENGINE *engine);
+
+TRANSFORM		*new_transform(SCENE scene, VEC3 position, VEC3 rotation, VEC3 scale);
+RTPRIMITIVE		*new_rtprim(SCENE scene, PRIM_TYPE type);
+MATERIAL		*new_material(SCENE scene);
+CAMERA			*new_camera(SCENE scene);
 
 #endif
