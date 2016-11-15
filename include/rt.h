@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:06:34 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/11/15 11:29:42 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/11/15 20:10:52 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,21 +24,28 @@
 # define MATERIAL		struct s_mtl
 # define CAMERA			struct s_camera
 # define TRANSFORM		struct s_transform
-# define SUPERSAMPLING	4
-# define WINDOW_SIZE	(t_point2){512, 512}
+# define UPVEC			(VEC3){0, 1, 0}
+# define SUPERSAMPLING	1
+# define WINDOW_SIZE	(t_point2){768, 768}
 # define WS				WINDOW_SIZE
 # define BUFFER_SIZE	(t_point2){WS.x * SUPERSAMPLING, WS.y * SUPERSAMPLING}
+# define CCLEAR_VALUE	125
+# define FCLEAR_VALUE	0
 # define DIRECTIONAL	0x0
 # define SPOT			0x1
 # define POINT			0x2
+# define DIFFUSE		oren_nayar_diffuse
+# define SPECULAR		trowbridge_reitz_specular
 
 typedef struct	s_transform
 {
 	UCHAR		updated;
 	TRANSFORM	*parent;
+	TRANSFORM	*target;
 	VEC3		position;
 	VEC3		rotation;
 	VEC3		scale;
+	VEC3		up;
 	MAT4		matrix;
 }				t_transform;
 
@@ -58,8 +65,7 @@ typedef struct	s_mtl
 {
 	VEC3		base_color;
 	float		roughness;
-	float		metallic;
-	float		specular;
+	float		metalness;
 	float		alpha;
 }				t_mtl;
 
@@ -68,7 +74,6 @@ typedef struct	s_rtprim
 	TRANSFORM	*transform;
 	MATERIAL	*material;
 	PRIMITIVE	prim;
-	PRIMITIVE	tranformed_prim;
 }				t_rtprim;
 
 typedef struct	s_camera
@@ -80,17 +85,18 @@ typedef struct	s_camera
 
 typedef struct	s_scene
 {
-	UINT		active_camera;
+	CAMERA		*active_camera;
 	ARRAY		primitive;
 	ARRAY		light;
-	ARRAY		material;
 	ARRAY		camera;
-	ARRAY		transform;
+	LINK		*transform;
+	LINK		*material;
 }				t_scene;
 
 typedef struct	s_framebuffer
 {
 	Uint8		bpp;
+	Uint8		opp;
 	UINT		sizeline;
 	t_point2	size;
 	ARRAY		array;
@@ -106,18 +112,39 @@ typedef struct	s_engine
 	FRAMEBUFFER	normalbuffer;
 	FRAMEBUFFER	mtlbuffer;
 	SCENE		scene;
+	INTERSECT	(*inter_functions[10])(PRIMITIVE, RAY);
 }				t_engine;
 
 FRAMEBUFFER		new_framebuffer(TYPE type, t_point2 size, Uint8 depth);
 SCENE			new_scene();
 ENGINE			new_engine();
+void			put_pixel_to_buffer(FRAMEBUFFER buffer,
+				t_point2 coord, VEC4 color);
+void			put_value_to_buffer(FRAMEBUFFER buffer,
+				t_point2 coord, float value);
+
 
 void			destroy_scene(SCENE *scene);
 void			destroy_engine(ENGINE *engine);
 
-TRANSFORM		*new_transform(SCENE scene, VEC3 position, VEC3 rotation, VEC3 scale);
-RTPRIMITIVE		*new_rtprim(SCENE scene, PRIM_TYPE type);
-MATERIAL		*new_material(SCENE scene);
-CAMERA			*new_camera(SCENE scene);
+TRANSFORM		*new_transform(SCENE *scene, VEC3 position, VEC3 rotation, VEC3 scale);
+RTPRIMITIVE		*new_rtprim(SCENE *scene);
+MATERIAL		*new_material(SCENE *scene);
+CAMERA			*new_camera(SCENE *scene);
+
+void			clear_renderer(ENGINE *engine);
+void			clear_buffers(ENGINE *engine);
+void			clear_uchar_bits(void *pixel);
+void			clear_float_bits(void *pixel);
+
+float			trowbridge_reitz_specular(VEC3 normal, VEC3 eye,
+				VEC3 lightdir, float s);
+float			blinn_phong_specular(VEC3 normal, VEC3 eye,
+				VEC3 lightdir, float s);
+float			oren_nayar_diffuse(VEC3 normal, VEC3 eye,
+				VEC3 lightdir, t_mtl mtl);
+float			lambert_diffuse(VEC3 normal, VEC3 eye,
+				VEC3 lightdir, t_mtl mtl);
+VEC3			compute_lightdir(t_light l, VEC3 position);
 
 #endif
