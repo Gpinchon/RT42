@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:06:34 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/11/24 21:50:40 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/11/25 00:10:38 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <sdl_framework.h>
 # include <vml.h>
 # include <ezmem.h>
+#include <stdio.h>
 # define ENGINE			struct s_engine
 # define SCENE			struct s_scene
 # define FRAMEBUFFER	struct s_framebuffer
@@ -44,9 +45,12 @@ typedef struct	s_transform
 	TRANSFORM	*target;
 	VEC3		position;
 	VEC3		rotation;
-	VEC3		scale;
+	VEC3		scaling;
 	VEC3		up;
 	MAT4		matrix;
+	MAT4		translate;
+	MAT4		rotate;
+	MAT4		scale;
 }				t_transform;
 
 typedef struct	s_light
@@ -81,6 +85,7 @@ typedef struct	s_camera
 	TRANSFORM	*transform;
 	RAY			ray;
 	MAT4		m4_view;
+	float		fov;
 }				t_camera;
 
 typedef struct	s_scene
@@ -122,6 +127,8 @@ void			put_pixel_to_buffer(FRAMEBUFFER buffer,
 				t_point2 coord, VEC4 color);
 void			put_value_to_buffer(FRAMEBUFFER buffer,
 				t_point2 coord, float value);
+void			*get_buffer_value(FRAMEBUFFER buffer,
+				t_point2 coord);
 
 
 void			destroy_scene(SCENE *scene);
@@ -130,7 +137,7 @@ void			destroy_engine(ENGINE *engine);
 TRANSFORM		*new_transform(SCENE *scene, VEC3 position, VEC3 rotation, VEC3 scale);
 RTPRIMITIVE		*new_rtprim(SCENE *scene);
 MATERIAL		*new_material(SCENE *scene);
-CAMERA			*new_camera(SCENE *scene);
+CAMERA			*new_camera(SCENE *scene, float fov);
 
 void			clear_renderer(ENGINE *engine);
 void			clear_buffers(ENGINE *engine);

@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/15 11:04:09 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/11/24 00:53:49 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/11/25 00:02:41 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,19 +38,19 @@ RTPRIMITIVE	*new_rtprim(SCENE *scene)
 	return (ezarray_get_index(scene->primitive, scene->primitive.length - 1));
 }
 
-CAMERA		*new_camera(SCENE *scene)
+CAMERA		*new_camera(SCENE *scene, float fov)
 {
 	CAMERA	camera;
 
 	vml_memset(&camera, 0, sizeof(CAMERA));
+	camera.fov = fov;
 	if (!scene->camera.length)
 		scene->camera = new_ezarray(other, scene->camera.length + 1, sizeof(CAMERA));
-	else
-		ezarray_push(&scene->camera, &camera);
+	ezarray_push(&scene->camera, &camera);
 	return (ezarray_get_index(scene->camera, scene->camera.length - 1));
 }
 
-TRANSFORM	*new_transform(SCENE *scene, VEC3 position, VEC3 rotation, VEC3 scale)
+TRANSFORM	*new_transform(SCENE *scene, VEC3 position, VEC3 rotation, VEC3 scaling)
 {
 	LINK		*new_link;
 
@@ -63,6 +63,6 @@ TRANSFORM	*new_transform(SCENE *scene, VEC3 position, VEC3 rotation, VEC3 scale)
 	}
 	((TRANSFORM*)ezlink_get_data(new_link))->position = position;
 	((TRANSFORM*)ezlink_get_data(new_link))->rotation = rotation;
-	((TRANSFORM*)ezlink_get_data(new_link))->scale = scale;
+	((TRANSFORM*)ezlink_get_data(new_link))->scaling = scaling;
 	return (ezlink_get_data(new_link));
 }

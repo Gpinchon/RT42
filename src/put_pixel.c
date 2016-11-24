@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/15 16:52:48 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/11/24 19:56:09 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/11/25 00:10:05 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,4 +35,11 @@ void	put_value_to_buffer(FRAMEBUFFER buffer, t_point2 coord, float value)
 		coord.y * buffer.sizeline +
 		coord.x * buffer.opp);
 	*(index) = value;
+}
+
+void	*get_buffer_value(FRAMEBUFFER buffer, t_point2 coord)
+{
+	return (ezarray_get_index(buffer.array,
+			coord.y * buffer.sizeline +
+			coord.x * buffer.opp));
 }

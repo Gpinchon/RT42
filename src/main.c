@@ -6,12 +6,11 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:32:51 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/11/24 22:11:04 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/11/25 00:29:50 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <rt.h>
-#include <stdio.h>
 
 void	mat4_print(MAT4 m)
 {
@@ -47,18 +46,18 @@ void	default_scene(SCENE *scene)
 {
 	RTPRIMITIVE	*p;
 	p = new_rtprim(scene);
-	p->prim = new_sphere(80, (VEC3){0, 0, 0});
+	p->prim = new_sphere(100, (VEC3){10, 0, 0});
 	p->transform = new_transform(scene,
-		(VEC3){-50, 0, 0}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
+		(VEC3){0, 0, 0}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
 	p->material = new_material(scene);
 	p->material->base_color = (VEC3){1, 0, 0};
 	p->material->roughness = 0;
 	p->material->metalness = 1;
 	p->material->alpha = 1;
-	scene->active_camera = new_camera(scene);
+	scene->active_camera = new_camera(scene, 80);
 	scene->active_camera->transform = new_transform(scene,
-		(VEC3){0, 0, -300}, vec3_normalize((VEC3){0, 0, -1}), (VEC3){1, 1, 1});
-	scene->active_camera->transform->target = p->transform;
+		(VEC3){0, 0, -300}, (VEC3){0, 0, -1}, (VEC3){1, 1, 1});
+	//scene->active_camera->transform->target = p->transform;
 }
 
 void	update_transform(TRANSFORM *transform)
@@ -67,10 +66,10 @@ void	update_transform(TRANSFORM *transform)
 		return ;
 	if (transform->target)
 		transform->rotation = vec3_normalize(vec3_sub(transform->target->position, transform->position));
-	transform->matrix = mat4_combine(
-		mat4_translate(transform->position),
-		mat4_rotation(transform->rotation),
-		mat4_scale(transform->scale));
+	transform->translate = mat4_translate(transform->position);
+	transform->rotate = mat4_rotation(transform->rotation);
+	transform->scale = mat4_scale(transform->scaling);
+	transform->matrix = mat4_combine(transform->translate, transform->rotate, transform->scale);
 	transform->updated = true;
 }
 
@@ -86,9 +85,8 @@ INTERSECT	cast_ray(ENGINE *engine, SCENE *scene)
 		if (prim->transform)
 		{
 			update_transform(prim->transform);
-			//prim->prim.position = mat4_mult_vec3(prim->transform->matrix, prim->prim.position);
-			prim->prim.position = mat4_mult_vec3(mat4_translate(prim->transform->position), prim->transform->position);
-			//mat4_print(prim->transform->matrix);
+			prim->prim.position = mat4_mult_vec3(prim->transform->matrix, prim->transform->position);
+			prim->prim.direction = mat4_mult_vec3(prim->transform->matrix, prim->transform->rotation);
 			//printf("%f, %f, %f\n", prim->prim.position.x, prim->prim.position.y, prim->prim.position.z);
 		}
 		if (engine->inter_functions[prim->prim.type])
@@ -98,11 +96,12 @@ INTERSECT	cast_ray(ENGINE *engine, SCENE *scene)
 	return (new_intersect());
 }
 
-VEC2	normalize_screen_coord(t_point2 screen_coord, t_point2 resolution, float aspect)
+VEC2	normalize_screen_coord(t_point2 screen_coord, t_point2 resolution, float aspect, float fov)
 {
+	fov = tan(TO_RADIAN(fov) / 2.f);
 	return ((VEC2){
-		(2 * (screen_coord.x / (float)resolution.x) - 1) * aspect,
-		1 - 2 * (screen_coord.y / (float)resolution.y)});
+		(2 * (screen_coord.x / (float)resolution.x) - 1) * aspect * fov,
+		1 - 2 * (screen_coord.y / (float)resolution.y) * fov});
 	//return ((VEC2){(float)resolution.x - 2 * screen_coord.x, (float)resolution.y - 2 * screen_coord.y});
 }
 
@@ -122,22 +121,26 @@ void	render_scene(ENGINE *engine)
 	screen_coord = (t_point2){0, 0};
 	aspect = engine->framebuffer.size.y / (float)engine->framebuffer.size.x;
 	cam->m4_view = mat4_mult_mat4(cam->transform->matrix,
-		mat4_perspective(45, aspect, 0.0001, 1000));
+		mat4_perspective(cam->fov, aspect, 0.0001, 1000));
+	/*cam->m4_view = mat4_mult_mat4(mat4_lookat(cam->transform->position, cam->transform->target->position, UPVEC),
+		mat4_perspective(cam->fov, aspect, 0.0001, 1000));*/
+	printf("%f, %f, %f\n", cam->transform->position.x, cam->transform->position.y, cam->transform->position.z);
+	printf("%f, %f, %f\n", cam->transform->rotation.x, cam->transform->rotation.y, cam->transform->rotation.z);
 	while (screen_coord.y < engine->framebuffer.size.y)
 	{
 		screen_coord.x = 0;
 		while (screen_coord.x < engine->framebuffer.size.x)
 		{
-			nscreen_coord = normalize_screen_coord(screen_coord, engine->framebuffer.size, aspect);
+			nscreen_coord = normalize_screen_coord(screen_coord, engine->framebuffer.size, aspect, cam->fov);
 			cam->ray = new_ray(
 				cam->transform->position,
 				mat4_mult_vec3(cam->m4_view, (VEC3){nscreen_coord.x, nscreen_coord.y, -1}));
 			//printf("%f, %f, %f\n", cam->ray.direction.x, cam->ray.direction.y, cam->ray.direction.z);
 			if ((intersect = cast_ray(engine, &engine->scene)).intersects)
 			{
-				put_pixel_to_buffer(engine->framebuffer, screen_coord, vec4_normalize(vec3_to_vec4(intersect.position, 1)));
+				put_pixel_to_buffer(engine->framebuffer, screen_coord, vec4_normalize(vec3_to_vec4(intersect.normal, 1)));
 				//printf("%f, %f, %f\n", intersect.position.x, intersect.position.y, intersect.position.z);
-				//put_pixel_to_buffer(engine->framebuffer, screen_coord, (VEC4){1, 0, 0, 1});
+				//put_pixel_to_buffer(engine->framebuffer, screen_coord, vec4_normalize((VEC4){intersect.position.z, intersect.position.z, intersect.position.z, 1}));
 			}
 			//put_pixel_to_buffer(engine->framebuffer, screen_coord, vec4_normalize(vec3_to_vec4(intersect.position, 1)));
 			screen_coord.x++;
