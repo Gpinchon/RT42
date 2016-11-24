@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:06:34 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/11/15 20:10:52 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/11/24 21:50:40 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
 # define TRANSFORM		struct s_transform
 # define UPVEC			(VEC3){0, 1, 0}
 # define SUPERSAMPLING	1
-# define WINDOW_SIZE	(t_point2){768, 768}
+# define WINDOW_SIZE	(t_point2){1024, 768}
 # define WS				WINDOW_SIZE
 # define BUFFER_SIZE	(t_point2){WS.x * SUPERSAMPLING, WS.y * SUPERSAMPLING}
 # define CCLEAR_VALUE	125

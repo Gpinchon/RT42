@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/15 11:04:09 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/11/15 20:48:24 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/11/24 00:53:49 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,14 @@ MATERIAL	*new_material(SCENE *scene)
 		new_link = new_ezlink(other, 1, sizeof(MATERIAL));
 		ezlink_append(scene->material, new_link);
 	}
-	return (new_link->data.data);
+	return (new_link->array.data);
 }
 
 RTPRIMITIVE	*new_rtprim(SCENE *scene)
 {
 	RTPRIMITIVE	primitive;
 
-	memset(&primitive, 0, sizeof(RTPRIMITIVE));
+	vml_memset(&primitive, 0, sizeof(RTPRIMITIVE));
 	if (!scene->primitive.length)
 		scene->primitive = new_ezarray(other, scene->primitive.length + 1, sizeof(RTPRIMITIVE));
 	else
@@ -42,7 +42,7 @@ CAMERA		*new_camera(SCENE *scene)
 {
 	CAMERA	camera;
 
-	memset(&camera, 0, sizeof(CAMERA));
+	vml_memset(&camera, 0, sizeof(CAMERA));
 	if (!scene->camera.length)
 		scene->camera = new_ezarray(other, scene->camera.length + 1, sizeof(CAMERA));
 	else
@@ -61,8 +61,8 @@ TRANSFORM	*new_transform(SCENE *scene, VEC3 position, VEC3 rotation, VEC3 scale)
 		new_link = new_ezlink(other, 1, sizeof(TRANSFORM));
 		ezlink_append(scene->transform, new_link);
 	}
-	((TRANSFORM*)scene->transform->data.data)->position = position;
-	((TRANSFORM*)scene->transform->data.data)->rotation = rotation;
-	((TRANSFORM*)scene->transform->data.data)->scale = scale;
-	return (new_link->data.data);
+	((TRANSFORM*)ezlink_get_data(new_link))->position = position;
+	((TRANSFORM*)ezlink_get_data(new_link))->rotation = rotation;
+	((TRANSFORM*)ezlink_get_data(new_link))->scale = scale;
+	return (ezlink_get_data(new_link));
 }

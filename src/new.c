@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/15 10:44:45 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/11/15 17:17:18 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/11/24 22:10:43 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ FRAMEBUFFER	new_framebuffer(TYPE type, t_point2 size, Uint8 depth)
 	buffer.size = size;
 	buffer.opp = depth * buffer.array.data_size;
 	buffer.bpp = buffer.opp * 8;
-	buffer.sizeline = size.y * depth;
+	buffer.sizeline = size.x * buffer.opp;
 	return (buffer);
 }
 

@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/15 16:52:48 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/11/15 17:01:25 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/11/24 19:56:09 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ void	put_pixel_to_buffer(FRAMEBUFFER buffer, t_point2 coord, VEC4 color)
 	index = ezarray_get_index(buffer.array,
 		coord.y * buffer.sizeline +
 		coord.x * buffer.opp);
+	if (!index)
+		return ;
 	*(index) = CLAMP(color.z * 255.f, 0.f, 255.f);
 	*(index + 1) = CLAMP(color.y * 255.f, 0.f, 255.f);
 	*(index + 2) = CLAMP(color.x * 255.f, 0.f, 255.f);
