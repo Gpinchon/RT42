@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:32:51 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/11/25 00:29:50 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/11/25 00:40:08 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,11 +98,9 @@ INTERSECT	cast_ray(ENGINE *engine, SCENE *scene)
 
 VEC2	normalize_screen_coord(t_point2 screen_coord, t_point2 resolution, float aspect, float fov)
 {
-	fov = tan(TO_RADIAN(fov) / 2.f);
 	return ((VEC2){
 		(2 * (screen_coord.x / (float)resolution.x) - 1) * aspect * fov,
 		1 - 2 * (screen_coord.y / (float)resolution.y) * fov});
-	//return ((VEC2){(float)resolution.x - 2 * screen_coord.x, (float)resolution.y - 2 * screen_coord.y});
 }
 
 void	render_scene(ENGINE *engine)
@@ -112,8 +110,10 @@ void	render_scene(ENGINE *engine)
 	CAMERA		*cam;
 	VEC2		nscreen_coord;
 	float		aspect;
+	float		fov;
 
 	cam = engine->scene.active_camera;
+	fov = tan(TO_RADIAN(cam->fov) / 2.f);
 	if (cam && cam->transform)
 		update_transform(cam->transform);
 	else
@@ -131,7 +131,7 @@ void	render_scene(ENGINE *engine)
 		screen_coord.x = 0;
 		while (screen_coord.x < engine->framebuffer.size.x)
 		{
-			nscreen_coord = normalize_screen_coord(screen_coord, engine->framebuffer.size, aspect, cam->fov);
+			nscreen_coord = normalize_screen_coord(screen_coord, engine->framebuffer.size, aspect, fov);
 			cam->ray = new_ray(
 				cam->transform->position,
 				mat4_mult_vec3(cam->m4_view, (VEC3){nscreen_coord.x, nscreen_coord.y, -1}));
