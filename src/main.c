@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:32:51 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/11/25 23:35:52 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/11/25 23:58:05 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,64 +67,6 @@ void	default_scene(SCENE *scene)
 	/*p->prim = new_sphere(100, (VEC3){0, 0, 0});*/
 	p->transform = new_transform(scene,
 		(VEC3){0, 0, -200}, (VEC3){1, 1, 0}, (VEC3){1, 1, 1});
-}
-
-VEC4	quaternion_axis_angle(const VEC3 axis,
-									float angle)
-{
-    float	rad = angle * 0.5f;
-	float	scale	= sinf(rad);
-	VEC4	quat;
-
-	quat.x = axis.x * scale;
-	quat.y = axis.y * scale;
-	quat.z = axis.z * scale;
-    quat.w = cosf(rad);
-
-	vec4_normalize(quat);
-
-	return quat;
-}
-
-MAT4	mat4_rotation_quaternion(VEC4 quat)
-{
-	MAT4	m;
-	double xx = quat.x * quat.x;
-	double xy = quat.x * quat.y;
-	double xz = quat.x * quat.z;
-	double xw = quat.x * quat.w;
-
-	double yy = quat.y * quat.y;
-	double yz = quat.y * quat.z;
-	double yw = quat.y * quat.w;
-
-	double zz = quat.z * quat.z;
-	double zw = quat.z * quat.w;
-
-	m.m[0] = 1 - 2 * (yy + zz);
-	m.m[1] = 2 * (xy + zw);
-	m.m[2] = 2 * (xz - yw);
-	m.m[3] = 0;
-	m.m[4] = 2 * (xy - zw);
-	m.m[5] = 1 - 2 * (xx + zz);
-	m.m[6] = 2 * (yz + xw);
-	m.m[7] = 0.0;
-	m.m[8] = 2 * (xz + yw);
-	m.m[9] = 2 * (yz - xw);
-	m.m[10] = 1 - 2 * (xx + yy);
-	m.m[11] = 0.0;
-	m.m[12] = 0.0;
-	m.m[13] = 0.0;
-	m.m[14] = 0.0;
-	m.m[15] = 1.0;
-	return(m);
-}
-
-MAT4	mat4_rotation_axis(VEC3 axis, float angle)
-{
-	VEC4 quat;
-	quat = quaternion_axis_angle(axis, angle);
-	return mat4_rotation_quaternion(quat);
 }
 
 void	update_transform(TRANSFORM *transform)
