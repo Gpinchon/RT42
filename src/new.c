@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/15 10:44:45 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/11/24 23:49:49 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/11/25 22:17:25 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ ENGINE		new_engine()
 	engine.normalbuffer = new_framebuffer(FLOAT, BUFFER_SIZE, 3);
 	engine.mtlbuffer = new_framebuffer(FLOAT, BUFFER_SIZE, sizeof(t_mtl) / sizeof(float));
 	attach_image_to_window(engine.window, engine.image);
+	engine.inter_functions[capped_cylinder] = NULL;
+	engine.inter_functions[capped_cone] = NULL;
 	engine.inter_functions[sphere] = intersect_sphere;
 	engine.inter_functions[cylinder] = intersect_cylinder;
 	engine.inter_functions[plane] = intersect_plane;

@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:06:34 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/11/25 00:10:38 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/11/25 23:48:19 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ typedef struct	s_mtl
 
 typedef struct	s_rtprim
 {
+	UCHAR		transformed;
 	TRANSFORM	*transform;
 	MATERIAL	*material;
 	PRIMITIVE	prim;
