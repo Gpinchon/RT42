@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:32:51 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/11/25 00:40:08 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/11/25 16:08:45 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	default_scene(SCENE *scene)
 	p = new_rtprim(scene);
 	p->prim = new_sphere(100, (VEC3){10, 0, 0});
 	p->transform = new_transform(scene,
-		(VEC3){0, 0, 0}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
+		(VEC3){-100, 0, 0}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
 	p->material = new_material(scene);
 	p->material->base_color = (VEC3){1, 0, 0};
 	p->material->roughness = 0;
@@ -57,7 +57,7 @@ void	default_scene(SCENE *scene)
 	scene->active_camera = new_camera(scene, 80);
 	scene->active_camera->transform = new_transform(scene,
 		(VEC3){0, 0, -300}, (VEC3){0, 0, -1}, (VEC3){1, 1, 1});
-	//scene->active_camera->transform->target = p->transform;
+	scene->active_camera->transform->target = p->transform;
 }
 
 void	update_transform(TRANSFORM *transform)
@@ -134,15 +134,13 @@ void	render_scene(ENGINE *engine)
 			nscreen_coord = normalize_screen_coord(screen_coord, engine->framebuffer.size, aspect, fov);
 			cam->ray = new_ray(
 				cam->transform->position,
-				mat4_mult_vec3(cam->m4_view, (VEC3){nscreen_coord.x, nscreen_coord.y, -1}));
-			//printf("%f, %f, %f\n", cam->ray.direction.x, cam->ray.direction.y, cam->ray.direction.z);
+				mat4_mult_vec3(cam->m4_view, vec3_normalize((VEC3){nscreen_coord.x, nscreen_coord.y, -1})));
 			if ((intersect = cast_ray(engine, &engine->scene)).intersects)
 			{
 				put_pixel_to_buffer(engine->framebuffer, screen_coord, vec4_normalize(vec3_to_vec4(intersect.normal, 1)));
 				//printf("%f, %f, %f\n", intersect.position.x, intersect.position.y, intersect.position.z);
 				//put_pixel_to_buffer(engine->framebuffer, screen_coord, vec4_normalize((VEC4){intersect.position.z, intersect.position.z, intersect.position.z, 1}));
 			}
-			//put_pixel_to_buffer(engine->framebuffer, screen_coord, vec4_normalize(vec3_to_vec4(intersect.position, 1)));
 			screen_coord.x++;
 		}
 		screen_coord.y++;
