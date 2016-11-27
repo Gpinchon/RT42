@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:06:34 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/11/27 20:31:05 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/11/27 23:26:44 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 # define TRANSFORM		struct s_transform
 # define CAST_RETURN	struct s_cast_return
 # define UPVEC			(VEC3){0, 1, 0}
+# define MAX_REFL		4
 # define SUPERSAMPLING	1
 # define WINDOW_SIZE	(t_point2){768, 768}
 # define WS				WINDOW_SIZE
@@ -122,6 +123,7 @@ typedef struct	s_cast_return
 
 typedef struct	s_engine
 {
+	UINT		refl_iteration;
 	void		*framework;
 	void		*window;
 	void		*image;
