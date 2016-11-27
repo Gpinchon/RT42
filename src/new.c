@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/15 10:44:45 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/11/25 22:17:25 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/11/27 16:43:21 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ FRAMEBUFFER	new_framebuffer(TYPE type, t_point2 size, Uint8 depth)
 
 	buffer.array = new_ezarray(type, size.x * size.y * depth);
 	buffer.size = size;
-	buffer.opp = depth * buffer.array.data_size;
+	buffer.opp = depth;
 	buffer.bpp = buffer.opp * 8;
 	buffer.sizeline = size.x * buffer.opp;
 	return (buffer);
@@ -42,12 +42,11 @@ ENGINE		new_engine()
 	assign_loop_hook(engine.framework, new_callback((void(*)(void*))refresh_window, engine.window));
 	engine.image = new_image(engine.framework, BUFFER_SIZE.x, BUFFER_SIZE.y);
 	engine.framebuffer = new_framebuffer(unsigned_char, BUFFER_SIZE, 4);
-	engine.depthbuffer = new_framebuffer(FLOAT, BUFFER_SIZE, 1);
+	engine.positionbuffer = new_framebuffer(FLOAT, BUFFER_SIZE, 3);
 	engine.normalbuffer = new_framebuffer(FLOAT, BUFFER_SIZE, 3);
 	engine.mtlbuffer = new_framebuffer(FLOAT, BUFFER_SIZE, sizeof(t_mtl) / sizeof(float));
 	attach_image_to_window(engine.window, engine.image);
-	engine.inter_functions[capped_cylinder] = NULL;
-	engine.inter_functions[capped_cone] = NULL;
+	engine.inter_functions[cone] = intersect_cone;
 	engine.inter_functions[sphere] = intersect_sphere;
 	engine.inter_functions[cylinder] = intersect_cylinder;
 	engine.inter_functions[plane] = intersect_plane;

@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:32:51 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/11/25 23:58:05 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/11/27 21:32:14 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,28 +45,56 @@ void	blit_buffer(FRAMEBUFFER buffer, void *image)
 void	default_scene(SCENE *scene)
 {
 	RTPRIMITIVE	*p;
+	LIGHT		*l;
+
+	scene->active_camera = new_camera(scene, 80, 0.0001, 1000);
+	scene->active_camera->transform = new_transform(scene,
+		(VEC3){0, 250, 250}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
 	p = new_rtprim(scene);
-	//p->prim = new_triangle((VEC3){0, 0, 0}, (VEC3){0, -50, 0}, (VEC3){0, 0, -50});
-	//p->prim = new_cone(100, 50, (VEC3){0, 0, 100}, (VEC3){0, 0, 0});
-	//p->prim = new_cylinder(100, 50, (VEC3){0, 0, 0}, (VEC3){0, 1, 0});
 	p->prim = new_sphere(100, (VEC3){0, 0, 0});
+	//p->prim = new_triangle((VEC3){0, 0, 0}, (VEC3){0, 150, 0}, (VEC3){0, 0, 150});
+	//p->prim = new_cone(6, 50, (VEC3){0, 0, 0}, (VEC3){0, 1, 0});
+	//p->prim = new_cylinder(100, 50, (VEC3){0, 0, 0}, (VEC3){0, 1, 0});
 	//p->prim = new_plane((VEC3){0, 0, 0}, (VEC3){0, 0, 0});
 	p->transform = new_transform(scene,
-		(VEC3){0, 0, -150}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
+		(VEC3){0, 0, 0}, (VEC3){0, -1, 0}, (VEC3){1, 1, 1});
 	p->material = new_material(scene);
 	p->material->base_color = (VEC3){1, 0, 0};
-	p->material->roughness = 0;
-	p->material->metalness = 1;
+	//p->material->emitting = (VEC3){0, 0, 1};
+	p->material->roughness = 0.5;
+	p->material->metalness = 0;
 	p->material->alpha = 1;
-	scene->active_camera = new_camera(scene, 80);
-	scene->active_camera->transform = new_transform(scene,
-		(VEC3){0, 0, 200}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
 	scene->active_camera->transform->target = p->transform;
 	p = new_rtprim(scene);
-	p->prim = new_cylinder(120, 100, (VEC3){0, 0, 0}, (VEC3){0, 1, 0});
-	/*p->prim = new_sphere(100, (VEC3){0, 0, 0});*/
+	p->prim = new_cylinder(100, 100, (VEC3){0, 0, 0}, (VEC3){0, 1, 0});
 	p->transform = new_transform(scene,
-		(VEC3){0, 0, -200}, (VEC3){1, 1, 0}, (VEC3){1, 1, 1});
+		(VEC3){200, 10, 0}, (VEC3){1, 1, 1}, (VEC3){1, 1, 1});
+	p->material = new_material(scene);
+	p->material->base_color = (VEC3){0, 1, 0};
+	p->material->roughness = 0.1;
+	p->material->metalness = 1;
+	p->material->alpha = 1;
+	p = new_rtprim(scene);
+	//p->prim = new_cone(6, 50, (VEC3){0, 0, 0}, (VEC3){0, 1, 0});
+	p->prim = new_plane((VEC3){0, 0, 0}, (VEC3){0, 0, 0});
+	p->transform = new_transform(scene,
+		(VEC3){0, -100, 0}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
+	p->material = new_material(scene);
+	p->material->base_color = (VEC3){0, 0, 1};
+	p->material->roughness = 0;
+	p->material->metalness = 0.5;
+	p->material->alpha = 1;
+	l = new_light(scene, POINT, (VEC3){-200, 200, 200});
+	l->direction = (VEC3){0, -1, 0};
+	l->attenuation = 0.002;
+	l->falloff = 150;
+	l->spot_size = 80;
+	l = new_light(scene, POINT, (VEC3){200, 200, -200});
+	l->direction = (VEC3){0, -1, 0};
+	l->attenuation = 0.002;
+	l->falloff = 150;
+	l->spot_size = 80;
+
 }
 
 void	update_transform(TRANSFORM *transform)
@@ -87,19 +115,18 @@ void	update_transform(TRANSFORM *transform)
 	transform->updated = true;
 }
 
-INTERSECT	cast_ray(ENGINE *engine, SCENE *scene, t_point2 screen_coord)
+CAST_RETURN	cast_ray(ENGINE *engine, SCENE *scene, RAY ray)
 {
 	UINT		i;
-	RTPRIMITIVE	*prim;
 	INTERSECT	inter;
-	INTERSECT	ret;
-
+	RTPRIMITIVE	*prim;
+	CAST_RETURN	ret;
 
 	i = 0;
-	ret = new_intersect();
-	while (i < scene->primitive.length)
+	vml_memset(&ret, 0, sizeof(CAST_RETURN));
+	while (i < scene->primitives.length)
 	{
-		prim = ezarray_get_index(scene->primitive, i);
+		prim = ezarray_get_index(scene->primitives, i);
 		if (prim->transform && !prim->transformed)
 		{
 			update_transform(prim->transform);
@@ -109,69 +136,99 @@ INTERSECT	cast_ray(ENGINE *engine, SCENE *scene, t_point2 screen_coord)
 		}
 		if (engine->inter_functions[prim->prim.type])
 		{
-			inter = engine->inter_functions[prim->prim.type](prim->prim, scene->active_camera->ray);
+			inter = engine->inter_functions[prim->prim.type](prim->prim, ray);
 			if (!inter.distance[0])
 				inter.distance[0] = inter.distance[1];
-			if (inter.intersects && (inter.distance[0] < ret.distance[0] || ret.distance[0] == 0))
+			if (inter.intersects && (inter.distance[0] < ret.intersect.distance[0] || ret.intersect.distance[0] == 0))
 			{
-				ret = inter;
+				ret.intersect = inter;
+				ret.rtprimitive = prim;
 			}
 		}
 		i++;
 	}
-	if (ret.intersects)
-		put_pixel_to_buffer(engine->framebuffer, screen_coord, vec4_normalize(vec3_to_vec4(ret.normal, 1)));
 	return (ret);
 }
 
-VEC2	normalize_screen_coord(t_point2 screen_coord, t_point2 resolution, float aspect, float fov)
+VEC2	normalize_screen_coord(t_point2 screen_coord, t_point2 resolution)
 {
 	return ((VEC2){
 		(2 * ((screen_coord.x + 0.5) / (float)resolution.x) - 1),
 		1 - 2 * ((screen_coord.y + 0.5) / (float)resolution.y)});
-	(void)fov;
-	(void)aspect;
 }
 
-void	render_scene(ENGINE *engine)
+void	fill_buffers(ENGINE *engine, t_point2 screen_coord, CAST_RETURN ret)
+{
+	void	*bufferptr;
+
+	if (ret.intersect.intersects)
+	{
+		if (ret.rtprimitive->material)
+		{
+			put_pixel_to_buffer(engine->framebuffer, screen_coord, vec3_to_vec4(ret.rtprimitive->material->base_color, ret.rtprimitive->material->alpha));
+			bufferptr = get_buffer_value(engine->mtlbuffer, screen_coord);
+			*((MATERIAL *)bufferptr) = *ret.rtprimitive->material;
+		}
+		bufferptr = get_buffer_value(engine->positionbuffer, screen_coord);
+		*((VEC3 *)bufferptr) = ret.intersect.position;
+		bufferptr = get_buffer_value(engine->normalbuffer, screen_coord);
+		*((VEC3 *)bufferptr) = ret.intersect.normal;
+		if (RENDER_NORMALS)
+			put_pixel_to_buffer(engine->framebuffer, screen_coord, vec4_normalize(vec3_to_vec4(ret.intersect.normal, 1)));
+	}
+}
+
+/*
+** VEC3	compute_point_color(LIGHT l, MATERIAL mtl, INTERSECT inter, RAY ray)
+*/
+
+VEC3	compute_lighting(ENGINE *engine, SCENE *scene, CAST_RETURN ret)
+{
+	UINT	i;
+	LIGHT	*lptr;
+	VEC3	color;
+	VEC3	raydir;
+	RAY		ray;
+
+	color = (VEC3){0, 0, 0};
+	i = 0;
+	while (i < scene->lights.length)
+	{
+		lptr = ezarray_get_index(scene->lights, i);
+		raydir = vec3_normalize(vec3_sub(lptr->position, ret.intersect.position));
+		ray = new_ray(vec3_add(ret.intersect.position, vec3_scale(ret.intersect.normal, 0.001)), raydir);
+		if (!cast_ray(engine, scene, ray).intersect.intersects)
+			color = vec3_add(color, compute_point_color(*lptr, *ret.rtprimitive->material, ret.intersect, scene->active_camera->ray));
+		i++;
+	}
+	return (color);
+}
+
+void	render_scene(ENGINE *engine, SCENE *scene)
 {
 	t_point2	screen_coord;
 	CAMERA		*cam;
 	VEC2		nscreen_coord;
-	float		aspect;
-	float		fov;
+	CAST_RETURN	ret;
 
-	cam = engine->scene.active_camera;
-	fov = tan(TO_RADIAN(cam->fov) / 2.f);
-	aspect = engine->framebuffer.size.y / (float)engine->framebuffer.size.x;
-	if (cam && cam->transform)
-	{
-		update_transform(cam->transform);
-	}
-	else
+	if (!(cam = scene->active_camera) || !cam->transform)
 		return ;
+	update_transform(cam->transform);
 	screen_coord = (t_point2){0, 0};
-	/*cam->m4_view = mat4_perspective(cam->fov, aspect, 0.0001, 1000);
-	cam->m4_view = mat4_mult_mat4(cam->m4_view, cam->transform->translate);
-	cam->m4_view = mat4_mult_mat4(cam->m4_view, cam->transform->rotate);*/
-	//cam->m4_view = cam->transform->matrix;
 	cam->m4_view = mat4_mult_mat4(cam->transform->matrix,
-			mat4_perspective(cam->fov, aspect, 0.0001, 1000));
-	printf("%f, %f, %f\n", cam->transform->position.x, cam->transform->position.y, cam->transform->position.z);
-	printf("%f, %f, %f\n", cam->transform->rotation.x, cam->transform->rotation.y, cam->transform->rotation.z);
+			mat4_perspective(cam->fov, engine->framebuffer.size.y / (float)engine->framebuffer.size.x, cam->znear, cam->zfar));
 	while (screen_coord.y < engine->framebuffer.size.y)
 	{
 		screen_coord.x = 0;
 		while (screen_coord.x < engine->framebuffer.size.x)
 		{
-			nscreen_coord = normalize_screen_coord(screen_coord, engine->framebuffer.size, aspect, fov);
+			nscreen_coord = normalize_screen_coord(screen_coord, engine->framebuffer.size);
 			cam->ray = new_ray(cam->transform->position,
 				mat4_mult_vec3(cam->m4_view, vec3_normalize((VEC3){nscreen_coord.x, nscreen_coord.y, -1})));
-			cast_ray(engine, &engine->scene, screen_coord);
-			/*if ((intersect = cast_ray(engine, &engine->scene)).intersects)
-			{
-				put_pixel_to_buffer(engine->framebuffer, screen_coord, vec4_normalize(vec3_to_vec4(intersect.normal, 1)));
-			}*/
+			ret = cast_ray(engine, scene, cam->ray);
+			//fill_buffers(engine, screen_coord, ret);
+			if (ret.intersect.intersects)
+				put_pixel_to_buffer(engine->framebuffer, screen_coord, vec3_to_vec4(compute_lighting(engine, scene, ret), 1));
 			screen_coord.x++;
 		}
 		screen_coord.y++;
@@ -186,7 +243,8 @@ int		main(int argc, char *argv[])
 	engine = new_engine();
 	default_scene(&engine.scene);
 	clear_renderer(&engine);
-	render_scene(&engine);
+	render_scene(&engine, &engine.scene);
+	//render_lights(&engine, &engine.scene);
 	blit_buffer(engine.framebuffer, engine.image);
 	refresh_window(engine.window);
 	framework_loop(engine.framework);

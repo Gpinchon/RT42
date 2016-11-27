@@ -6,7 +6,7 @@
 #    By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/11/13 17:17:47 by gpinchon          #+#    #+#              #
-#    Updated: 2016/11/25 23:57:11 by gpinchon         ###   ########.fr        #
+#    Updated: 2016/11/27 15:58:50 by gpinchon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,11 +33,13 @@ LIBS	=	$(addprefix -L , $(LIBDIR)) -lezmem -lvml -lSDLframework -lSDL2main -lSDL
 endif
 
 $(NAME): $(OBJ)
-	git submodule foreach git pull origin master
 	$(foreach dir, $(LIBDIR), $(MAKE) -C $(dir) && ) true
 	$(CC) $(CFLAGS) $(OBJ) $(LIBS) -o $(NAME)
 
 all: $(NAME)
+
+pull:
+	git pull && git submodule foreach git pull origin master
 
 clean:
 	rm -rf $(OBJ)

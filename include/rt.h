@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:06:34 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/11/25 23:48:19 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/11/27 20:31:05 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,10 @@
 # define MATERIAL		struct s_mtl
 # define CAMERA			struct s_camera
 # define TRANSFORM		struct s_transform
+# define CAST_RETURN	struct s_cast_return
 # define UPVEC			(VEC3){0, 1, 0}
 # define SUPERSAMPLING	1
-# define WINDOW_SIZE	(t_point2){1024, 768}
+# define WINDOW_SIZE	(t_point2){768, 768}
 # define WS				WINDOW_SIZE
 # define BUFFER_SIZE	(t_point2){WS.x * SUPERSAMPLING, WS.y * SUPERSAMPLING}
 # define CCLEAR_VALUE	125
@@ -37,6 +38,7 @@
 # define POINT			0x2
 # define DIFFUSE		oren_nayar_diffuse
 # define SPECULAR		trowbridge_reitz_specular
+# define RENDER_NORMALS	true
 
 typedef struct	s_transform
 {
@@ -55,6 +57,7 @@ typedef struct	s_transform
 
 typedef struct	s_light
 {
+	TRANSFORM	*target;
 	UCHAR		type;
 	float		power;
 	float		attenuation;
@@ -68,6 +71,7 @@ typedef struct	s_light
 typedef struct	s_mtl
 {
 	VEC3		base_color;
+	VEC3		emitting;
 	float		roughness;
 	float		metalness;
 	float		alpha;
@@ -84,19 +88,21 @@ typedef struct	s_rtprim
 typedef struct	s_camera
 {
 	TRANSFORM	*transform;
+	float		fov;
+	float		znear;
+	float		zfar;
 	RAY			ray;
 	MAT4		m4_view;
-	float		fov;
 }				t_camera;
 
 typedef struct	s_scene
 {
 	CAMERA		*active_camera;
-	ARRAY		primitive;
-	ARRAY		light;
-	ARRAY		camera;
-	LINK		*transform;
-	LINK		*material;
+	ARRAY		primitives;
+	ARRAY		lights;
+	LINK		*cameras;
+	LINK		*transforms;
+	LINK		*materials;
 }				t_scene;
 
 typedef struct	s_framebuffer
@@ -108,13 +114,19 @@ typedef struct	s_framebuffer
 	ARRAY		array;
 }				t_framebuffer;
 
+typedef struct	s_cast_return
+{
+	RTPRIMITIVE	*rtprimitive;
+	INTERSECT	intersect;
+}				t_cast_return;
+
 typedef struct	s_engine
 {
 	void		*framework;
 	void		*window;
 	void		*image;
 	FRAMEBUFFER	framebuffer;
-	FRAMEBUFFER	depthbuffer;
+	FRAMEBUFFER	positionbuffer;
 	FRAMEBUFFER	normalbuffer;
 	FRAMEBUFFER	mtlbuffer;
 	SCENE		scene;
@@ -138,7 +150,8 @@ void			destroy_engine(ENGINE *engine);
 TRANSFORM		*new_transform(SCENE *scene, VEC3 position, VEC3 rotation, VEC3 scale);
 RTPRIMITIVE		*new_rtprim(SCENE *scene);
 MATERIAL		*new_material(SCENE *scene);
-CAMERA			*new_camera(SCENE *scene, float fov);
+CAMERA			*new_camera(SCENE *scene, float fov, float znear, float zfar);
+LIGHT			*new_light(SCENE *scene, UCHAR type, VEC3 position);
 
 void			clear_renderer(ENGINE *engine);
 void			clear_buffers(ENGINE *engine);
@@ -154,5 +167,7 @@ float			oren_nayar_diffuse(VEC3 normal, VEC3 eye,
 float			lambert_diffuse(VEC3 normal, VEC3 eye,
 				VEC3 lightdir, t_mtl mtl);
 VEC3			compute_lightdir(t_light l, VEC3 position);
+VEC3			compute_point_color(LIGHT l, MATERIAL mtl,
+				INTERSECT inter, RAY ray);
 
 #endif
