@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/15 10:44:45 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/11/27 16:43:21 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/11/29 00:06:21 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,24 @@ SCENE		new_scene()
 	return (scene);
 }
 
+INTERSECT	intersect_sphere2(t_primitive s, t_ray r)
+{
+	t_vec3		eye;
+	INTERSECT	inter;
+
+	inter = new_intersect();
+	eye = vec3_sub(r.origin, s.position);
+	if (!(inter.intersects = solve_quadratic(
+				vec3_dot(r.direction, r.direction),
+				vec3_dot(eye, r.direction) * 2.0,
+				vec3_dot(eye, eye) - (s.radius2),
+				inter.distance) && intersect_test(inter.distance)))
+		return (inter);
+	inter.position = intersect_compute_position(r, inter.distance[0]);
+	inter.normal = sphere_normal(inter.position, s);
+	return (inter);
+}
+
 ENGINE		new_engine()
 {
 	ENGINE	engine;
@@ -47,7 +65,7 @@ ENGINE		new_engine()
 	engine.mtlbuffer = new_framebuffer(FLOAT, BUFFER_SIZE, sizeof(t_mtl) / sizeof(float));
 	attach_image_to_window(engine.window, engine.image);
 	engine.inter_functions[cone] = intersect_cone;
-	engine.inter_functions[sphere] = intersect_sphere;
+	engine.inter_functions[sphere] = intersect_sphere2;
 	engine.inter_functions[cylinder] = intersect_cylinder;
 	engine.inter_functions[plane] = intersect_plane;
 	engine.inter_functions[triangle] = intersect_triangle;
