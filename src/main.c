@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:32:51 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/11/30 01:40:40 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/12/01 00:23:22 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,20 +49,20 @@ void	default_scene(SCENE *scene)
 
 	scene->active_camera = new_camera(scene, 80, 0.0001, 1000);
 	scene->active_camera->transform = new_transform(scene,
-		(VEC3){-250, 300, 0}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
+		(VEC3){150, 200, 200}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
 	p = new_rtprim(scene);
 	p->prim = new_sphere(100, (VEC3){0, 0, 0});
-	//p->prim = new_triangle((VEC3){0, 0, 0}, (VEC3){0, 150, 0}, (VEC3){0, 0, 150});
+	//p->prim = new_triangle((VEC3){150, 0, 0}, (VEC3){0, 150, 0}, (VEC3){0, 0, 150});
 	//p->prim = new_cone(6, 50, (VEC3){0, 0, 0}, (VEC3){0, 1, 0});
 	//p->prim = new_cylinder(100, 50, (VEC3){0, 0, 0}, (VEC3){0, 1, 0});
 	//p->prim = new_plane((VEC3){0, 0, 0}, (VEC3){0, 0, 0});
 	p->transform = new_transform(scene,
-		(VEC3){0, 100, 0}, (VEC3){0, -1, 0}, (VEC3){1, 1, 1});
+		(VEC3){0, 0, 0}, (VEC3){0, -1, 0}, (VEC3){1, 1, 1});
 	p->material = new_material(scene);
-	p->material->refraction = 1.54;
+	p->material->refraction = 2.4175f;
 	p->material->base_color = (VEC3){0, 0, 0};
-	p->material->refraction_color = (VEC3){1, 0.74901, 0};
-	//p->material->emitting = (VEC3){0, 0, 1};
+	p->material->refraction_color = (VEC3){0, 0, 0.1};
+	//p->material->emitting = (VEC3){0, 0, 0.1};
 	p->material->roughness = 0;
 	p->material->metalness = 1;
 	p->material->alpha = 0.1;
@@ -84,19 +84,21 @@ void	default_scene(SCENE *scene)
 	p->transform = new_transform(scene,
 		(VEC3){0, -100, 0}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
 	p->material = new_material(scene);
+	p->material->refraction = 1.333f;
 	p->material->base_color = (VEC3){0, 0, 1};
-	p->material->roughness = 0.5;
-	p->material->metalness = 0;
-	p->material->alpha = 1;
-	/*p = new_rtprim(scene);
-	p->prim = new_plane((VEC3){0, 0, 0}, (VEC3){0, 0, 1});
+	p->material->roughness = 0.8;
+	p->material->metalness = 1;
+	p->material->alpha = 0.5;
+	p = new_rtprim(scene);
+	p->prim = new_sphere(100, (VEC3){0, 0, 0});
 	p->transform = new_transform(scene,
-		(VEC3){0, 0, -200}, (VEC3){0, 0, 1}, (VEC3){1, 1, 1});
+		(VEC3){0, -100, -200}, (VEC3){0, 0, 1}, (VEC3){1, 1, 1});
 	p->material = new_material(scene);
-	p->material->base_color = (VEC3){0, 0, 1};
+	p->material->base_color = (VEC3){1, 0, 0};
+	p->material->refraction = 1.333f;
 	p->material->roughness = 0.5;
-	p->material->metalness = 0.5;
-	p->material->alpha = 1;*/
+	p->material->metalness = 1;
+	p->material->alpha = 0.5;
 	/*l = new_light(scene, DIRECTIONAL, (VEC3){1, 1, 1});
 	l->direction = (VEC3){0, -1, 0};
 	l->power = 0.05;
@@ -198,7 +200,6 @@ VEC3	compute_lighting(ENGINE *engine, SCENE *scene, CAST_RETURN ret)
 	UINT		i;
 	LIGHT		*lptr;
 	VEC3		color;
-	VEC3		raydir;
 	RAY			ray;
 	CAST_RETURN	lret;
 
@@ -207,14 +208,16 @@ VEC3	compute_lighting(ENGINE *engine, SCENE *scene, CAST_RETURN ret)
 	while (i < scene->lights.length)
 	{
 		lptr = ezarray_get_index(scene->lights, i);
-		raydir = compute_lightdir(*lptr, ret.intersect.position);
-		ray = new_ray(vec3_add(ret.intersect.position, vec3_scale(ret.intersect.normal, 0.005)), raydir);
-		//color = vec3_add(color, vec3_scale(compute_point_color(*lptr, *ret.rtprimitive->material, ret.intersect, ray), ret.rtprimitive->material->alpha));
-		if (!(lret = cast_ray(engine, scene, ray)).intersect.intersects
+		ray = new_ray(vec3_add(ret.intersect.position, vec3_scale(ret.intersect.normal, 0.005)), compute_lightdir(*lptr, ret.intersect.position));
+		color = vec3_add(color, vec3_scale(compute_point_color(*lptr, *ret.rtprimitive->material, ret.intersect, ray), ret.rtprimitive->material->alpha));
+		if ((lret = cast_ray(engine, scene, ray)).intersect.intersects
+		&& lptr->cast_shadow)
+			color = vec3_sub(color, vec3_scale(color, 1.f - ret.rtprimitive->material->alpha));
+		/*if (!(lret = cast_ray(engine, scene, ray)).intersect.intersects
 		|| !lptr->cast_shadow)
 			color = vec3_add(color, vec3_scale(compute_point_color(*lptr, *ret.rtprimitive->material, ret.intersect, ray), ret.rtprimitive->material->alpha));
 		else
-			color = vec3_add(color, vec3_scale(compute_point_color(*lptr, *ret.rtprimitive->material, ret.intersect, ray), 1 - lret.rtprimitive->material->alpha));
+			color = vec3_add(color, vec3_scale(compute_point_color(*lptr, *ret.rtprimitive->material, ret.intersect, ray), 1.f - lret.rtprimitive->material->alpha));*/
 		i++;
 	}
 	return (color);
@@ -225,34 +228,63 @@ VEC3	vec3_reflect(VEC3 v, VEC3 n)
 	return (vec3_sub(v, vec3_scale(n, 2 * vec3_dot(v, n))));
 }
 
-VEC3	vec3_refract(VEC3 incident, VEC3 normal, float ri)
+VEC3	vec3_inverse(VEC3 v)
 {
-	float noi;
-	float k;
-	float ni;
+	VEC3	vn;
 
-	ni  = 1.f / ri;
-	noi = vec3_dot(normal, incident);
-	k = 1.f - ni * ni * (1.f - noi * noi);
-	if (k < 0.f)
-		return (VEC3){0.f, 0.f, 0.f};
-	else
-		return vec3_sub(vec3_scale(incident, ni), vec3_scale(normal, ni * noi + sqrtf(k)));
+	vn = vec3_normalize(v);
+	return ((VEC3){
+		v.x / (vn.x * vn.x),
+		v.y / (vn.y * vn.y),
+		v.z / (vn.z * vn.z)});
 }
 
-float	refraction_medium(VEC3 incident, VEC3 normal, float ri)
+VEC3	vec3_refract(VEC3 incident, VEC3 normal, float ior, float aior)
 {
-	float noi;
-	float k;
-	float ni;
+	float cosi = CLAMP(vec3_dot(normal, incident), -1, 1); 
+	float n1, n2; 
+	VEC3 n = normal;
+	if (cosi > 0)
+	{
+		n1 = ior;
+		n2 = aior;
+		normal = vec3_negate(normal);
+	}
+	else
+	{
+		n1 = aior;
+		n2 = ior;
+		cosi = -cosi;
+	} 
+	float eta = n1 / n2;
+	float k = 1.f - eta * eta * (1.f - cosi * cosi);
+	return (k < 0 ?
+		(VEC3){0, 0, 0} :
+		vec3_add(vec3_scale(incident, eta), vec3_scale(n, (eta * cosi - sqrtf(k)))));
+}
 
-	ni  = 1.f / ri;
-	noi = vec3_dot(normal, incident);
-	k = 1.f - ni * ni * (1.f - noi * noi);
+float	refraction_medium(VEC3 incident, VEC3 normal, float ior)
+{
+	float cosi = CLAMP(vec3_dot(incident, normal), -1, 1); 
+	float n1, n2; 
+	if (cosi > 0)
+	{
+		n1 = ior;
+		n2 = 1.f;
+		normal = vec3_negate(normal);
+	}
+	else
+	{
+		n1 = 1.f;
+		n2 = ior;
+		cosi = -cosi;
+	} 
+	float eta = n1 / n2;
+	float k = 1 - eta * eta * (1 - cosi * cosi);
 	return (k);
 }
 
-VEC3	compute_refraction(ENGINE *engine, SCENE *scene, CAST_RETURN ret, RAY cur_ray)
+VEC3	compute_refraction(ENGINE *engine, SCENE *scene, CAST_RETURN ret, RAY cur_ray, float aior)
 {
 	VEC3		color;
 	RAY			ray;
@@ -262,19 +294,19 @@ VEC3	compute_refraction(ENGINE *engine, SCENE *scene, CAST_RETURN ret, RAY cur_r
 		return ((VEC3){0, 0, 0});
 	engine->refr_iteration++;
 	color = (VEC3){0, 0, 0};
-	VEC3	direction = vec3_refract(cur_ray.direction, ret.intersect.normal, ret.rtprimitive->material->refraction);
-	VEC3 position = intersect_compute_position(cur_ray, ret.intersect.distance[1]);
-	ray = new_ray(vec3_add(position, vec3_scale(cur_ray.direction, 0.0005)), direction);
-	//ray = new_ray(vec3_add(ret.intersect.position, vec3_scale(normal, 0.0005)), normal);
+	VEC3	direction;
+	//direction = vec3_normalize(vec3_sub(ret.intersect.position, cur_ray.origin));
+	direction = vec3_refract(cur_ray.direction, ret.intersect.normal, ret.rtprimitive->material->refraction, aior);
+	//ray = new_ray(vec3_add(position, vec3_scale(cur_ray.direction, 0.0005)), direction);
+	ray = new_ray(vec3_add(ret.intersect.position, vec3_scale(direction, 0.0005)), direction);
 	if ((refrret = cast_ray(engine, scene, ray)).intersect.intersects)
 	{
-		color = compute_refraction(engine, scene, refrret, ray);
+		color = compute_refraction(engine, scene, refrret, ray, ret.rtprimitive->material->refraction);
 		color = vec3_add(color, compute_lighting(engine, scene, refrret));
 		color = vec3_add(color, vec3_scale(ret.rtprimitive->material->refraction_color, refraction_medium(cur_ray.direction, ret.intersect.normal, ret.rtprimitive->material->refraction)));
 		color = vec3_interp(interp_linear, color, (VEC3){0, 0, 0}, ret.rtprimitive->material->alpha);
 	}
 	return (color);
-	(void)cur_ray;
 }
 
 VEC3	compute_reflection(ENGINE *engine, SCENE *scene, CAST_RETURN ret, RAY cur_ray)
@@ -330,7 +362,7 @@ void	render_scene(ENGINE *engine, SCENE *scene)
 				col = compute_lighting(engine, scene, ret);
 				col = vec3_add(col, compute_reflection(engine, scene, ret, cam->ray));
 				engine->refl_iteration = 0;
-				col = vec3_add(col, compute_refraction(engine, scene, ret, cam->ray));
+				col = vec3_add(col, compute_refraction(engine, scene, ret, cam->ray, 1.f));
 				engine->refr_iteration = 0;
 				//col = vec3_interp(interp_linear, vec3_add(col, compute_refraction(engine, scene, ret, cam->ray)), col, ret.rtprimitive->material->alpha);
 				put_pixel_to_buffer(engine->framebuffer, screen_coord, vec3_to_vec4(col, 1));
