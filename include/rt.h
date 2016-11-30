@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:06:34 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/11/28 23:00:53 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/11/30 00:39:30 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@
 # define WINDOW_SIZE	(t_point2){768, 768}
 # define WS				WINDOW_SIZE
 # define BUFFER_SIZE	(t_point2){WS.x * SUPERSAMPLING, WS.y * SUPERSAMPLING}
-# define CCLEAR_VALUE	125
+# define CCLEAR_VALUE	0
 # define FCLEAR_VALUE	0
 # define DIRECTIONAL	0x0
 # define SPOT			0x1
@@ -61,6 +61,7 @@ typedef struct	s_light
 {
 	TRANSFORM	*target;
 	UCHAR		type;
+	UCHAR		cast_shadow;
 	float		power;
 	float		attenuation;
 	float		falloff;
@@ -73,9 +74,11 @@ typedef struct	s_light
 typedef struct	s_mtl
 {
 	VEC3		base_color;
+	VEC3		refraction_color;
 	VEC3		emitting;
 	float		roughness;
 	float		metalness;
+	float		refraction;
 	float		alpha;
 }				t_mtl;
 
@@ -163,9 +166,9 @@ void			clear_uchar_bits(void *pixel);
 void			clear_float_bits(void *pixel);
 
 float			trowbridge_reitz_specular(VEC3 normal, VEC3 eye,
-				VEC3 lightdir, float s);
+				VEC3 lightdir, MATERIAL mtl);
 float			blinn_phong_specular(VEC3 normal, VEC3 eye,
-				VEC3 lightdir, float s);
+				VEC3 lightdir, t_mtl mtl);
 float			oren_nayar_diffuse(VEC3 normal, VEC3 eye,
 				VEC3 lightdir, t_mtl mtl);
 float			lambert_diffuse(VEC3 normal, VEC3 eye,

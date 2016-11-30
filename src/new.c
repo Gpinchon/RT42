@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/15 10:44:45 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/11/29 00:06:21 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/11/29 21:26:42 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,21 +32,27 @@ SCENE		new_scene()
 	return (scene);
 }
 
-INTERSECT	intersect_sphere2(t_primitive s, t_ray r)
+INTERSECT	intersect_plane2(t_primitive cp, t_ray r)
 {
-	t_vec3		eye;
 	INTERSECT	inter;
+	t_vec3	normal;
+	float	denom;
+	float	t;
 
 	inter = new_intersect();
-	eye = vec3_sub(r.origin, s.position);
-	if (!(inter.intersects = solve_quadratic(
-				vec3_dot(r.direction, r.direction),
-				vec3_dot(eye, r.direction) * 2.0,
-				vec3_dot(eye, eye) - (s.radius2),
-				inter.distance) && intersect_test(inter.distance)))
-		return (inter);
-	inter.position = intersect_compute_position(r, inter.distance[0]);
-	inter.normal = sphere_normal(inter.position, s);
+	normal = vec3_negate(cp.direction);
+	denom = vec3_dot(normal, r.direction);
+	if (denom > 1e-6)
+	{
+		t = vec3_dot(vec3_sub(cp.position, r.origin), normal) / denom;
+		if (t >= 0)
+		{
+			inter.intersects = 1;
+			inter.distance[0] = inter.distance[1] = t;
+			inter.position = intersect_compute_position(r, inter.distance[0]);
+			inter.normal = plane_normal(inter.position, cp);
+		}
+	}
 	return (inter);
 }
 
@@ -65,9 +71,9 @@ ENGINE		new_engine()
 	engine.mtlbuffer = new_framebuffer(FLOAT, BUFFER_SIZE, sizeof(t_mtl) / sizeof(float));
 	attach_image_to_window(engine.window, engine.image);
 	engine.inter_functions[cone] = intersect_cone;
-	engine.inter_functions[sphere] = intersect_sphere2;
+	engine.inter_functions[sphere] = intersect_sphere;
 	engine.inter_functions[cylinder] = intersect_cylinder;
-	engine.inter_functions[plane] = intersect_plane;
+	engine.inter_functions[plane] = intersect_plane2;
 	engine.inter_functions[triangle] = intersect_triangle;
 	return (engine);
 }
