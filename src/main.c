@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:32:51 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/12/01 12:34:43 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/12/02 00:36:22 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	default_scene(SCENE *scene)
 
 	scene->active_camera = new_camera(scene, 80, 0.0001, 1000);
 	scene->active_camera->transform = new_transform(scene,
-		(VEC3){150, 500, 200}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
+		(VEC3){150, 500, 150}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
 	p = new_rtprim(scene);
 	p->prim = new_sphere(100, (VEC3){0, 0, 0});
 	//p->prim = new_triangle((VEC3){150, 0, 0}, (VEC3){0, 150, 0}, (VEC3){0, 0, 150});
@@ -65,13 +65,13 @@ void	default_scene(SCENE *scene)
 	//p->material->emitting = (VEC3){0, 0, 0.1};
 	p->material->roughness = 0;
 	p->material->metalness = 1;
-	p->material->alpha = 0;
+	p->material->alpha = 0.2;
 	scene->active_camera->transform->target = p->transform;
 	p = new_rtprim(scene);
 	//p->prim = new_sphere(100, (VEC3){0, 0, 0});
 	p->prim = new_cylinder(100, 100, (VEC3){0, 0, 0}, (VEC3){0, 1, 0});
 	p->transform = new_transform(scene,
-		(VEC3){250, 10, 0}, (VEC3){1, 1, 1}, (VEC3){1, 1, 1});
+		(VEC3){250, 0, 0}, (VEC3){1, 1, 1}, (VEC3){1, 1, 1});
 	p->material = new_material(scene);
 	p->material->refraction = 1.f;
 	p->material->base_color = (VEC3){0, 1, 0};
@@ -83,11 +83,21 @@ void	default_scene(SCENE *scene)
 	//p->prim = new_cone(6, 50, (VEC3){0, 0, 0}, (VEC3){0, 1, 0});
 	p->prim = new_plane((VEC3){0, 0, 0}, (VEC3){0, 0, 0});
 	p->transform = new_transform(scene,
-		(VEC3){0, 150, 0}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
+		(VEC3){0, 0, -250}, (VEC3){0, 0, 1}, (VEC3){1, 1, 1});
 	p->material = new_material(scene);
 	p->material->refraction = 2.4175f;
 	p->material->base_color = (VEC3){0, 0, 1};
 	p->material->roughness = 0.2;
+	p->material->metalness = 1;
+	p->material->alpha = 1;
+	p = new_rtprim(scene);
+	p->prim = new_plane((VEC3){0, 0, 0}, (VEC3){0, 0, 0});
+	p->transform = new_transform(scene,
+		(VEC3){0, 0, 0}, (VEC3){-0.2, 1, 0}, (VEC3){1, 1, 1});
+	p->material = new_material(scene);
+	p->material->refraction = 2.4175f;
+	p->material->base_color = (VEC3){0, 0, 1};
+	p->material->roughness = 0.5;
 	p->material->metalness = 1;
 	p->material->alpha = 0;
 	p = new_rtprim(scene);
@@ -100,18 +110,21 @@ void	default_scene(SCENE *scene)
 	p->material->roughness = 0.5;
 	p->material->metalness = 1;
 	p->material->alpha = 0;
-	/*l = new_light(scene, DIRECTIONAL, (VEC3){1, 1, 1});
+	/*l = new_light(scene, DIRECTIONAL, (VEC3){200, 200, -200});
+	l->cast_shadow = false;
 	l->direction = (VEC3){0, -1, 0};
-	l->power = 0.05;
 	l->attenuation = 0.002;
 	l->falloff = 150;
 	l->spot_size = 80;*/
 	l = new_light(scene, POINT, (VEC3){-200, 200, 200});
 	l->cast_shadow = true;
 	l->direction = (VEC3){0, -1, 0};
+	//l->power = .5f;
 	l->attenuation = 0.002;
 	l->falloff = 300;
 	l->spot_size = 80;
+	/*scene->active_camera->transform->target = new_transform(scene,
+		(VEC3){-200, 200, 200}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});*/
 
 }
 
@@ -149,7 +162,9 @@ CAST_RETURN	cast_ray(ENGINE *engine, SCENE *scene, RAY ray)
 		{
 			update_transform(prim->transform);
 			prim->prim.position = mat4_mult_vec3(prim->transform->translate, prim->transform->position);
-			prim->prim.direction = mat4_mult_vec3(prim->transform->rotate, vec3_normalize(prim->transform->rotation));
+			prim->prim.direction = vec3_normalize(mat4_mult_vec3(prim->transform->rotate, prim->transform->rotation));
+			/*if (prim->prim.type == plane)
+				prim->prim.direction = prim->transform->rotation;*/
 			prim->transformed = true;
 		}
 		if (engine->inter_functions[prim->prim.type])
@@ -211,11 +226,12 @@ VEC3	compute_lighting(ENGINE *engine, SCENE *scene, CAST_RETURN ret)
 		//ray.direction = vec3_sub(lptr->position, ret.intersect.position);
 		ray.origin = vec3_add(ret.intersect.position, vec3_scale(ret.intersect.normal, 0.5));
 		color = vec3_add(color, compute_point_color(*lptr, *ret.rtprimitive->material, ret.intersect, ray));
-		if ((lret = cast_ray(engine, scene, ray)).intersect.intersects
-		&& lptr->cast_shadow)
+		if (lptr->cast_shadow
+		&& (lret = cast_ray(engine, scene, ray)).intersect.intersects
+		&& lret.intersect.distance[0] < vec3_distance(lptr->position, ret.intersect.position))
 		{
 			if (lret.rtprimitive->prim.type == plane)
-				printf("%f\n", lret.intersect.distance[0]);
+				printf("%f, %f\n", lret.intersect.distance[0], vec3_distance(lptr->position, ret.intersect.position));
 			color = vec3_sub(color, vec3_scale(color, 0.5));
 		}
 		/*

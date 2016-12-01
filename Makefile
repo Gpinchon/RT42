@@ -6,7 +6,7 @@
 #    By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/11/13 17:17:47 by gpinchon          #+#    #+#              #
-#    Updated: 2016/11/27 15:58:50 by gpinchon         ###   ########.fr        #
+#    Updated: 2016/12/01 22:36:32 by gpinchon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,6 +24,7 @@ CC		=	gcc
 INCLUDE	=	$(addprefix -I, $(wildcard ./libs/*/include/)) -I./include/
 LIBDIR	=	$(wildcard ./libs/*)
 
+#CFLAGS	=	-g -Wall -Wextra -Werror $(INCLUDE)
 CFLAGS	=	-g -Wall -Wextra -Werror $(INCLUDE)
 
 ifeq ($(OS), Windows_NT)
@@ -39,7 +40,9 @@ $(NAME): $(OBJ)
 all: $(NAME)
 
 pull:
-	git pull && git submodule foreach git pull origin master
+	git pull
+	git submodule update --init --recursive
+	git submodule foreach git pull origin master
 
 clean:
 	rm -rf $(OBJ)
