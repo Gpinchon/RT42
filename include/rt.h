@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:06:34 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/11/30 00:39:30 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/12/02 17:37:01 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,6 +137,7 @@ typedef struct	s_engine
 	FRAMEBUFFER	normalbuffer;
 	FRAMEBUFFER	mtlbuffer;
 	SCENE		scene;
+	SCENE		*active_scene;
 	INTERSECT	(*inter_functions[10])(PRIMITIVE, RAY);
 }				t_engine;
 
