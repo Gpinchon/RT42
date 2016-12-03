@@ -6,17 +6,22 @@
 #    By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/11/13 17:17:47 by gpinchon          #+#    #+#              #
-#    Updated: 2016/12/02 17:31:22 by gpinchon         ###   ########.fr        #
+#    Updated: 2016/12/02 22:58:36 by gpinchon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	=	RT
-SRC		=	./src/main.c				\
-			./src/light_computation.c	\
-			./src/new.c					\
-			./src/new2.c				\
-			./src/destroy.c				\
-			./src/clear.c				\
+SRC		=	./src/main.c					\
+			./src/light_computation.c		\
+			./src/cast_ray.c				\
+			./src/compute_lighting.c		\
+			./src/refraction_reflection.c	\
+			./src/texture_mapping.c			\
+			./src/transform.c				\
+			./src/new.c						\
+			./src/new2.c					\
+			./src/destroy.c					\
+			./src/clear.c					\
 			./src/put_pixel.c
 
 OBJ		=	$(SRC:.c=.o)

@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/15 10:44:45 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/12/01 23:06:51 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/12/02 23:45:15 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,43 @@ INTERSECT	intersect_plane2(t_primitive cp, t_ray r)
 	return (inter);
 }
 
+INTERSECT intersect_cylinder2(t_primitive cp, t_ray r)
+{
+	t_vec3		v[6];
+	INTERSECT	i;
+
+	i = new_intersect();
+	v[0] = vec3_proj(cp.position, cp.direction);
+	v[1] = vec3_sub(cp.position, v[0]);
+	v[2] = vec3_proj(r.origin, cp.direction);
+	v[3] = vec3_proj(r.direction, cp.direction);
+	v[4] = vec3_sub(r.direction, v[3]);
+	v[5] = vec3_sub(vec3_sub(r.origin, v[2]), v[1]);
+	if (!(i.intersects = solve_quadratic(vec3_dot(v[4], v[4]),
+		vec3_dot(v[5], v[4]) * 2.0, vec3_dot(v[5], v[5]) - (cp.radius2), i.distance)))
+		return (i);
+	if (cp.size > 0 && vec3_length(vec3_sub(vec3_add(v[2],
+		vec3_scale(v[3], i.distance[0])), v[0])) >= cp.size / 2)
+		i.distance[0] = 0;
+	if (cp.size > 0 && vec3_length(vec3_sub(vec3_add(v[2],
+		vec3_scale(v[3], i.distance[1])), v[0])) >= cp.size / 2)
+		i.distance[1] = 0;
+	if (!(i.intersects = intersect_test(i.distance)))
+		return (i);
+	if (i.distance[0] <= 0)
+	{
+		i.distance[0] = i.distance[1];
+		i.position = intersect_compute_position(r, i.distance[0]);
+		i.normal = vec3_negate(cylinder_normal(i.position, cp));
+	}
+	else
+	{
+		i.position = intersect_compute_position(r, i.distance[0]);
+		i.normal = cylinder_normal(i.position, cp);
+	}
+	return (i);
+}
+
 ENGINE		new_engine()
 {
 	ENGINE	engine;
@@ -71,8 +108,8 @@ ENGINE		new_engine()
 	attach_image_to_window(engine.window, engine.image);
 	engine.inter_functions[cone] = intersect_cone;
 	engine.inter_functions[sphere] = intersect_sphere;
-	engine.inter_functions[cylinder] = intersect_cylinder;
-	engine.inter_functions[plane] = intersect_plane2;
+	engine.inter_functions[cylinder] = intersect_cylinder2;
+	engine.inter_functions[plane] = intersect_plane;
 	engine.inter_functions[triangle] = intersect_triangle;
 	return (engine);
 }

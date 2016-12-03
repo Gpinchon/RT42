@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:06:34 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/12/02 17:37:01 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/12/02 23:13:13 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,9 @@ typedef struct	s_light
 
 typedef struct	s_mtl
 {
+	void		*base_map;
+	void		*normal_map;
+	void		*roughness_map;
 	VEC3		base_color;
 	VEC3		refraction_color;
 	VEC3		emitting;
@@ -123,6 +126,7 @@ typedef struct	s_cast_return
 {
 	RTPRIMITIVE	*rtprimitive;
 	INTERSECT	intersect;
+	VEC2		uv;
 }				t_cast_return;
 
 typedef struct	s_engine
@@ -151,6 +155,15 @@ void			put_value_to_buffer(FRAMEBUFFER buffer,
 void			*get_buffer_value(FRAMEBUFFER buffer,
 				t_point2 coord);
 
+t_point2		map_uv(void *image, VEC2 uv);
+VEC3			get_texture_color(void *image, VEC2 uv);
+VEC2			sphere_uv(PRIMITIVE sphere, INTERSECT inter);
+
+CAST_RETURN		cast_ray(ENGINE *engine, SCENE *scene, RAY ray);
+VEC3			compute_lighting(ENGINE *engine, CAST_RETURN ret);
+VEC3			compute_refraction(ENGINE *engine, CAST_RETURN ret, RAY cur_ray, float aior);
+VEC3			compute_reflection(ENGINE *engine, CAST_RETURN ret, RAY cur_ray);
+void			update_transform(TRANSFORM *transform);
 
 void			destroy_scene(SCENE *scene);
 void			destroy_engine(ENGINE *engine);
