@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:06:34 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/12/02 23:13:13 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/12/05 23:34:33 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,11 +73,15 @@ typedef struct	s_light
 
 typedef struct	s_mtl
 {
+	char		*name;
 	void		*base_map;
 	void		*normal_map;
-	void		*roughness_map;
+	void		*metal_map;
+	void		*rough_map;
+	VEC2		uv_scale;
 	VEC3		base_color;
 	VEC3		refraction_color;
+	VEC3		reflection_color;
 	VEC3		emitting;
 	float		roughness;
 	float		metalness;
@@ -127,6 +131,7 @@ typedef struct	s_cast_return
 	RTPRIMITIVE	*rtprimitive;
 	INTERSECT	intersect;
 	VEC2		uv;
+	MATERIAL	mtl;
 }				t_cast_return;
 
 typedef struct	s_engine
@@ -156,8 +161,11 @@ void			*get_buffer_value(FRAMEBUFFER buffer,
 				t_point2 coord);
 
 t_point2		map_uv(void *image, VEC2 uv);
+float			color_to_factor(VEC3 color);
 VEC3			get_texture_color(void *image, VEC2 uv);
 VEC2			sphere_uv(PRIMITIVE sphere, INTERSECT inter);
+VEC2			cylinder_uv(PRIMITIVE cylinder, INTERSECT inter);
+VEC2			plane_uv(PRIMITIVE plane, INTERSECT inter);
 
 CAST_RETURN		cast_ray(ENGINE *engine, SCENE *scene, RAY ray);
 VEC3			compute_lighting(ENGINE *engine, CAST_RETURN ret);
@@ -170,9 +178,17 @@ void			destroy_engine(ENGINE *engine);
 
 TRANSFORM		*new_transform(SCENE *scene, VEC3 position, VEC3 rotation, VEC3 scale);
 RTPRIMITIVE		*new_rtprim(SCENE *scene);
-MATERIAL		*new_material(SCENE *scene);
+MATERIAL		*new_material(SCENE *scene, char *name);
 CAMERA			*new_camera(SCENE *scene, float fov, float znear, float zfar);
 LIGHT			*new_light(SCENE *scene, UCHAR type, VEC3 position);
+
+MATERIAL		*get_mtl_by_name(SCENE *scene, char *name);
+MATERIAL		*mtl_aquamarine(ENGINE *engine, SCENE *scene);
+MATERIAL		*mtl_greasy_metal(ENGINE *engine, SCENE *scene);
+MATERIAL		*mtl_rusted_metal(ENGINE *engine, SCENE *scene);
+MATERIAL		*mtl_copper_rock(ENGINE *engine, SCENE *scene);
+MATERIAL		*mtl_granite(ENGINE *engine, SCENE *scene);
+MATERIAL		*mtl_water(ENGINE *engine, SCENE *scene);
 
 void			clear_renderer(ENGINE *engine);
 void			clear_buffers(ENGINE *engine);

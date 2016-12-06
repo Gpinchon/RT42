@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:32:51 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/12/03 01:04:59 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/12/06 01:27:45 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,99 +50,103 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 	(void)engine;
 	scene->active_camera = new_camera(scene, 80, 0.0001, 1000);
 	scene->active_camera->transform = new_transform(scene,
-		(VEC3){-50, 150, 150}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
+		(VEC3){0, 150, 350}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
+	MATERIAL *mirror = new_material(scene, "mirror");
+	mirror->base_color = (VEC3){0.1, 0.1, 0.1};
+	mirror->reflection_color = (VEC3){1, 1, 1};
+	mirror->refraction = 1.90f;
+	mirror->roughness = 0.003;
+	mirror->metalness = 1;
+	mirror->alpha = 1;
 	p = new_rtprim(scene);
 	p->prim = new_sphere(100, (VEC3){0, 0, 0});
-	//p->prim = new_triangle((VEC3){150, 0, 0}, (VEC3){0, 150, 0}, (VEC3){0, 0, 150});
-	//p->prim = new_cone(6, 50, (VEC3){0, 0, 0}, (VEC3){0, 1, 0});
-	//p->prim = new_cylinder(100, 50, (VEC3){0, 0, 0}, (VEC3){0, 1, 0});
-	//p->prim = new_plane((VEC3){0, 0, 0}, (VEC3){0, 0, 0});
 	p->transform = new_transform(scene,
-		(VEC3){0, 0, 0}, (VEC3){0, -1, 0}, (VEC3){1, 1, 1});
-	p->material = new_material(scene);
-	p->material->refraction = 1.59f * 2.f;
-	p->material->base_color = (VEC3){0.419607843, 0.792156863, 0.88627451};
-	p->material->refraction_color = (VEC3){0, 0.5, 0.1};
-	//p->material->emitting = (VEC3){0, 0, 0.1};
-	//p->material->base_map = load_image_file(engine->framework, "res/Graphics_duck.bmp");
-	p->material->normal_map = load_image_file(engine->framework, "res/rock.bmp");
-	p->material->roughness = 0.3;
-	p->material->metalness = 0.5;
-	p->material->alpha = 0.7;
+		(VEC3){250, 100, 0}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
+	p->material = mtl_rusted_metal(engine, scene);
+	p = new_rtprim(scene);
+	p->prim = new_sphere(100, (VEC3){0, 0, 0});
+	p->transform = new_transform(scene,
+		(VEC3){0, 100, 0}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
+	p->material = mtl_greasy_metal(engine, scene);
 	scene->active_camera->transform->target = p->transform;
 	p = new_rtprim(scene);
-	p->prim = new_cylinder(100, 100, (VEC3){0, 0, 0}, (VEC3){0, 1, 0});
+	p->prim = new_sphere(100, (VEC3){0, 0, 0});
 	p->transform = new_transform(scene,
-		(VEC3){250, 0, 0}, (VEC3){1, 1, 1}, (VEC3){1, 1, 1});
-	p->material = new_material(scene);
-	p->material->refraction = 2.f;
-	p->material->base_color = (VEC3){0, 1, 0};
-	p->material->roughness = 0.2;
-	p->material->metalness = 1;
-	p->material->alpha = 1;
+		(VEC3){-250, 100, 0}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
+	p->material = mtl_copper_rock(engine, scene);
+
 	p = new_rtprim(scene);
-	p->prim = new_cylinder(50, 0, (VEC3){0, 0, 0}, (VEC3){0, 1, 0});
+	p->prim = new_cylinder(100, 500, (VEC3){0, 0, 0}, (VEC3){0, 1, 0});
 	p->transform = new_transform(scene,
-		(VEC3){0, 0, -200}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
-	p->material = new_material(scene);
-	p->material->base_color = (VEC3){1, 0, 0};
-	p->material->refraction = 1.333f;
-	p->material->roughness = 0.5;
-	p->material->metalness = 1;
-	p->material->alpha = 0.5;
+		(VEC3){250, 250, -200}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
+	p->material = mtl_rusted_metal(engine, scene);
+	p = new_rtprim(scene);
+	p->prim = new_cylinder(100, 500, (VEC3){0, 0, 0}, (VEC3){0, 1, 0});
+	p->transform = new_transform(scene,
+		(VEC3){0, 250, -200}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
+	p->material = mtl_water(engine, scene);
+	p = new_rtprim(scene);
+	p->prim = new_cylinder(100, 500, (VEC3){0, 0, 0}, (VEC3){0, 1, 0});
+	p->transform = new_transform(scene,
+		(VEC3){-250, 250, -200}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
+	p->material = mtl_copper_rock(engine, scene);
+
 	p = new_rtprim(scene);
 	p->prim = new_plane((VEC3){0, 0, 0}, (VEC3){0, 0, 0});
 	p->transform = new_transform(scene,
-		(VEC3){0, 0, -250}, (VEC3){0, 0, 1}, (VEC3){1, 1, 1});
-	p->material = new_material(scene);
-	p->material->refraction = 1.333f;
-	p->material->base_color = (VEC3){0, 0, 1};
-	p->material->roughness = 0.2;
-	p->material->metalness = 1;
-	p->material->alpha = 1;
+		(VEC3){0, 0, -500}, (VEC3){0, 0, 1}, (VEC3){1, 1, 1});
+	p->material = mirror;
+	p = new_rtprim(scene);
+	p->prim = new_plane((VEC3){0, 0, 0}, (VEC3){0, 0, 0});
+	p->transform = new_transform(scene,
+		(VEC3){0, 0, 500}, (VEC3){0, 0, -1}, (VEC3){1, 1, 1});
+	p->material = mirror;
 	p = new_rtprim(scene);
 	p->prim = new_plane((VEC3){0, 0, 0}, (VEC3){0, 0, 0});
 	p->transform = new_transform(scene,
 		(VEC3){500, 0, 0}, (VEC3){-1, 0, 0}, (VEC3){1, 1, 1});
-	p->material = new_material(scene);
-	p->material->refraction = 1.333f;
-	p->material->base_color = (VEC3){0, 0, 1};
-	p->material->roughness = 0.2;
-	p->material->metalness = 1;
-	p->material->alpha = 1;
+	p->material = mirror;
 	p = new_rtprim(scene);
 	p->prim = new_plane((VEC3){0, 0, 0}, (VEC3){0, 0, 0});
 	p->transform = new_transform(scene,
 		(VEC3){-500, 0, 0}, (VEC3){1, 0, 0}, (VEC3){1, 1, 1});
-	p->material = new_material(scene);
-	p->material->refraction = 2.4175f;
-	p->material->base_color = (VEC3){0, 0, 1};
-	p->material->roughness = 0.2;
-	p->material->metalness = 1;
-	p->material->alpha = 1;
+	p->material = mirror;
 	p = new_rtprim(scene);
 	p->prim = new_plane((VEC3){0, 0, 0}, (VEC3){0, 0, 0});
 	p->transform = new_transform(scene,
-		(VEC3){0, -100, 0}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
-	p->material = new_material(scene);
-	p->material->refraction = 2.4175f;
-	p->material->base_color = (VEC3){0, 0, 1};
-	p->material->roughness = 0.5;
-	p->material->metalness = 0;
-	p->material->alpha = 1;
+		(VEC3){0, 0, 0}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
+	p->material = mtl_water(engine, scene);
+	p = new_rtprim(scene);
+	p->prim = new_plane((VEC3){0, 0, 0}, (VEC3){0, 0, 0});
+	p->transform = new_transform(scene,
+		(VEC3){0, 500, 0}, (VEC3){0, -1, 0}, (VEC3){1, 1, 1});
+	p->material = mirror;
+	/*p->prim = new_plane((VEC3){0, 0, 0}, (VEC3){0, 0, 0});
+	p->transform = new_transform(scene,
+		(VEC3){0, 0, -50}, (VEC3){0, 0, 1}, (VEC3){1, 1, 1});
+	p->material = mtl_water(engine, scene);*/
 	/*l = new_light(scene, DIRECTIONAL, (VEC3){200, 200, -200});
 	l->cast_shadow = false;
 	l->direction = (VEC3){0, -1, 0};
 	l->attenuation = 0.002;
 	l->falloff = 150;
 	l->spot_size = 80;*/
-	l = new_light(scene, POINT, (VEC3){-200, 200, 200});
+	l = new_light(scene, POINT, (VEC3){-200, 250, 200});
+	l->color = (VEC3){1, 207.f / 255.f, 197.f / 255.f};
 	l->cast_shadow = true;
 	l->direction = (VEC3){0, -1, 0};
-	//l->power = .5f;
+	l->power = 2.f;
 	l->attenuation = 0.002;
-	l->falloff = 150;
+	l->falloff = 500;
 	l->spot_size = 80;
+	/*l = new_light(scene, POINT, (VEC3){0, 250, 100});
+	l->color = (VEC3){1, 207.f / 255.f, 197.f / 255.f};
+	l->cast_shadow = false;
+	l->direction = (VEC3){0, -1, 0};
+	l->power = 1.f;
+	l->attenuation = 0.002;
+	l->falloff = 500;
+	l->spot_size = 80;*/
 	/*scene->active_camera->transform->target = new_transform(scene,
 		(VEC3){-200, 200, 200}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});*/
 
@@ -209,12 +213,8 @@ void	render_scene(ENGINE *engine, SCENE *scene)
 				engine->refl_iteration = 0;
 				col = vec3_add(col, compute_refraction(engine, ret, cam->ray, 1.f));
 				engine->refr_iteration = 0;
-				/*
-				{
-					col = get_texture_color(texture, uv);
-				}*/
 				put_pixel_to_buffer(engine->framebuffer, screen_coord, vec3_to_vec4(col, 1));
-				//put_pixel_to_buffer(engine->framebuffer, screen_coord, vec4_normalize(vec3_to_vec4(vec3_normalize(ret.intersect.position), 1)));
+				//put_pixel_to_buffer(engine->framebuffer, screen_coord, vec4_normalize(vec3_to_vec4(vec3_normalize(ret.intersect.normal), 1)));
 			}
 			screen_coord.x++;
 		}
@@ -231,7 +231,6 @@ int		main(int argc, char *argv[])
 	default_scene(&engine, &engine.scene);
 	clear_renderer(&engine);
 	render_scene(&engine, &engine.scene);
-	//render_lights(&engine, &engine.scene);
 	blit_buffer(engine.framebuffer, engine.image);
 	refresh_window(engine.window);
 	framework_loop(engine.framework);

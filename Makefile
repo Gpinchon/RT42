@@ -6,7 +6,7 @@
 #    By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/11/13 17:17:47 by gpinchon          #+#    #+#              #
-#    Updated: 2016/12/02 22:58:36 by gpinchon         ###   ########.fr        #
+#    Updated: 2016/12/05 23:08:06 by gpinchon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,6 +18,7 @@ SRC		=	./src/main.c					\
 			./src/refraction_reflection.c	\
 			./src/texture_mapping.c			\
 			./src/transform.c				\
+			./src/materials.c				\
 			./src/new.c						\
 			./src/new2.c					\
 			./src/destroy.c					\

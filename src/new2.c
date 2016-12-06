@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/15 11:04:09 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/11/27 17:56:17 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/12/05 23:09:10 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,13 @@ RTPRIMITIVE	*new_rtprim(SCENE *scene)
 	return (ezarray_get_index(scene->primitives, scene->primitives.length - 1));
 }
 
-MATERIAL	*new_material(SCENE *scene)
+MATERIAL	*new_material(SCENE *scene, char *name)
 {
 	LINK		*new_link;
+	MATERIAL	*mtl;
 
+	if ((mtl = get_mtl_by_name(scene, name)))
+		return (mtl);
 	if (!scene->materials)
 		new_link = scene->materials = new_ezlink(other, 1, sizeof(MATERIAL));
 	else
@@ -35,6 +38,10 @@ MATERIAL	*new_material(SCENE *scene)
 		new_link = new_ezlink(other, 1, sizeof(MATERIAL));
 		ezlink_append(scene->materials, new_link);
 	}
+	((MATERIAL*)ezlink_get_data(new_link))->name = strcpy(malloc(sizeof(char) * strlen(name)), name);
+	((MATERIAL*)ezlink_get_data(new_link))->uv_scale = (VEC2){1, 1};
+	((MATERIAL*)ezlink_get_data(new_link))->refraction = 1.f;
+	((MATERIAL*)ezlink_get_data(new_link))->alpha = 1;
 	return (ezlink_get_data(new_link));
 }
 
