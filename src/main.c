@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:32:51 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/12/06 01:27:45 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/12/09 01:08:31 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,30 +50,30 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 	(void)engine;
 	scene->active_camera = new_camera(scene, 80, 0.0001, 1000);
 	scene->active_camera->transform = new_transform(scene,
-		(VEC3){0, 150, 350}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
+		(VEC3){0, 150, 250}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
 	MATERIAL *mirror = new_material(scene, "mirror");
 	mirror->base_color = (VEC3){0.1, 0.1, 0.1};
 	mirror->reflection_color = (VEC3){1, 1, 1};
 	mirror->refraction = 1.90f;
-	mirror->roughness = 0.003;
+	mirror->roughness = 0;
 	mirror->metalness = 1;
 	mirror->alpha = 1;
 	p = new_rtprim(scene);
 	p->prim = new_sphere(100, (VEC3){0, 0, 0});
 	p->transform = new_transform(scene,
 		(VEC3){250, 100, 0}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
-	p->material = mtl_rusted_metal(engine, scene);
+	p->material = mtl_scuffed_aluminium(engine, scene);
 	p = new_rtprim(scene);
 	p->prim = new_sphere(100, (VEC3){0, 0, 0});
 	p->transform = new_transform(scene,
 		(VEC3){0, 100, 0}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
-	p->material = mtl_greasy_metal(engine, scene);
+	p->material = mtl_scuffed_plastic_red(engine, scene);
 	scene->active_camera->transform->target = p->transform;
 	p = new_rtprim(scene);
 	p->prim = new_sphere(100, (VEC3){0, 0, 0});
 	p->transform = new_transform(scene,
 		(VEC3){-250, 100, 0}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
-	p->material = mtl_copper_rock(engine, scene);
+	p->material = mtl_rock_copper(engine, scene);
 
 	p = new_rtprim(scene);
 	p->prim = new_cylinder(100, 500, (VEC3){0, 0, 0}, (VEC3){0, 1, 0});
@@ -84,12 +84,12 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 	p->prim = new_cylinder(100, 500, (VEC3){0, 0, 0}, (VEC3){0, 1, 0});
 	p->transform = new_transform(scene,
 		(VEC3){0, 250, -200}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
-	p->material = mtl_water(engine, scene);
+	p->material = mtl_greasy_metal(engine, scene);
 	p = new_rtprim(scene);
 	p->prim = new_cylinder(100, 500, (VEC3){0, 0, 0}, (VEC3){0, 1, 0});
 	p->transform = new_transform(scene,
 		(VEC3){-250, 250, -200}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
-	p->material = mtl_copper_rock(engine, scene);
+	p->material = mtl_rock_sliced(engine, scene);
 
 	p = new_rtprim(scene);
 	p->prim = new_plane((VEC3){0, 0, 0}, (VEC3){0, 0, 0});

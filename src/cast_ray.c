@@ -6,11 +6,21 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/02 22:52:19 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/12/06 01:30:04 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/12/07 23:32:45 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <rt.h>
+
+VEC3 mat3_mult_vec32(MAT3 m, VEC3 v)
+{
+	VEC3	out;
+
+	out.x = v.x * m.m[0] + v.y * m.m[3] + v.z * m.m[6];
+    out.y = v.x * m.m[1] + v.y * m.m[4] + v.z * m.m[7];
+    out.z = v.x * m.m[2] + v.y * m.m[5] + v.z * m.m[8];
+    return (out);
+}
 
 CAST_RETURN	cast_ray(ENGINE *engine, SCENE *scene, RAY ray)
 {
@@ -48,22 +58,17 @@ CAST_RETURN	cast_ray(ENGINE *engine, SCENE *scene, RAY ray)
 					ret.uv = vec2_mult(plane_uv(ret.rtprimitive->prim, ret.intersect), ret.mtl.uv_scale);
 				if (ret.mtl.normal_map)
 				{
-					//ret.intersect.normal = vec3_mult(ret.intersect.normal, vec3_normalize(vec3_cross(ret.intersect.normal, get_texture_color(ret.mtl.normal_map, ret.uv))));
-					//ret.intersect.normal = get_texture_color(ret.mtl.normal_map, ret.uv);
-					//ret.intersect.normal = vec3_normalize(vec3_mult(ret.intersect.normal, get_texture_color(ret.mtl.normal_map, ret.uv)));
-					//ret.intersect.normal = mat4_mult_vec3(mat4_inverse(prim->transform->matrix), get_texture_color(ret.mtl.normal_map, ret.uv));
-					//printf("normal %f, %f, %f\n", ret.intersect.normal.x, ret.intersect.normal.y, ret.intersect.normal.z);
-					VEC3 t = vec3_cross(ret.intersect.normal, (VEC3){0, 1, 0});
-					//VEC3 v1 = vec3_cross(ret.intersect.normal, (VEC3){0, 0, 0});
-					//VEC3 t;
-					VEC3 b = vec3_cross(t, (VEC3){0, 1, 0});
-					if (vec3_length(t) == 0)
-					{
-						t = vec3_cross(ret.intersect.normal, (VEC3){0, 0, 1});
-						b = vec3_cross(t, (VEC3){0, 1, 0});
-					}
-					ret.intersect.normal = mat3_mult_vec3(new_mat3(t, b, ret.intersect.normal), get_texture_color(ret.mtl.normal_map, ret.uv));
-					//printf("right %f, %f, %f\n", ret.intersect.normal.x, ret.intersect.normal.y, ret.intersect.normal.z);
+					VEC3	t = vec3_cross(ret.intersect.normal, new_vec3(0.0, 1.0, 0.0)); 
+					VEC3	b;
+					VEC3	n = ret.intersect.normal;
+					if (!vec3_length(t))
+						t = vec3_cross(ret.intersect.normal, new_vec3(0.0, 0.0, 1.0));
+					t = vec3_normalize(t);
+					b = vec3_normalize((vec3_cross(n, t)));
+					VEC3	map_n = get_texture_color(ret.mtl.normal_map, ret.uv);
+					map_n = vec3_normalize(vec3_sub(vec3_scale(map_n, 2), new_vec3(1, 1, 1)));
+					MAT3	tbn = new_mat3(t, b, n);
+					ret.intersect.normal = vec3_normalize(mat3_mult_vec3(tbn, map_n));
 				}
 				if (ret.mtl.base_map)
 					ret.mtl.reflection_color = ret.mtl.base_color = get_texture_color(ret.mtl.base_map, ret.uv);
@@ -71,6 +76,10 @@ CAST_RETURN	cast_ray(ENGINE *engine, SCENE *scene, RAY ray)
 					ret.mtl.roughness = color_to_factor(get_texture_color(ret.mtl.rough_map, ret.uv));
 				if (ret.mtl.metal_map)
 					ret.mtl.metalness = color_to_factor(get_texture_color(ret.mtl.metal_map, ret.uv));
+				if (ret.mtl.ao_map)
+					ret.mtl.base_color = vec3_mult(ret.mtl.base_color, get_texture_color(ret.mtl.ao_map, ret.uv));
+				if (ret.mtl.height_map)
+					ret.intersect.position = vec3_add(ret.intersect.position, vec3_scale(ret.intersect.normal, 1 - color_to_factor(get_texture_color(ret.mtl.height_map, ret.uv))));
 			}
 		}
 		i++;

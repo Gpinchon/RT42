@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/02 22:57:17 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/12/06 00:11:14 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/12/09 00:17:57 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ VEC2		cylinder_uv(PRIMITIVE cylinder, INTERSECT inter)
 		vn = UPVEC;
 	else
 		vn = cylinder.direction;
+	cylinder.position = vec3_sub(cylinder.position, vec3_scale(cylinder.direction, cylinder.size));
 	ve = vec3_cross(vn, (VEC3){0, 0, 1});
 	vp = vec3_normalize(vec3_sub(inter.position, cylinder.position));
 	uv.x = (acosf(vec3_dot(vp, ve) / sin(acosf(-vec3_dot(vn, vp))))) / (2.f * M_PI);

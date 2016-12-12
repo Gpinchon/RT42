@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:06:34 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/12/05 23:34:33 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/12/09 01:10:21 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@
 # define MAX_REFL		4
 # define MAX_REFR		4
 # define SUPERSAMPLING	1
-# define WINDOW_SIZE	(t_point2){768, 768}
+# define WINDOW_SIZE	(t_point2){1280, 768}
 # define WS				WINDOW_SIZE
 # define BUFFER_SIZE	(t_point2){WS.x * SUPERSAMPLING, WS.y * SUPERSAMPLING}
 # define CCLEAR_VALUE	0
@@ -78,6 +78,8 @@ typedef struct	s_mtl
 	void		*normal_map;
 	void		*metal_map;
 	void		*rough_map;
+	void		*ao_map;
+	void		*height_map;
 	VEC2		uv_scale;
 	VEC3		base_color;
 	VEC3		refraction_color;
@@ -148,6 +150,7 @@ typedef struct	s_engine
 	SCENE		scene;
 	SCENE		*active_scene;
 	INTERSECT	(*inter_functions[10])(PRIMITIVE, RAY);
+	float		poisson_disk[64];
 }				t_engine;
 
 FRAMEBUFFER		new_framebuffer(TYPE type, t_point2 size, Uint8 depth);
@@ -186,9 +189,13 @@ MATERIAL		*get_mtl_by_name(SCENE *scene, char *name);
 MATERIAL		*mtl_aquamarine(ENGINE *engine, SCENE *scene);
 MATERIAL		*mtl_greasy_metal(ENGINE *engine, SCENE *scene);
 MATERIAL		*mtl_rusted_metal(ENGINE *engine, SCENE *scene);
-MATERIAL		*mtl_copper_rock(ENGINE *engine, SCENE *scene);
+MATERIAL		*mtl_rock_copper(ENGINE *engine, SCENE *scene);
+MATERIAL		*mtl_rock_sliced(ENGINE *engine, SCENE *scene);
 MATERIAL		*mtl_granite(ENGINE *engine, SCENE *scene);
 MATERIAL		*mtl_water(ENGINE *engine, SCENE *scene);
+MATERIAL		*mtl_brick(ENGINE *engine, SCENE *scene);
+MATERIAL		*mtl_scuffed_plastic_red(ENGINE *engine, SCENE *scene);
+MATERIAL		*mtl_scuffed_aluminium(ENGINE *engine, SCENE *scene);
 
 void			clear_renderer(ENGINE *engine);
 void			clear_buffers(ENGINE *engine);
