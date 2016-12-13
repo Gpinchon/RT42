@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:32:51 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/12/13 19:54:16 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/12/13 20:02:11 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,26 +189,6 @@ void	fill_buffers(ENGINE *engine, t_point2 screen_coord, CAST_RETURN *ret)
 		if (RENDER_NORMALS)
 			put_pixel_to_buffer(engine->framebuffer, screen_coord, vec4_normalize(vec3_to_vec4(ret->intersect.normal, 1)));
 	}
-}
-
-t_mat4	mat4_perspective2(float fov, float aspect, float z_near, float z_far)
-{
-	float	delta_z;
-	float	s;
-	float	cotangent;
-
-	fov = TO_RADIAN((180 - fov) / 2);
-	s = sin(fov);
-	delta_z = z_far - z_near;
-	if (!delta_z || !s || !aspect)
-		return (mat4_zero());
-	cotangent = cos(fov) / s;
-	return ((t_mat4){ .m = {
-		cotangent / aspect, 0, 0, 0,
-		0, cotangent, 0, 0,
-		0, 0, -(z_far + z_near) / delta_z, -1,
-		0, 0, -2 * z_near * z_far / delta_z, 0
-	}});
 }
 
 void	render_scene(ENGINE *engine, SCENE *scene)
