@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:06:34 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/12/09 01:10:21 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/12/13 19:50:06 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include <sdl_framework.h>
 # include <vml.h>
 # include <ezmem.h>
-#include <stdio.h>
+# include <stdio.h>
 # define ENGINE			struct s_engine
 # define SCENE			struct s_scene
 # define FRAMEBUFFER	struct s_framebuffer
@@ -30,7 +30,7 @@
 # define MAX_REFL		4
 # define MAX_REFR		4
 # define SUPERSAMPLING	1
-# define WINDOW_SIZE	(t_point2){1280, 768}
+# define WINDOW_SIZE	(t_point2){1920, 1080}
 # define WS				WINDOW_SIZE
 # define BUFFER_SIZE	(t_point2){WS.x * SUPERSAMPLING, WS.y * SUPERSAMPLING}
 # define CCLEAR_VALUE	0
@@ -40,7 +40,7 @@
 # define POINT			0x2
 # define DIFFUSE		oren_nayar_diffuse
 # define SPECULAR		trowbridge_reitz_specular
-# define RENDER_NORMALS	true
+# define RENDER_NORMALS	false
 
 typedef struct	s_transform
 {
@@ -138,6 +138,8 @@ typedef struct	s_cast_return
 
 typedef struct	s_engine
 {
+	UINT		max_refr;
+	UINT		max_refl;
 	UINT		refl_iteration;
 	UINT		refr_iteration;
 	void		*framework;
@@ -150,7 +152,6 @@ typedef struct	s_engine
 	SCENE		scene;
 	SCENE		*active_scene;
 	INTERSECT	(*inter_functions[10])(PRIMITIVE, RAY);
-	float		poisson_disk[64];
 }				t_engine;
 
 FRAMEBUFFER		new_framebuffer(TYPE type, t_point2 size, Uint8 depth);
@@ -171,9 +172,9 @@ VEC2			cylinder_uv(PRIMITIVE cylinder, INTERSECT inter);
 VEC2			plane_uv(PRIMITIVE plane, INTERSECT inter);
 
 CAST_RETURN		cast_ray(ENGINE *engine, SCENE *scene, RAY ray);
-VEC3			compute_lighting(ENGINE *engine, CAST_RETURN ret);
-VEC3			compute_refraction(ENGINE *engine, CAST_RETURN ret, RAY cur_ray, float aior);
-VEC3			compute_reflection(ENGINE *engine, CAST_RETURN ret, RAY cur_ray);
+VEC3			compute_lighting(ENGINE *engine, CAST_RETURN *ret);
+VEC3			compute_refraction(ENGINE *engine, CAST_RETURN *ret, RAY *cur_ray, float aior);
+VEC3			compute_reflection(ENGINE *engine, CAST_RETURN *ret, RAY *cur_ray);
 void			update_transform(TRANSFORM *transform);
 
 void			destroy_scene(SCENE *scene);

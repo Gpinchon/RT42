@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/05 22:09:17 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/12/09 01:34:15 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/12/13 17:00:51 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,13 +73,12 @@ MATERIAL	*mtl_scuffed_plastic_red(ENGINE *engine, SCENE *scene)
 	if ((mtl = get_mtl_by_name(scene, "scuffed_plastic_red")))
 		return (mtl);
 	mtl = new_material(scene, "scuffed_plastic_red");
-	mtl->refraction = 1.59f;
 	mtl->base_map = load_image_file(engine->framework, "res/scuffed_plastic/scuffed_plastic_red_base.bmp");
 	mtl->metal_map = load_image_file(engine->framework, "res/scuffed_plastic/scuffed_plastic_metal.bmp");
 	mtl->normal_map = load_image_file(engine->framework, "res/scuffed_plastic/scuffed_plastic_normal.bmp");
 	mtl->rough_map = load_image_file(engine->framework, "res/scuffed_plastic/scuffed_plastic_rough.bmp");
 	mtl->ao_map = load_image_file(engine->framework, "res/scuffed_plastic/scuffed_plastic_ao.bmp");
-	mtl->alpha = 1;
+	mtl->refraction = 1.4906f;
 	return (mtl);
 }
 
@@ -90,12 +89,11 @@ MATERIAL	*mtl_scuffed_aluminium(ENGINE *engine, SCENE *scene)
 	if ((mtl = get_mtl_by_name(scene, "scuffed_aluminium")))
 		return (mtl);
 	mtl = new_material(scene, "scuffed_aluminium");
-	mtl->refraction = 1.59f;
 	mtl->base_map = load_image_file(engine->framework, "res/scuffed_aluminium/scuffed_aluminium_base.bmp");
 	mtl->metal_map = load_image_file(engine->framework, "res/scuffed_aluminium/scuffed_aluminium_metal.bmp");
 	mtl->normal_map = load_image_file(engine->framework, "res/scuffed_aluminium/scuffed_aluminium_normal.bmp");
 	mtl->rough_map = load_image_file(engine->framework, "res/scuffed_aluminium/scuffed_aluminium_rough.bmp");
-	mtl->alpha = 1;
+	mtl->refraction = 1.59f;
 	return (mtl);
 }
 
@@ -111,7 +109,23 @@ MATERIAL	*mtl_greasy_metal(ENGINE *engine, SCENE *scene)
 	mtl->normal_map = load_image_file(engine->framework, "res/greasy_metal/greasy_metal_normal.bmp");
 	mtl->rough_map = load_image_file(engine->framework, "res/greasy_metal/greasy_metal_rough.bmp");
 	mtl->uv_scale = (VEC2){1, 1};
-	mtl->refraction = 1.1f;
+	mtl->refraction = 1.59f;
+	return (mtl);
+}
+
+MATERIAL	*mtl_rusted_metal(ENGINE *engine, SCENE *scene)
+{
+	MATERIAL	*mtl;
+
+	if ((mtl = get_mtl_by_name(scene, "rusted_metal")))
+		return (mtl);
+	mtl = new_material(scene, "rusted_metal");
+	mtl->base_map = load_image_file(engine->framework, "res/rusted_metal/rusted_metal_base.bmp");
+	mtl->metal_map = load_image_file(engine->framework, "res/rusted_metal/rusted_metal_metal.bmp");
+	mtl->normal_map = load_image_file(engine->framework, "res/rusted_metal/rusted_metal_normal.bmp");
+	mtl->rough_map = load_image_file(engine->framework, "res/rusted_metal/rusted_metal_rough.bmp");
+	mtl->uv_scale = (VEC2){1, 1};
+	mtl->refraction = 1.4906f;
 	return (mtl);
 }
 
@@ -130,22 +144,6 @@ MATERIAL	*mtl_brick(ENGINE *engine, SCENE *scene)
 	mtl->height_map = load_image_file(engine->framework, "res/brick/brick_height.bmp");
 	mtl->uv_scale = (VEC2){1, 1};
 	mtl->refraction = 1.f;
-	return (mtl);
-}
-
-MATERIAL	*mtl_rusted_metal(ENGINE *engine, SCENE *scene)
-{
-	MATERIAL	*mtl;
-
-	if ((mtl = get_mtl_by_name(scene, "rusted_metal")))
-		return (mtl);
-	mtl = new_material(scene, "rusted_metal");
-	mtl->base_map = load_image_file(engine->framework, "res/rusted_metal/rusted_metal_base.bmp");
-	mtl->metal_map = load_image_file(engine->framework, "res/rusted_metal/rusted_metal_metal.bmp");
-	mtl->normal_map = load_image_file(engine->framework, "res/rusted_metal/rusted_metal_normal.bmp");
-	mtl->rough_map = load_image_file(engine->framework, "res/rusted_metal/rusted_metal_rough.bmp");
-	mtl->uv_scale = (VEC2){1, 1};
-	mtl->refraction = 1.1f;
 	return (mtl);
 }
 
@@ -181,7 +179,7 @@ MATERIAL	*mtl_rock_sliced(ENGINE *engine, SCENE *scene)
 	mtl->ao_map = load_image_file(engine->framework, "res/rock_sliced/rock_sliced_ao.bmp");
 	mtl->height_map = load_image_file(engine->framework, "res/rock_sliced/rock_sliced_height.bmp");
 	mtl->uv_scale = (VEC2){1, 1};
-	mtl->refraction = 1.1f;
+	mtl->refraction = 1.f;
 	return (mtl);
 }
 

@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/15 10:44:45 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/12/02 23:45:15 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/12/13 12:41:53 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,5 +111,7 @@ ENGINE		new_engine()
 	engine.inter_functions[cylinder] = intersect_cylinder2;
 	engine.inter_functions[plane] = intersect_plane;
 	engine.inter_functions[triangle] = intersect_triangle;
+	engine.max_refl = MAX_REFL;
+	engine.max_refr = MAX_REFR;
 	return (engine);
 }

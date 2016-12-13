@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/15 11:04:09 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/12/05 23:09:10 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/12/13 19:39:46 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ CAMERA		*new_camera(SCENE *scene, float fov, float znear, float zfar)
 		new_link = new_ezlink(other, 1, sizeof(CAMERA));
 		ezlink_append(scene->cameras, new_link);
 	}
-	((CAMERA*)ezlink_get_data(new_link))->fov = fov;
+	((CAMERA*)ezlink_get_data(new_link))->fov = 180 - fov;
 	((CAMERA*)ezlink_get_data(new_link))->znear = znear;
 	((CAMERA*)ezlink_get_data(new_link))->zfar = zfar;
 	return (ezlink_get_data(new_link));

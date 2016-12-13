@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:32:51 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/12/09 01:08:31 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/12/13 19:54:16 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,9 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 	LIGHT		*l;
 
 	(void)engine;
-	scene->active_camera = new_camera(scene, 80, 0.0001, 1000);
+	scene->active_camera = new_camera(scene, 90, 0.0001, 1000);
 	scene->active_camera->transform = new_transform(scene,
-		(VEC3){0, 150, 250}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
+		(VEC3){0, 250, 250}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
 	MATERIAL *mirror = new_material(scene, "mirror");
 	mirror->base_color = (VEC3){0.1, 0.1, 0.1};
 	mirror->reflection_color = (VEC3){1, 1, 1};
@@ -72,7 +72,7 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 	p = new_rtprim(scene);
 	p->prim = new_sphere(100, (VEC3){0, 0, 0});
 	p->transform = new_transform(scene,
-		(VEC3){-250, 100, 0}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
+		(VEC3){-250, -100, 0}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
 	p->material = mtl_rock_copper(engine, scene);
 
 	p = new_rtprim(scene);
@@ -131,8 +131,9 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 	l->attenuation = 0.002;
 	l->falloff = 150;
 	l->spot_size = 80;*/
-	l = new_light(scene, POINT, (VEC3){-200, 250, 200});
-	l->color = (VEC3){1, 207.f / 255.f, 197.f / 255.f};
+	l = new_light(scene, POINT, (VEC3){-250, 250, 250});
+	//l->color = (VEC3){1, 207.f / 255.f, 197.f / 255.f};
+	l->color = (VEC3){1, 1, 1};
 	l->cast_shadow = true;
 	l->direction = (VEC3){0, -1, 0};
 	l->power = 2.f;
@@ -152,32 +153,62 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 
 }
 
-VEC2	normalize_screen_coord(t_point2 screen_coord, t_point2 resolution)
+VEC2	normalize_screen_coord(t_point2 screen_coord, t_point2 resolution, float fov)
 {
 	return ((VEC2){
-		(2 * ((screen_coord.x + 0.5) / (float)resolution.x) - 1),
-		1 - 2 * ((screen_coord.y + 0.5) / (float)resolution.y)});
+		(2 * ((float)(screen_coord.x + 0.5) / (float)resolution.x) - 1),
+		(1 - 2 * ((float)(screen_coord.y + 0.5) / (float)resolution.y))});
+	(void)fov;
 }
 
-void	fill_buffers(ENGINE *engine, t_point2 screen_coord, CAST_RETURN ret)
+/*VEC2	normalize_screen_coord(t_point2 screen_coord, t_point2 resolution, float fov)
+{
+	if (screen_coord.y == resolution.y - 1)
+		printf("%f\n", (1 - (2 * (float)(screen_coord.y + 0.5) / (float)resolution.y)));
+	return ((VEC2){
+		(2 * ((float)(screen_coord.x + 0.5) / (float)resolution.x) - 1) * TO_RADIAN(fov / 2),
+		(1 - (2 * (float)(screen_coord.y + 0.5) / (float)resolution.y)) * TO_RADIAN(fov / 2)});
+}*/
+
+void	fill_buffers(ENGINE *engine, t_point2 screen_coord, CAST_RETURN *ret)
 {
 	void	*bufferptr;
 
-	if (ret.intersect.intersects)
+	if (ret->intersect.intersects)
 	{
-		if (ret.rtprimitive->material)
+		if (ret->rtprimitive->material)
 		{
-			put_pixel_to_buffer(engine->framebuffer, screen_coord, vec3_to_vec4(ret.rtprimitive->material->base_color, ret.rtprimitive->material->alpha));
+			put_pixel_to_buffer(engine->framebuffer, screen_coord, vec3_to_vec4(ret->rtprimitive->material->base_color, ret->rtprimitive->material->alpha));
 			bufferptr = get_buffer_value(engine->mtlbuffer, screen_coord);
-			*((MATERIAL *)bufferptr) = *ret.rtprimitive->material;
+			*((MATERIAL *)bufferptr) = *ret->rtprimitive->material;
 		}
 		bufferptr = get_buffer_value(engine->positionbuffer, screen_coord);
-		*((VEC3 *)bufferptr) = ret.intersect.position;
+		*((VEC3 *)bufferptr) = ret->intersect.position;
 		bufferptr = get_buffer_value(engine->normalbuffer, screen_coord);
-		*((VEC3 *)bufferptr) = ret.intersect.normal;
+		*((VEC3 *)bufferptr) = ret->intersect.normal;
 		if (RENDER_NORMALS)
-			put_pixel_to_buffer(engine->framebuffer, screen_coord, vec4_normalize(vec3_to_vec4(ret.intersect.normal, 1)));
+			put_pixel_to_buffer(engine->framebuffer, screen_coord, vec4_normalize(vec3_to_vec4(ret->intersect.normal, 1)));
 	}
+}
+
+t_mat4	mat4_perspective2(float fov, float aspect, float z_near, float z_far)
+{
+	float	delta_z;
+	float	s;
+	float	cotangent;
+
+	fov = TO_RADIAN((180 - fov) / 2);
+	s = sin(fov);
+	delta_z = z_far - z_near;
+	if (!delta_z || !s || !aspect)
+		return (mat4_zero());
+	cotangent = cos(fov) / s;
+	return ((t_mat4){ .m = {
+		cotangent / aspect, 0, 0, 0,
+		0, cotangent, 0, 0,
+		0, 0, -(z_far + z_near) / delta_z, -1,
+		0, 0, -2 * z_near * z_far / delta_z, 0
+	}});
 }
 
 void	render_scene(ENGINE *engine, SCENE *scene)
@@ -195,27 +226,28 @@ void	render_scene(ENGINE *engine, SCENE *scene)
 	screen_coord = (t_point2){0, 0};
 	cam->m4_view = mat4_mult_mat4(cam->transform->matrix,
 			mat4_perspective(cam->fov, engine->framebuffer.size.y / (float)engine->framebuffer.size.x, cam->znear, cam->zfar));
+	//cam->m4_view = cam->transform->matrix;
 	while (screen_coord.y < engine->framebuffer.size.y)
 	{
 		screen_coord.x = 0;
 		while (screen_coord.x < engine->framebuffer.size.x)
 		{
-			nscreen_coord = normalize_screen_coord(screen_coord, engine->framebuffer.size);
+			nscreen_coord = normalize_screen_coord(screen_coord, engine->framebuffer.size, cam->fov);
 			cam->ray = new_ray(cam->transform->position,
 				mat4_mult_vec3(cam->m4_view, vec3_normalize((VEC3){nscreen_coord.x, nscreen_coord.y, -1})));
 			ret = cast_ray(engine, scene, cam->ray);
-			if (ret.intersect.intersects)
+			if (ret.intersect.intersects && !RENDER_NORMALS)
 			{
 				col = (VEC3){0, 0, 0};
-				fill_buffers(engine, screen_coord, ret);
-				col = compute_lighting(engine, ret);
-				col = vec3_add(col, compute_reflection(engine, ret, cam->ray));
-				engine->refl_iteration = 0;
-				col = vec3_add(col, compute_refraction(engine, ret, cam->ray, 1.f));
+				fill_buffers(engine, screen_coord, &ret);
+				col = vec3_add(compute_lighting(engine, &ret), compute_reflection(engine, &ret, &cam->ray));
+				col = vec3_add(col, compute_refraction(engine, &ret, &cam->ray, 1.f));
 				engine->refr_iteration = 0;
+				engine->refl_iteration = 0;
 				put_pixel_to_buffer(engine->framebuffer, screen_coord, vec3_to_vec4(col, 1));
-				//put_pixel_to_buffer(engine->framebuffer, screen_coord, vec4_normalize(vec3_to_vec4(vec3_normalize(ret.intersect.normal), 1)));
 			}
+			else if (ret.intersect.intersects)
+				put_pixel_to_buffer(engine->framebuffer, screen_coord, vec4_normalize(vec3_to_vec4(vec3_normalize(ret.intersect.normal), 1)));
 			screen_coord.x++;
 		}
 		screen_coord.y++;

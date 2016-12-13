@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/02 22:57:17 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/12/09 00:17:57 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/12/13 16:01:15 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,27 +15,38 @@
 t_point2	map_uv(void *image, VEC2 uv)
 {
 	IMGDATA		img;
-	t_point2	coord;
 
 	img = get_image_data(image);
-	coord.x = CLAMP((int)(img.size.x * uv.x) % img.size.x, 0, img.size.x - 1);
-	coord.y = CLAMP((int)(img.size.y * uv.y) % img.size.y, 0, img.size.y - 1);
-	return (coord);
+	return ((t_point2){
+		CLAMP((int)(img.size.x * uv.x) % img.size.x, 0, img.size.x - 1),
+		CLAMP((int)(img.size.y * uv.y) % img.size.y, 0, img.size.y - 1)
+	});
 }
 
 VEC3		get_texture_color(void *image, VEC2 uv)
 {
 	t_point2	tex;
 	IMGDATA		img;
-	UCHAR	*pixel;
-	VEC3	color;
+	UCHAR		*pixel;
+	VEC3		color;
 
 	if (!image)
 		return ((VEC3){0, 0, 0});
+	color = (VEC3){0, 0, 0};
 	tex = map_uv(image, uv);
 	img = get_image_data(image);
-	pixel = img.pixels + tex.y * img.sizeline + tex.x * img.opp;
-	color = (VEC3){pixel[2] / 255.f, pixel[1] / 255.f, pixel[0] / 255.f};
+	pixel = img.pixels + (tex.y * img.sizeline + tex.x * img.opp);
+	if (img.opp > 2)
+	{
+		color.x = pixel[2] / 255.f;
+		color.y = pixel[1] / 255.f;
+		color.z = pixel[0] / 255.f;
+	}
+	else if (img.opp == 1)
+	{
+		color.x = pixel[0] / 255.f;
+		color = (VEC3){color.x, color.x, color.x};
+	}
 	return (color);
 }
 

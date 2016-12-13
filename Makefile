@@ -6,7 +6,7 @@
 #    By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/11/13 17:17:47 by gpinchon          #+#    #+#              #
-#    Updated: 2016/12/05 23:08:06 by gpinchon         ###   ########.fr        #
+#    Updated: 2016/12/13 16:13:02 by gpinchon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,6 +34,9 @@ CFLAGS	=	-Ofast -Wall -Wextra -Werror $(INCLUDE)
 
 ifeq ($(OS), Windows_NT)
 LIBS	=	$(addprefix -L , $(LIBDIR)) -lezmem -lvml -lmingw32 -lSDLframework -lSDL2main -lSDL2  -lopengl32 -lm
+else ifeq ($(shell uname -s), Darwin)
+LIBS	=	$(addprefix -L , $(LIBDIR)) -lezmem -lvml -L ~/.brew/lib -lSDLframework -lSDL2 -lm
+INCLUDE	=	-I ~/.brew/include $(addprefix -I, $(wildcard ./libs/*/include/)) -I./include/
 else
 LIBS	=	$(addprefix -L , $(LIBDIR)) -lezmem -lvml -lSDLframework -lSDL2main -lSDL2 -lGL -lm
 endif
