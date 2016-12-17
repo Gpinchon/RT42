@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/15 10:44:45 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/12/13 12:41:53 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/12/16 13:49:02 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,10 +108,15 @@ ENGINE		new_engine()
 	attach_image_to_window(engine.window, engine.image);
 	engine.inter_functions[cone] = intersect_cone;
 	engine.inter_functions[sphere] = intersect_sphere;
-	engine.inter_functions[cylinder] = intersect_cylinder2;
+	engine.inter_functions[cylinder] = intersect_cylinder;
 	engine.inter_functions[plane] = intersect_plane;
 	engine.inter_functions[triangle] = intersect_triangle;
+	engine.uv_functions[cone] = cylinder_uv;
+	engine.uv_functions[sphere] = sphere_uv;
+	engine.uv_functions[cylinder] = cylinder_uv;
+	engine.uv_functions[plane] = plane_uv;
 	engine.max_refl = MAX_REFL;
 	engine.max_refr = MAX_REFR;
+	generate_poisson_disc(engine.poisson_disc, 64, 0.05f, new_vec2(-1, 1));
 	return (engine);
 }

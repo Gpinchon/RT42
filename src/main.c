@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:32:51 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/12/13 20:02:11 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/12/17 02:07:11 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,9 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 	(void)engine;
 	scene->active_camera = new_camera(scene, 90, 0.0001, 1000);
 	scene->active_camera->transform = new_transform(scene,
-		(VEC3){0, 250, 250}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
+		(VEC3){0, 50, 350}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
+	scene->active_camera->transform->target = new_transform(scene,
+		(VEC3){0, 100, 0}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});;
 	MATERIAL *mirror = new_material(scene, "mirror");
 	mirror->base_color = (VEC3){0.1, 0.1, 0.1};
 	mirror->reflection_color = (VEC3){1, 1, 1};
@@ -61,56 +63,65 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 	p = new_rtprim(scene);
 	p->prim = new_sphere(100, (VEC3){0, 0, 0});
 	p->transform = new_transform(scene,
-		(VEC3){250, 100, 0}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
+		(VEC3){375, 100, 0}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
 	p->material = mtl_scuffed_aluminium(engine, scene);
 	p = new_rtprim(scene);
 	p->prim = new_sphere(100, (VEC3){0, 0, 0});
 	p->transform = new_transform(scene,
-		(VEC3){0, 100, 0}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
+		(VEC3){125, 100, 0}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
 	p->material = mtl_scuffed_plastic_red(engine, scene);
-	scene->active_camera->transform->target = p->transform;
 	p = new_rtprim(scene);
 	p->prim = new_sphere(100, (VEC3){0, 0, 0});
 	p->transform = new_transform(scene,
-		(VEC3){-250, -100, 0}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
+		(VEC3){-125, 100, 0}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
+	p->material = mtl_aquamarine(engine, scene);
+	p = new_rtprim(scene);
+	p->prim = new_sphere(30, (VEC3){0, 0, 0});
+	p->transform = new_transform(scene,
+		(VEC3){-125, 100, 0}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
+	p->material = mtl_rock_copper(engine, scene);
+	p = new_rtprim(scene);
+	p->prim = new_sphere(100, (VEC3){0, 0, 0});
+	p->transform = new_transform(scene,
+		(VEC3){-375, 100, 0}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
 	p->material = mtl_rock_copper(engine, scene);
 
 	p = new_rtprim(scene);
-	p->prim = new_cylinder(100, 500, (VEC3){0, 0, 0}, (VEC3){0, 1, 0});
+	p->prim = new_cylinder(100, 0, (VEC3){0, 0, 0}, (VEC3){0, 1, 0});
 	p->transform = new_transform(scene,
-		(VEC3){250, 250, -200}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
+		(VEC3){250, 0, -200}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
 	p->material = mtl_rusted_metal(engine, scene);
 	p = new_rtprim(scene);
-	p->prim = new_cylinder(100, 500, (VEC3){0, 0, 0}, (VEC3){0, 1, 0});
+	p->prim = new_cylinder(100, 0, (VEC3){0, 0, 0}, (VEC3){0, 1, 0});
 	p->transform = new_transform(scene,
-		(VEC3){0, 250, -200}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
+		(VEC3){0, 0, -200}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
 	p->material = mtl_greasy_metal(engine, scene);
 	p = new_rtprim(scene);
-	p->prim = new_cylinder(100, 500, (VEC3){0, 0, 0}, (VEC3){0, 1, 0});
+	p->prim = new_cylinder(100, 0, (VEC3){0, 0, 0}, (VEC3){0, 1, 0});
 	p->transform = new_transform(scene,
-		(VEC3){-250, 250, -200}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
+		(VEC3){-250, 0, -200}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
 	p->material = mtl_rock_sliced(engine, scene);
 
 	p = new_rtprim(scene);
 	p->prim = new_plane((VEC3){0, 0, 0}, (VEC3){0, 0, 0});
 	p->transform = new_transform(scene,
 		(VEC3){0, 0, -500}, (VEC3){0, 0, 1}, (VEC3){1, 1, 1});
-	p->material = mirror;
+	p->material = mtl_brick(engine, scene);
 	p = new_rtprim(scene);
 	p->prim = new_plane((VEC3){0, 0, 0}, (VEC3){0, 0, 0});
 	p->transform = new_transform(scene,
 		(VEC3){0, 0, 500}, (VEC3){0, 0, -1}, (VEC3){1, 1, 1});
-	p->material = mirror;
+	p->material = mtl_brick(engine, scene);
 	p = new_rtprim(scene);
 	p->prim = new_plane((VEC3){0, 0, 0}, (VEC3){0, 0, 0});
 	p->transform = new_transform(scene,
 		(VEC3){500, 0, 0}, (VEC3){-1, 0, 0}, (VEC3){1, 1, 1});
-	p->material = mirror;
+	p->material = mtl_brick(engine, scene);
 	p = new_rtprim(scene);
 	p->prim = new_plane((VEC3){0, 0, 0}, (VEC3){0, 0, 0});
 	p->transform = new_transform(scene,
 		(VEC3){-500, 0, 0}, (VEC3){1, 0, 0}, (VEC3){1, 1, 1});
-	p->material = mirror;
+	p->material = mtl_brick(engine, scene);
 	p = new_rtprim(scene);
 	p->prim = new_plane((VEC3){0, 0, 0}, (VEC3){0, 0, 0});
 	p->transform = new_transform(scene,
@@ -120,7 +131,7 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 	p->prim = new_plane((VEC3){0, 0, 0}, (VEC3){0, 0, 0});
 	p->transform = new_transform(scene,
 		(VEC3){0, 500, 0}, (VEC3){0, -1, 0}, (VEC3){1, 1, 1});
-	p->material = mirror;
+	p->material = mtl_brick(engine, scene);
 	/*p->prim = new_plane((VEC3){0, 0, 0}, (VEC3){0, 0, 0});
 	p->transform = new_transform(scene,
 		(VEC3){0, 0, -50}, (VEC3){0, 0, 1}, (VEC3){1, 1, 1});
@@ -131,9 +142,9 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 	l->attenuation = 0.002;
 	l->falloff = 150;
 	l->spot_size = 80;*/
-	l = new_light(scene, POINT, (VEC3){-250, 250, 250});
-	//l->color = (VEC3){1, 207.f / 255.f, 197.f / 255.f};
-	l->color = (VEC3){1, 1, 1};
+	l = new_light(scene, POINT, (VEC3){0, 25, 150});
+	l->color = (VEC3){1, 207.f / 255.f, 197.f / 255.f};
+	//l->color = (VEC3){1, 1, 1};
 	l->cast_shadow = true;
 	l->direction = (VEC3){0, -1, 0};
 	l->power = 2.f;
@@ -153,22 +164,12 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 
 }
 
-VEC2	normalize_screen_coord(t_point2 screen_coord, t_point2 resolution, float fov)
+VEC2	normalize_screen_coord(t_point2 screen_coord, t_point2 resolution)
 {
 	return ((VEC2){
 		(2 * ((float)(screen_coord.x + 0.5) / (float)resolution.x) - 1),
 		(1 - 2 * ((float)(screen_coord.y + 0.5) / (float)resolution.y))});
-	(void)fov;
 }
-
-/*VEC2	normalize_screen_coord(t_point2 screen_coord, t_point2 resolution, float fov)
-{
-	if (screen_coord.y == resolution.y - 1)
-		printf("%f\n", (1 - (2 * (float)(screen_coord.y + 0.5) / (float)resolution.y)));
-	return ((VEC2){
-		(2 * ((float)(screen_coord.x + 0.5) / (float)resolution.x) - 1) * TO_RADIAN(fov / 2),
-		(1 - (2 * (float)(screen_coord.y + 0.5) / (float)resolution.y)) * TO_RADIAN(fov / 2)});
-}*/
 
 void	fill_buffers(ENGINE *engine, t_point2 screen_coord, CAST_RETURN *ret)
 {
@@ -206,22 +207,22 @@ void	render_scene(ENGINE *engine, SCENE *scene)
 	screen_coord = (t_point2){0, 0};
 	cam->m4_view = mat4_mult_mat4(cam->transform->matrix,
 			mat4_perspective(cam->fov, engine->framebuffer.size.y / (float)engine->framebuffer.size.x, cam->znear, cam->zfar));
-	//cam->m4_view = cam->transform->matrix;
 	while (screen_coord.y < engine->framebuffer.size.y)
 	{
 		screen_coord.x = 0;
 		while (screen_coord.x < engine->framebuffer.size.x)
 		{
-			nscreen_coord = normalize_screen_coord(screen_coord, engine->framebuffer.size, cam->fov);
+			nscreen_coord = normalize_screen_coord(screen_coord, engine->framebuffer.size);
 			cam->ray = new_ray(cam->transform->position,
 				mat4_mult_vec3(cam->m4_view, vec3_normalize((VEC3){nscreen_coord.x, nscreen_coord.y, -1})));
 			ret = cast_ray(engine, scene, cam->ray);
 			if (ret.intersect.intersects && !RENDER_NORMALS)
 			{
 				col = (VEC3){0, 0, 0};
-				fill_buffers(engine, screen_coord, &ret);
+				//fill_buffers(engine, screen_coord, &ret);
 				col = vec3_add(compute_lighting(engine, &ret), compute_reflection(engine, &ret, &cam->ray));
 				col = vec3_add(col, compute_refraction(engine, &ret, &cam->ray, 1.f));
+				//col = vec3_add(col, compute_radiosity(engine, &ret));
 				engine->refr_iteration = 0;
 				engine->refl_iteration = 0;
 				put_pixel_to_buffer(engine->framebuffer, screen_coord, vec3_to_vec4(col, 1));

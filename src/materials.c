@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/05 22:09:17 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/12/13 17:00:51 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/12/17 00:13:21 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ MATERIAL	*mtl_water(ENGINE *engine, SCENE *scene)
 	mtl->reflection_color = (VEC3){1, 1, 1};
 	mtl->normal_map = load_image_file(engine->framework, "res/water/water_normal.bmp");
 	//mtl->height_map = load_image_file(engine->framework, "res/water/water_height.bmp");
-	mtl->uv_scale = (VEC2){1, 1};
+	mtl->uv_scale = (VEC2){2, 2};
 	mtl->roughness = 0.05;
 	mtl->metalness = 0.5;
 	mtl->alpha = 0.05;
@@ -142,7 +142,7 @@ MATERIAL	*mtl_brick(ENGINE *engine, SCENE *scene)
 	mtl->rough_map = load_image_file(engine->framework, "res/brick/brick_rough.bmp");
 	mtl->ao_map = load_image_file(engine->framework, "res/brick/brick_ao.bmp");
 	mtl->height_map = load_image_file(engine->framework, "res/brick/brick_height.bmp");
-	mtl->uv_scale = (VEC2){1, 1};
+	mtl->uv_scale = (VEC2){5, 5};
 	mtl->refraction = 1.f;
 	return (mtl);
 }

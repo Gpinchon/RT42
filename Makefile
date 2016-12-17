@@ -6,7 +6,7 @@
 #    By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/11/13 17:17:47 by gpinchon          #+#    #+#              #
-#    Updated: 2016/12/13 16:13:02 by gpinchon         ###   ########.fr        #
+#    Updated: 2016/12/16 23:53:26 by gpinchon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,6 +16,7 @@ SRC		=	./src/main.c					\
 			./src/cast_ray.c				\
 			./src/compute_lighting.c		\
 			./src/refraction_reflection.c	\
+			./src/radiosity.c				\
 			./src/texture_mapping.c			\
 			./src/transform.c				\
 			./src/materials.c				\
@@ -23,7 +24,8 @@ SRC		=	./src/main.c					\
 			./src/new2.c					\
 			./src/destroy.c					\
 			./src/clear.c					\
-			./src/put_pixel.c
+			./src/put_pixel.c				\
+			./src/random.c
 
 OBJ		=	$(SRC:.c=.o)
 CC		=	gcc

@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/02 22:57:17 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/12/13 16:01:15 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/12/16 13:17:22 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ t_point2	map_uv(void *image, VEC2 uv)
 	});
 }
 
-VEC3		get_texture_color(void *image, VEC2 uv)
+VEC3		sample_texture(void *image, VEC2 uv)
 {
 	t_point2	tex;
 	IMGDATA		img;
@@ -46,6 +46,56 @@ VEC3		get_texture_color(void *image, VEC2 uv)
 	{
 		color.x = pixel[0] / 255.f;
 		color = (VEC3){color.x, color.x, color.x};
+	}
+	return (color);
+}
+
+VEC3		sample_texture_filtered(void *image, VEC2 uv)
+{
+	IMGDATA		img;
+	UCHAR		*pixel;
+	VEC3		color;
+
+	if (!image)
+		return ((VEC3){0, 0, 0});
+	color = (VEC3){0, 0, 0};
+	img = get_image_data(image);
+	float fu = (uv.x) * img.size.x;
+	float fv = (uv.y) * img.size.y;
+	int	u[4];
+	int v[4];
+	//uv1
+	u[0] = u[2] = ((int)fu) % img.size.x;
+	v[0] = v[1] = ((int)fv) % img.size.y;
+	//uv2
+	u[1] = u[3] = (u[0] + 1) % img.size.x;
+	v[2] = v[3] = (v[0] + 1) % img.size.y;
+	// calculate fractional parts of u and v
+	float fracu = fu - floorf( fu );
+	float fracv = fv - floorf( fv );
+	// calculate weight factors
+	float weight[4];
+	weight[0] = (1 - fracu) * (1 - fracv);
+	weight[1] = fracu * (1 - fracv);
+	weight[2] = (1 - fracu) * fracv;
+	weight[3] = fracu *  fracv;
+	
+	int i = 0;
+	while (i < 4)
+	{
+		pixel = img.pixels + (v[i] * img.sizeline + u[i] * img.opp);
+		if (img.opp > 2)
+		{
+			color.x += (pixel[2] / 255.f) * weight[i];
+			color.y += (pixel[1] / 255.f) * weight[i];
+			color.z += (pixel[0] / 255.f) * weight[i];
+
+		}
+		else if (img.opp == 1)
+		{
+			color.x = color.y = color.z += (pixel[0] / 255.f) * weight[i];
+		}
+		i++;
 	}
 	return (color);
 }
@@ -73,7 +123,7 @@ VEC2		sphere_uv(PRIMITIVE sphere, INTERSECT inter)
 	vp = vec3_normalize(vec3_sub(inter.position, sphere.position));
 	phi = acosf(-vec3_dot(vn, vp));
 	uv.y = phi / M_PI;
-	uv.x = (acosf(vec3_dot(vp, ve) / sin(phi))) / (2.f * M_PI);
+	uv.x = acosf(CLAMP(vec3_dot(vp, ve) / sin(phi), -1, 1)) / (2.f * M_PI);
 	if (vec3_dot(vec3_cross(vn, ve), vp) <= 0)
 		uv.x = 1 - uv.x;
 	return (uv);
@@ -95,7 +145,7 @@ VEC2		cylinder_uv(PRIMITIVE cylinder, INTERSECT inter)
 	cylinder.position = vec3_sub(cylinder.position, vec3_scale(cylinder.direction, cylinder.size));
 	ve = vec3_cross(vn, (VEC3){0, 0, 1});
 	vp = vec3_normalize(vec3_sub(inter.position, cylinder.position));
-	uv.x = (acosf(vec3_dot(vp, ve) / sin(acosf(-vec3_dot(vn, vp))))) / (2.f * M_PI);
+	uv.x = acosf(CLAMP(vec3_dot(vp, ve) / sin(acosf(-vec3_dot(vn, vp))), -1, 1)) / (2.f * M_PI);
 	if (vec3_dot(vec3_cross(vn, ve), vp) <= 0)
 		uv.x = 1 - uv.x;
 	uv.y = sqrt(pow(vec3_distance(cylinder.position, inter.position), 2) - cylinder.radius2);
@@ -106,16 +156,17 @@ VEC2		cylinder_uv(PRIMITIVE cylinder, INTERSECT inter)
 VEC2	plane_uv(PRIMITIVE plane, INTERSECT inter)
 {
 	VEC2	uv;
-	VEC3	uaxis;
-	VEC3	vaxis;
 
-	inter.position = new_vec3(
-	(inter.position.x < 0 ? plane.position.x - inter.position.x : inter.position.x),
-	(inter.position.y < 0 ? plane.position.y - inter.position.y : inter.position.y),
-	(inter.position.z < 0 ? plane.position.z - inter.position.z : inter.position.z));
-	uaxis = new_vec3(plane.direction.y, plane.direction.z, -plane.direction.x);
-	vaxis = vec3_cross(uaxis, plane.direction);
-	uv.x = vec3_dot(inter.position, uaxis) / 100.f;
-	uv.y = vec3_dot(inter.position, vaxis) / 100.f;
+	VEC3 t = vec3_cross(inter.normal, new_vec3(0.0, 1.0, 0.0));
+	if (!vec3_length(t))
+		t = vec3_cross(inter.normal, new_vec3(0.0, 0.0, 1.0));
+	t = vec3_normalize(t);
+	float d = vec3_distance(inter.position, plane.position);
+	float alpha = acosf(vec3_dot(t, vec3_normalize(vec3_sub(plane.position, inter.position))));
+	if (alpha > 1.5708)
+		alpha = acosf(vec3_dot(vec3_negate(t), vec3_normalize(vec3_sub(plane.position, inter.position))));
+	uv.x = cos(alpha) * d / 1000.f;
+	uv.y = sin(alpha) * d / 1000.f;
+
 	return (uv);
 }

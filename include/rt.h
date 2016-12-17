@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:06:34 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/12/13 19:50:06 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/12/16 23:28:54 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <vml.h>
 # include <ezmem.h>
 # include <stdio.h>
+
 # define ENGINE			struct s_engine
 # define SCENE			struct s_scene
 # define FRAMEBUFFER	struct s_framebuffer
@@ -30,7 +31,7 @@
 # define MAX_REFL		4
 # define MAX_REFR		4
 # define SUPERSAMPLING	1
-# define WINDOW_SIZE	(t_point2){1920, 1080}
+# define WINDOW_SIZE	(t_point2){1024, 576}
 # define WS				WINDOW_SIZE
 # define BUFFER_SIZE	(t_point2){WS.x * SUPERSAMPLING, WS.y * SUPERSAMPLING}
 # define CCLEAR_VALUE	0
@@ -152,6 +153,8 @@ typedef struct	s_engine
 	SCENE		scene;
 	SCENE		*active_scene;
 	INTERSECT	(*inter_functions[10])(PRIMITIVE, RAY);
+	VEC2		(*uv_functions[10])(PRIMITIVE, INTERSECT);
+	VEC2		poisson_disc[64];
 }				t_engine;
 
 FRAMEBUFFER		new_framebuffer(TYPE type, t_point2 size, Uint8 depth);
@@ -163,18 +166,22 @@ void			put_value_to_buffer(FRAMEBUFFER buffer,
 				t_point2 coord, float value);
 void			*get_buffer_value(FRAMEBUFFER buffer,
 				t_point2 coord);
+void			generate_poisson_disc(VEC2 *disc, UINT disc_size, float min_dist, VEC2 limits);
+float			frand_a_b(float a, float b);
 
 t_point2		map_uv(void *image, VEC2 uv);
 float			color_to_factor(VEC3 color);
-VEC3			get_texture_color(void *image, VEC2 uv);
 VEC2			sphere_uv(PRIMITIVE sphere, INTERSECT inter);
 VEC2			cylinder_uv(PRIMITIVE cylinder, INTERSECT inter);
 VEC2			plane_uv(PRIMITIVE plane, INTERSECT inter);
+VEC3			sample_texture(void *image, VEC2 uv);
+VEC3			sample_texture_filtered(void *image, VEC2 uv);
 
 CAST_RETURN		cast_ray(ENGINE *engine, SCENE *scene, RAY ray);
 VEC3			compute_lighting(ENGINE *engine, CAST_RETURN *ret);
 VEC3			compute_refraction(ENGINE *engine, CAST_RETURN *ret, RAY *cur_ray, float aior);
 VEC3			compute_reflection(ENGINE *engine, CAST_RETURN *ret, RAY *cur_ray);
+VEC3			compute_radiosity(ENGINE *engine, CAST_RETURN *ret);
 void			update_transform(TRANSFORM *transform);
 
 void			destroy_scene(SCENE *scene);
