@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:32:51 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/12/17 02:07:11 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/12/18 17:40:18 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -229,6 +229,9 @@ void	render_scene(ENGINE *engine, SCENE *scene)
 			}
 			else if (ret.intersect.intersects)
 				put_pixel_to_buffer(engine->framebuffer, screen_coord, vec4_normalize(vec3_to_vec4(vec3_normalize(ret.intersect.normal), 1)));
+			if (engine->progress_callback)
+				engine->progress_callback(engine, (screen_coord.x + 1 + (screen_coord.y + 1) * engine->framebuffer.size.y) * 100 / (float)(engine->framebuffer.size.y * engine->framebuffer.size.y + engine->framebuffer.size.x));
+			engine->last_time = time(NULL);
 			screen_coord.x++;
 		}
 		screen_coord.y++;
@@ -236,11 +239,38 @@ void	render_scene(ENGINE *engine, SCENE *scene)
 	printf("Done !\n");
 }
 
+void	print_progress(ENGINE *engine, float progress)
+{
+	t_rgba		color;
+	t_point2	img_size;
+	int			i;
+	int			heigth;
+
+	color = rgba(255, 0, 0, 255);
+	get_image_size(engine->loading_screen, &img_size.x, &img_size.y);
+	heigth = (5.f / 100.f * img_size.y);
+	i = img_size.y / 2 - heigth;
+	while (i < (img_size.y / 2) + heigth)
+	{
+		put_image_pixel(engine->loading_screen, &color, (t_point2){img_size.x * progress / 100.f, i});
+		//put_window_pixel(engine->window, &color, (t_point2){WINDOW_SIZE.x * progress / 100.f, i});
+		i++;
+	}
+	if (time(NULL) - engine->last_time >= 0.9)
+	{
+		clear_window(engine->window);
+		put_image_stretched(engine->window, engine->loading_screen);
+		refresh_window(engine->window);
+	}
+}
+
 int		main(int argc, char *argv[])
 {
 	ENGINE	engine;
 
 	engine = new_engine();
+	engine.progress_callback = print_progress;
+	engine.loading_screen = load_image_file(engine.framework, "./res/loading_screen.bmp");
 	default_scene(&engine, &engine.scene);
 	clear_renderer(&engine);
 	render_scene(&engine, &engine.scene);

@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:06:34 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/12/16 23:28:54 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/12/18 17:17:29 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <sdl_framework.h>
 # include <vml.h>
 # include <ezmem.h>
+# include <time.h>
 # include <stdio.h>
 
 # define ENGINE			struct s_engine
@@ -146,14 +147,17 @@ typedef struct	s_engine
 	void		*framework;
 	void		*window;
 	void		*image;
+	void		*loading_screen;
+	INTERSECT	(*inter_functions[10])(PRIMITIVE, RAY);
+	VEC2		(*uv_functions[10])(PRIMITIVE, INTERSECT);
+	void		(*progress_callback)(ENGINE*, float);
+	time_t		last_time;
+	SCENE		*active_scene;
 	FRAMEBUFFER	framebuffer;
 	FRAMEBUFFER	positionbuffer;
 	FRAMEBUFFER	normalbuffer;
 	FRAMEBUFFER	mtlbuffer;
 	SCENE		scene;
-	SCENE		*active_scene;
-	INTERSECT	(*inter_functions[10])(PRIMITIVE, RAY);
-	VEC2		(*uv_functions[10])(PRIMITIVE, INTERSECT);
 	VEC2		poisson_disc[64];
 }				t_engine;
 
