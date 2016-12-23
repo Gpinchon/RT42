@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/15 11:04:09 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/12/13 19:39:46 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/12/22 22:27:47 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,13 +66,11 @@ TRANSFORM	*new_transform(SCENE *scene, VEC3 position, VEC3 rotation, VEC3 scalin
 {
 	LINK		*new_link;
 
+	new_link = new_ezlink(other, 1, sizeof(TRANSFORM));
 	if (!scene->transforms)
-		new_link = scene->transforms = new_ezlink(other, 1, sizeof(TRANSFORM));
+		scene->transforms = new_link;
 	else
-	{
-		new_link = new_ezlink(other, 1, sizeof(TRANSFORM));
 		ezlink_append(scene->transforms, new_link);
-	}
 	((TRANSFORM*)ezlink_get_data(new_link))->position = position;
 	((TRANSFORM*)ezlink_get_data(new_link))->rotation = rotation;
 	((TRANSFORM*)ezlink_get_data(new_link))->scaling = scaling;

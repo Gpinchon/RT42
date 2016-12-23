@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/15 10:44:45 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/12/18 16:36:04 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/12/23 01:03:06 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,11 +99,12 @@ ENGINE		new_engine()
 	memset(&engine, 0, sizeof(ENGINE));
 	engine.framework = new_framework();
 	engine.window = new_window(engine.framework, WINDOW_SIZE.x, WINDOW_SIZE.y, "RT");
-	assign_loop_hook(engine.framework, new_callback((void(*)(void*))refresh_window, engine.window));
-	engine.image = new_image(engine.framework, BUFFER_SIZE.x, BUFFER_SIZE.y);
+	set_loop_hook(engine.framework, new_callback((void(*)(void*))refresh_window, engine.window));
+	engine.image = new_image(engine.framework, WINDOW_SIZE.x, WINDOW_SIZE.y);
 	engine.framebuffer = new_framebuffer(unsigned_char, BUFFER_SIZE, 4);
 	engine.positionbuffer = new_framebuffer(FLOAT, BUFFER_SIZE, 3);
 	engine.normalbuffer = new_framebuffer(FLOAT, BUFFER_SIZE, 3);
+	engine.depthbuffer = new_framebuffer(FLOAT, BUFFER_SIZE, 1);
 	engine.mtlbuffer = new_framebuffer(FLOAT, BUFFER_SIZE, sizeof(t_mtl) / sizeof(float));
 	attach_image_to_window(engine.window, engine.image);
 	engine.inter_functions[cone] = intersect_cone;

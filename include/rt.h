@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:06:34 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/12/18 17:17:29 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/12/23 01:20:44 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 # include <sdl_framework.h>
 # include <vml.h>
 # include <ezmem.h>
-# include <time.h>
 # include <stdio.h>
 
 # define ENGINE			struct s_engine
@@ -31,10 +30,9 @@
 # define UPVEC			(VEC3){0, 1, 0}
 # define MAX_REFL		4
 # define MAX_REFR		4
-# define SUPERSAMPLING	1
-# define WINDOW_SIZE	(t_point2){1024, 576}
-# define WS				WINDOW_SIZE
-# define BUFFER_SIZE	(t_point2){WS.x * SUPERSAMPLING, WS.y * SUPERSAMPLING}
+# define SAMPLING		1
+# define WINDOW_SIZE	(t_point2){1024, 768}
+# define BUFFER_SIZE	(t_point2){WINDOW_SIZE.x * SAMPLING, WINDOW_SIZE.y * SAMPLING}
 # define CCLEAR_VALUE	0
 # define FCLEAR_VALUE	0
 # define DIRECTIONAL	0x0
@@ -140,6 +138,7 @@ typedef struct	s_cast_return
 
 typedef struct	s_engine
 {
+	BOOL		stop_rendering;
 	UINT		max_refr;
 	UINT		max_refl;
 	UINT		refl_iteration;
@@ -151,12 +150,13 @@ typedef struct	s_engine
 	INTERSECT	(*inter_functions[10])(PRIMITIVE, RAY);
 	VEC2		(*uv_functions[10])(PRIMITIVE, INTERSECT);
 	void		(*progress_callback)(ENGINE*, float);
-	time_t		last_time;
+	Uint32		last_time;
 	SCENE		*active_scene;
 	FRAMEBUFFER	framebuffer;
 	FRAMEBUFFER	positionbuffer;
 	FRAMEBUFFER	normalbuffer;
 	FRAMEBUFFER	mtlbuffer;
+	FRAMEBUFFER	depthbuffer;
 	SCENE		scene;
 	VEC2		poisson_disc[64];
 }				t_engine;

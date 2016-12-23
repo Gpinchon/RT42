@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:32:51 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/12/18 17:40:18 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/12/23 01:21:28 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,38 @@ void	mat4_print(MAT4 m)
 	printf("\n\n");
 }
 
+void	blit_buffer_scaled(FRAMEBUFFER buffer, void *image)
+{
+	t_rgba		rgbacol;
+	UCHAR		*bufpixel;
+	VEC2		coord;
+	VEC2		imgcoord;
+	t_point2	imgsize;
+
+	imgsize = get_image_data(image).size;
+	coord = new_vec2(0, 0);
+	imgcoord = new_vec2(0, 0);
+	while (imgcoord.y < imgsize.y)
+	{
+		coord.x = 0;
+		imgcoord.x = 0;
+		while (imgcoord.x < imgsize.x)
+		{
+			bufpixel = get_buffer_value(buffer, (t_point2){coord.x, coord.y});
+			rgbacol = rgba(bufpixel[2], bufpixel[1], bufpixel[0], bufpixel[3]);
+			put_image_pixel(image, &rgbacol, (t_point2){imgcoord.x, imgcoord.y});
+			coord.x += (float)buffer.size.x / (float)imgsize.x;
+			imgcoord.x++;
+		}
+		coord.y += (float)buffer.size.y / (float)imgsize.y;
+		imgcoord.y++;
+	}
+}
+
 void	blit_buffer(FRAMEBUFFER buffer, void *image)
 {
-	UINT 	i;
-	IMGDATA	img;
+	UINT 		i;
+	IMGDATA		img;
 
 	i = 0;
 	img = get_image_data(image);
@@ -40,6 +68,8 @@ void	blit_buffer(FRAMEBUFFER buffer, void *image)
 			((UCHAR*)img.pixels)[i] = *((UCHAR*)ezarray_get_index(buffer.array, i));
 			i++;
 		}
+	else if (img.bpp == buffer.bpp)
+		blit_buffer_scaled(buffer, image);
 }
 
 void	default_scene(ENGINE *engine, SCENE *scene)
@@ -187,12 +217,14 @@ void	fill_buffers(ENGINE *engine, t_point2 screen_coord, CAST_RETURN *ret)
 		*((VEC3 *)bufferptr) = ret->intersect.position;
 		bufferptr = get_buffer_value(engine->normalbuffer, screen_coord);
 		*((VEC3 *)bufferptr) = ret->intersect.normal;
+		bufferptr = get_buffer_value(engine->depthbuffer, screen_coord);
+		*((float *)bufferptr) = ret->intersect.distance[0];
 		if (RENDER_NORMALS)
 			put_pixel_to_buffer(engine->framebuffer, screen_coord, vec4_normalize(vec3_to_vec4(ret->intersect.normal, 1)));
 	}
 }
 
-void	render_scene(ENGINE *engine, SCENE *scene)
+BOOL	render_scene(ENGINE *engine, SCENE *scene)
 {
 	t_point2	screen_coord;
 	CAMERA		*cam;
@@ -201,7 +233,7 @@ void	render_scene(ENGINE *engine, SCENE *scene)
 	VEC3		col;
 
 	if (!(cam = scene->active_camera) || !cam->transform)
-		return ;
+		return (false);
 	engine->active_scene = scene;
 	update_transform(cam->transform);
 	screen_coord = (t_point2){0, 0};
@@ -212,6 +244,8 @@ void	render_scene(ENGINE *engine, SCENE *scene)
 		screen_coord.x = 0;
 		while (screen_coord.x < engine->framebuffer.size.x)
 		{
+			if (engine->stop_rendering)
+				return (false);
 			nscreen_coord = normalize_screen_coord(screen_coord, engine->framebuffer.size);
 			cam->ray = new_ray(cam->transform->position,
 				mat4_mult_vec3(cam->m4_view, vec3_normalize((VEC3){nscreen_coord.x, nscreen_coord.y, -1})));
@@ -219,10 +253,9 @@ void	render_scene(ENGINE *engine, SCENE *scene)
 			if (ret.intersect.intersects && !RENDER_NORMALS)
 			{
 				col = (VEC3){0, 0, 0};
-				//fill_buffers(engine, screen_coord, &ret);
+				fill_buffers(engine, screen_coord, &ret);
 				col = vec3_add(compute_lighting(engine, &ret), compute_reflection(engine, &ret, &cam->ray));
 				col = vec3_add(col, compute_refraction(engine, &ret, &cam->ray, 1.f));
-				//col = vec3_add(col, compute_radiosity(engine, &ret));
 				engine->refr_iteration = 0;
 				engine->refl_iteration = 0;
 				put_pixel_to_buffer(engine->framebuffer, screen_coord, vec3_to_vec4(col, 1));
@@ -231,12 +264,11 @@ void	render_scene(ENGINE *engine, SCENE *scene)
 				put_pixel_to_buffer(engine->framebuffer, screen_coord, vec4_normalize(vec3_to_vec4(vec3_normalize(ret.intersect.normal), 1)));
 			if (engine->progress_callback)
 				engine->progress_callback(engine, (screen_coord.x + 1 + (screen_coord.y + 1) * engine->framebuffer.size.y) * 100 / (float)(engine->framebuffer.size.y * engine->framebuffer.size.y + engine->framebuffer.size.x));
-			engine->last_time = time(NULL);
 			screen_coord.x++;
 		}
 		screen_coord.y++;
 	}
-	printf("Done !\n");
+	return (true);
 }
 
 void	print_progress(ENGINE *engine, float progress)
@@ -246,22 +278,32 @@ void	print_progress(ENGINE *engine, float progress)
 	int			i;
 	int			heigth;
 
+	if ((engine->stop_rendering = framework_is_done(engine->framework)))
+		return ;
 	color = rgba(255, 0, 0, 255);
 	get_image_size(engine->loading_screen, &img_size.x, &img_size.y);
 	heigth = (5.f / 100.f * img_size.y);
 	i = img_size.y / 2 - heigth;
 	while (i < (img_size.y / 2) + heigth)
 	{
-		put_image_pixel(engine->loading_screen, &color, (t_point2){img_size.x * progress / 100.f, i});
-		//put_window_pixel(engine->window, &color, (t_point2){WINDOW_SIZE.x * progress / 100.f, i});
+		put_image_pixel(engine->loading_screen, &color,
+			(t_point2){img_size.x * progress / 100.f, i});
 		i++;
 	}
-	if (time(NULL) - engine->last_time >= 0.9)
+	if (SDL_GetTicks() - engine->last_time >= 100)
 	{
 		clear_window(engine->window);
 		put_image_stretched(engine->window, engine->loading_screen);
-		refresh_window(engine->window);
+		engine->last_time = SDL_GetTicks();
+		framework_loop_once(engine->framework);
 	}
+}
+
+int		do_post_treatment(ENGINE *engine)
+{
+
+	return (true);
+	(void)engine;
 }
 
 int		main(int argc, char *argv[])
@@ -273,10 +315,14 @@ int		main(int argc, char *argv[])
 	engine.loading_screen = load_image_file(engine.framework, "./res/loading_screen.bmp");
 	default_scene(&engine, &engine.scene);
 	clear_renderer(&engine);
-	render_scene(&engine, &engine.scene);
-	blit_buffer(engine.framebuffer, engine.image);
-	refresh_window(engine.window);
-	framework_loop(engine.framework);
+	if (render_scene(&engine, &engine.scene))
+	{
+		blit_buffer(engine.framebuffer, engine.image);
+		refresh_window(engine.window);
+		framework_loop(engine.framework);
+	}
+	destroy_framework(engine.framework);
 	destroy_engine(&engine);
+	//destroy_engine(&engine);
 	return (argv[argc - 1][0]);
 }
