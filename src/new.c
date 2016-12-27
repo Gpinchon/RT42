@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/15 10:44:45 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/12/23 01:03:06 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/12/27 16:55:46 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ INTERSECT	intersect_plane2(t_primitive cp, t_ray r)
 	return (inter);
 }
 
-INTERSECT intersect_cylinder2(t_primitive cp, t_ray r)
+INTERSECT intersect_capped_cylinder(t_primitive cp, t_ray r)
 {
 	t_vec3		v[6];
 	INTERSECT	i;
@@ -70,24 +70,32 @@ INTERSECT intersect_cylinder2(t_primitive cp, t_ray r)
 	if (!(i.intersects = solve_quadratic(vec3_dot(v[4], v[4]),
 		vec3_dot(v[5], v[4]) * 2.0, vec3_dot(v[5], v[5]) - (cp.radius2), i.distance)))
 		return (i);
-	if (cp.size > 0 && vec3_length(vec3_sub(vec3_add(v[2],
-		vec3_scale(v[3], i.distance[0])), v[0])) >= cp.size / 2)
-		i.distance[0] = 0;
-	if (cp.size > 0 && vec3_length(vec3_sub(vec3_add(v[2],
-		vec3_scale(v[3], i.distance[1])), v[0])) >= cp.size / 2)
-		i.distance[1] = 0;
-	if (!(i.intersects = intersect_test(i.distance)))
-		return (i);
+	if (cp.size > 0)
+	{
+		i.distance[0] *= (vec3_length(vec3_sub(vec3_add(v[2], vec3_scale(v[3], i.distance[0])), v[0])) <= cp.size / 2.f);
+		i.distance[1] *= (vec3_length(vec3_sub(vec3_add(v[2], vec3_scale(v[3], i.distance[1])), v[0])) <= cp.size / 2.f);
+	}
 	if (i.distance[0] <= 0)
 	{
-		i.distance[0] = i.distance[1];
-		i.position = intersect_compute_position(r, i.distance[0]);
+		i.position = intersect_compute_position(r, (i.distance[0] = i.distance[1]));
 		i.normal = vec3_negate(cylinder_normal(i.position, cp));
 	}
 	else
 	{
 		i.position = intersect_compute_position(r, i.distance[0]);
 		i.normal = cylinder_normal(i.position, cp);
+	}
+	if (i.distance[0] <= 0)
+		i.normal = vec3_negate(i.normal);
+	if (!(i.intersects = intersect_test(i.distance)))
+	{
+		cp.position = vec3_sub(cp.position, vec3_scale(cp.direction, cp.size / 2.f));
+		/*cp.direction = vec3_sub(i.position, vec3_scale(cp.direction, cp.size / 2.f));
+		cp.direction = vec3_normalize(vec3_sub(cp.direction, cp.position));*/
+		//cp.position = vec3_sub(i.position, vec3_scale(i.normal, (cp.radius)));
+		//printf("%f, %f, %f\n", cp.position.x, cp.position.y, cp.position.z);
+		i = intersect_disc(cp, r);
+		return (i);
 	}
 	return (i);
 }
@@ -110,12 +118,16 @@ ENGINE		new_engine()
 	engine.inter_functions[cone] = intersect_cone;
 	engine.inter_functions[sphere] = intersect_sphere;
 	engine.inter_functions[cylinder] = intersect_cylinder;
+	engine.inter_functions[capped_cylinder] = intersect_capped_cylinder;
 	engine.inter_functions[plane] = intersect_plane;
 	engine.inter_functions[triangle] = intersect_triangle;
+	engine.inter_functions[disc] = intersect_disc;
 	engine.uv_functions[cone] = cylinder_uv;
 	engine.uv_functions[sphere] = sphere_uv;
 	engine.uv_functions[cylinder] = cylinder_uv;
+	engine.uv_functions[capped_cylinder] = cylinder_uv;
 	engine.uv_functions[plane] = plane_uv;
+	engine.uv_functions[disc] = plane_uv;
 	engine.max_refl = MAX_REFL;
 	engine.max_refr = MAX_REFR;
 	generate_poisson_disc(engine.poisson_disc, 64, 0.05f, new_vec2(-1, 1));

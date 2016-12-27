@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/02 22:57:17 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/12/16 13:17:22 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/12/27 15:35:45 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,23 +148,25 @@ VEC2		cylinder_uv(PRIMITIVE cylinder, INTERSECT inter)
 	uv.x = acosf(CLAMP(vec3_dot(vp, ve) / sin(acosf(-vec3_dot(vn, vp))), -1, 1)) / (2.f * M_PI);
 	if (vec3_dot(vec3_cross(vn, ve), vp) <= 0)
 		uv.x = 1 - uv.x;
-	uv.y = sqrt(pow(vec3_distance(cylinder.position, inter.position), 2) - cylinder.radius2);
-	uv.y /= cylinder.size > 0 ? cylinder.size : 1000.f;
+	uv.y = sqrt(pow(vec3_distance(cylinder.position, inter.position), 2) - cylinder.radius2) / 1000.f;
 	return (uv);
 }
 
 VEC2	plane_uv(PRIMITIVE plane, INTERSECT inter)
 {
 	VEC2	uv;
+	VEC3	t;
+	float	alpha;
 
-	VEC3 t = vec3_cross(inter.normal, new_vec3(0.0, 1.0, 0.0));
+	t = vec3_cross(inter.normal, new_vec3(0.0, 1.0, 0.0));
 	if (!vec3_length(t))
 		t = vec3_cross(inter.normal, new_vec3(0.0, 0.0, 1.0));
 	t = vec3_normalize(t);
 	float d = vec3_distance(inter.position, plane.position);
-	float alpha = acosf(vec3_dot(t, vec3_normalize(vec3_sub(plane.position, inter.position))));
+	VEC3	dir = vec3_normalize(vec3_sub(plane.position, inter.position));
+	alpha = acosf(vec3_dot(t, dir));
 	if (alpha > 1.5708)
-		alpha = acosf(vec3_dot(vec3_negate(t), vec3_normalize(vec3_sub(plane.position, inter.position))));
+		alpha = acosf(vec3_dot(vec3_negate(t), dir));
 	uv.x = cos(alpha) * d / 1000.f;
 	uv.y = sin(alpha) * d / 1000.f;
 

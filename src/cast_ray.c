@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/02 22:52:19 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/12/16 13:53:20 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/12/27 16:04:07 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ CAST_RETURN	cast_ray(ENGINE *engine, SCENE *scene, RAY ray)
 					uv = vec2_mult(engine->uv_functions[prim->prim.type](prim->prim, inter), ret.mtl.uv_scale);
 				sample_normal_map(ret.mtl.normal_map, uv, &inter);
 				if (ret.mtl.height_map)
-					inter.position = vec3_add(inter.position, vec3_scale(inter.normal, color_to_factor(sample_texture_filtered(ret.mtl.height_map, uv))));
+					inter.position = vec3_add(inter.position, vec3_scale(inter.normal, 10 * color_to_factor(sample_texture_filtered(ret.mtl.height_map, uv))));
 				if (ret.mtl.base_map)
 					ret.mtl.reflection_color = ret.mtl.base_color = sample_texture_filtered(ret.mtl.base_map, uv);
 				if (ret.mtl.rough_map)
