@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/16 11:24:55 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/12/16 13:50:57 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/12/27 22:04:41 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void		generate_poisson_disc(VEC2 *disc, UINT disc_size, float min_dist, VEC2 lim
 	while (i < disc_size)
 	{
 		attempts = 0;
-		while (attempts < 1000)
+		while (attempts < 100000)
 		{
 			p = new_point_around(min_dist, p);
 			if (!point_is_too_close(p, disc, disc_size, i, min_dist)

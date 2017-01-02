@@ -6,7 +6,7 @@
 #    By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/11/13 17:17:47 by gpinchon          #+#    #+#              #
-#    Updated: 2016/12/27 15:19:32 by gpinchon         ###   ########.fr        #
+#    Updated: 2016/12/28 23:53:25 by gpinchon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,7 +32,7 @@ CC		=	gcc
 INCLUDE	=	$(addprefix -I, $(wildcard ./libs/*/include/)) -I./include/
 LIBDIR	=	$(wildcard ./libs/*)
 
-CFLAGS	=	-g -Wall -Wextra -Werror $(INCLUDE)
+CFLAGS	=	-Ofast -Wall -Wextra -Werror $(INCLUDE)
 
 ifeq ($(OS), Windows_NT)
 LIBS	=	$(addprefix -L , $(LIBDIR)) -lezmem -lvml -lmingw32 -lSDLframework -lSDL2main -lSDL2  -lopengl32 -lm

@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/05 22:09:17 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/12/27 12:37:03 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/12/31 01:33:15 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ MATERIAL	*mtl_aquamarine(ENGINE *engine, SCENE *scene)
 	if ((mtl = get_mtl_by_name(scene, "aquamarine")))
 		return (mtl);
 	mtl = new_material(scene, "aquamarine");
-	mtl->refraction = 1.59f;
+	mtl->refraction = 1.59f * 2.f;
 	mtl->base_color = (VEC3){0.419607843, 0.792156863, 0.88627451};
 	mtl->refraction_color = (VEC3){0.419607843, 0.792156863, 0.88627451};
 	mtl->reflection_color = (VEC3){1, 1, 1};
@@ -143,6 +143,44 @@ MATERIAL	*mtl_brick(ENGINE *engine, SCENE *scene)
 	mtl->height_map = load_image_file(engine->framework, "res/brick/brick_height.bmp");
 	mtl->uv_scale = (VEC2){5, 5};
 	mtl->refraction = 1.f;
+	mtl->parallax = 0.1;
+	return (mtl);
+}
+
+MATERIAL	*mtl_octostone(ENGINE *engine, SCENE *scene)
+{
+	MATERIAL	*mtl;
+
+	if ((mtl = get_mtl_by_name(scene, "octostone")))
+		return (mtl);
+	mtl = new_material(scene, "octostone");
+	mtl->base_map = load_image_file(engine->framework, "res/octostone/octostone_base.bmp");
+	mtl->metal_map = load_image_file(engine->framework, "res/octostone/octostone_metal.bmp");
+	mtl->normal_map = load_image_file(engine->framework, "res/octostone/octostone_normal.bmp");
+	mtl->rough_map = load_image_file(engine->framework, "res/octostone/octostone_rough.bmp");
+	mtl->ao_map = load_image_file(engine->framework, "res/octostone/octostone_ao.bmp");
+	mtl->height_map = load_image_file(engine->framework, "res/octostone/octostone_height.bmp");
+	mtl->uv_scale = (VEC2){5, 5};
+	mtl->refraction = 1.f;
+	return (mtl);
+}
+
+MATERIAL	*mtl_harshbricks(ENGINE *engine, SCENE *scene)
+{
+	MATERIAL	*mtl;
+
+	if ((mtl = get_mtl_by_name(scene, "harshbricks")))
+		return (mtl);
+	mtl = new_material(scene, "harshbricks");
+	mtl->base_map = load_image_file(engine->framework, "res/harshbricks/harshbricks_base.bmp");
+	mtl->metal_map = load_image_file(engine->framework, "res/harshbricks/harshbricks_metal.bmp");
+	mtl->normal_map = load_image_file(engine->framework, "res/harshbricks/harshbricks_normal.bmp");
+	mtl->rough_map = load_image_file(engine->framework, "res/harshbricks/harshbricks_rough.bmp");
+	mtl->ao_map = load_image_file(engine->framework, "res/harshbricks/harshbricks_ao.bmp");
+	mtl->height_map = load_image_file(engine->framework, "res/harshbricks/harshbricks_height.bmp");
+	mtl->uv_scale = (VEC2){5, 5};
+	mtl->refraction = 1.1f;
+	mtl->parallax = 0.1;
 	return (mtl);
 }
 
@@ -161,6 +199,7 @@ MATERIAL	*mtl_rock_copper(ENGINE *engine, SCENE *scene)
 	mtl->height_map = load_image_file(engine->framework, "res/rock_copper/rock_copper_height.bmp");
 	mtl->uv_scale = (VEC2){1, 1};
 	mtl->refraction = 1.1f;
+	mtl->parallax = 0.1;
 	return (mtl);
 }
 
@@ -179,6 +218,7 @@ MATERIAL	*mtl_rock_sliced(ENGINE *engine, SCENE *scene)
 	mtl->height_map = load_image_file(engine->framework, "res/rock_sliced/rock_sliced_height.bmp");
 	mtl->uv_scale = (VEC2){1, 1};
 	mtl->refraction = 1.f;
+	mtl->parallax = 0.1;
 	return (mtl);
 }
 

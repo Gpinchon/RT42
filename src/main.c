@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:32:51 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/12/27 16:43:59 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/02 17:12:54 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,21 @@ void	blit_buffer(FRAMEBUFFER buffer, void *image)
 		blit_buffer_scaled(buffer, image);
 }
 
+MATERIAL	*mtl_light(ENGINE *engine, SCENE *scene)
+{
+	MATERIAL	*mtl;
+
+	if ((mtl = get_mtl_by_name(scene, "light")))
+		return (mtl);
+	mtl = new_material(scene, "light");
+	mtl->refraction = 1.f;
+	mtl->emitting.power = 2.f;
+	mtl->emitting.attenuation = 0.002f;
+	mtl->emitting.falloff = 50.f;
+	mtl->emitting.color = new_vec3(1, 1, 1);
+	return (mtl);
+	(void)engine;
+}
 void	default_scene(ENGINE *engine, SCENE *scene)
 {
 	RTPRIMITIVE	*p;
@@ -80,9 +95,9 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 	(void)engine;
 	scene->active_camera = new_camera(scene, 90, 0.0001, 1000);
 	scene->active_camera->transform = new_transform(scene,
-		(VEC3){0, 50, 350}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
+		(VEC3){0, 2.5, 2.5}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
 	scene->active_camera->transform->target = new_transform(scene,
-		(VEC3){0, 100, 0}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});;
+		(VEC3){0, 2.5, -1}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});;
 	MATERIAL *mirror = new_material(scene, "mirror");
 	mirror->base_color = (VEC3){0.1, 0.1, 0.1};
 	mirror->reflection_color = (VEC3){1, 1, 1};
@@ -91,73 +106,68 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 	mirror->metalness = 1;
 	mirror->alpha = 1;
 	p = new_rtprim(scene);
-	p->prim = new_sphere(100, (VEC3){0, 0, 0});
+	p->prim = new_sphere(1, (VEC3){0, 0, 0});
 	p->transform = new_transform(scene,
-		(VEC3){375, 100, 0}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
+		(VEC3){3.75, 1, 0}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
 	p->material = mtl_scuffed_aluminium(engine, scene);
 	p = new_rtprim(scene);
-	p->prim = new_sphere(100, (VEC3){0, 0, 0});
+	p->prim = new_sphere(1, (VEC3){0, 0, 0});
 	p->transform = new_transform(scene,
-		(VEC3){125, 100, 0}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
+		(VEC3){1.25, 1, 0}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
 	p->material = mtl_scuffed_plastic_red(engine, scene);
 	p = new_rtprim(scene);
-	p->prim = new_sphere(100, (VEC3){0, 0, 0});
+	p->prim = new_sphere(1, (VEC3){0, 0, 0});
 	p->transform = new_transform(scene,
-		(VEC3){-125, 100, 0}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
+		(VEC3){-1.25, 1, 0}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
 	p->material = mtl_aquamarine(engine, scene);
-	/*p = new_rtprim(scene);
-	p->prim = new_sphere(30, (VEC3){0, 0, 0});
-	p->transform = new_transform(scene,
-		(VEC3){-125, 100, 0}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
-	p->material = mtl_rock_copper(engine, scene);*/
 	p = new_rtprim(scene);
-	p->prim = new_sphere(100, (VEC3){0, 0, 0});
+	p->prim = new_sphere(1, (VEC3){0, 0, 0});
 	p->transform = new_transform(scene,
-		(VEC3){-375, 100, 0}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
+		(VEC3){-3.75, 1, 0}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
 	p->material = mtl_rock_copper(engine, scene);
 
 	p = new_rtprim(scene);
-	p->prim = new_cylinder(100, 0, (VEC3){0, 0, 0}, (VEC3){0, 1, 0});
+	p->prim = new_cylinder(1, 0, (VEC3){0, 0, 0}, (VEC3){0, 1, 0});
 	p->transform = new_transform(scene,
-		(VEC3){250, 0, -200}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
+		(VEC3){2.50, 0, -2}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
 	p->material = mtl_rusted_metal(engine, scene);
 	p = new_rtprim(scene);
-	p->prim = new_capped_cylinder(100, 50, (VEC3){0, 0, 0}, (VEC3){0, 1, 0});
+	p->prim = new_cylinder(1, 0, (VEC3){0, 0, 0}, (VEC3){0, 1, 0});
 	p->transform = new_transform(scene,
-		(VEC3){0, 250, -200}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
-	p->material = mtl_greasy_metal(engine, scene);
+		(VEC3){0, 0, -2}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
+	p->material = mtl_light(engine, scene);
 	p = new_rtprim(scene);
-	p->prim = new_cylinder(100, 0, (VEC3){0, 0, 0}, (VEC3){0, 1, 0});
+	p->prim = new_cylinder(1, 0, (VEC3){0, 0, 0}, (VEC3){0, 1, 0});
 	p->transform = new_transform(scene,
-		(VEC3){-250, 0, -200}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
+		(VEC3){-2.50, 0, -2}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
 	p->material = mtl_rock_sliced(engine, scene);
 
+	p = new_rtprim(scene);
+	p->prim = new_plane((VEC3){0, 0, 0}, (VEC3){0, 0, 0});
+	p->transform = new_transform(scene,
+		(VEC3){0, 0, -3}, (VEC3){0, 0, 1}, (VEC3){1, 1, 1});
+	p->material = mtl_harshbricks(engine, scene);
 	/*p = new_rtprim(scene);
 	p->prim = new_plane((VEC3){0, 0, 0}, (VEC3){0, 0, 0});
 	p->transform = new_transform(scene,
-		(VEC3){0, 0, -500}, (VEC3){0, 0, 1}, (VEC3){1, 1, 1});
+		(VEC3){0, 0, 5}, (VEC3){0, 0, -1}, (VEC3){1, 1, 1});
 	p->material = mtl_brick(engine, scene);
 	p = new_rtprim(scene);
 	p->prim = new_plane((VEC3){0, 0, 0}, (VEC3){0, 0, 0});
 	p->transform = new_transform(scene,
-		(VEC3){0, 0, 500}, (VEC3){0, 0, -1}, (VEC3){1, 1, 1});
-	p->material = mtl_brick(engine, scene);
-	p = new_rtprim(scene);
+		(VEC3){5, 0, 0}, (VEC3){-1, 0, 0}, (VEC3){1, 1, 1});
+	p->material = mtl_brick(engine, scene);*/
+	/*p = new_rtprim(scene);
 	p->prim = new_plane((VEC3){0, 0, 0}, (VEC3){0, 0, 0});
 	p->transform = new_transform(scene,
-		(VEC3){500, 0, 0}, (VEC3){-1, 0, 0}, (VEC3){1, 1, 1});
-	p->material = mtl_brick(engine, scene);
-	p = new_rtprim(scene);
-	p->prim = new_plane((VEC3){0, 0, 0}, (VEC3){0, 0, 0});
-	p->transform = new_transform(scene,
-		(VEC3){-500, 0, 0}, (VEC3){1, 0, 0}, (VEC3){1, 1, 1});
-	p->material = mtl_brick(engine, scene);
+		(VEC3){-5, 0, 0}, (VEC3){1, 0, 0}, (VEC3){1, 1, 1});
+	p->material = mtl_brick(engine, scene);*/
 	p = new_rtprim(scene);
 	p->prim = new_plane((VEC3){0, 0, 0}, (VEC3){0, 0, 0});
 	p->transform = new_transform(scene,
 		(VEC3){0, 0, 0}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
-	p->material = mtl_water(engine, scene);
-	p = new_rtprim(scene);
+	p->material = mtl_octostone(engine, scene);
+	/*p = new_rtprim(scene);
 	p->prim = new_plane((VEC3){0, 0, 0}, (VEC3){0, 0, 0});
 	p->transform = new_transform(scene,
 		(VEC3){0, 500, 0}, (VEC3){0, -1, 0}, (VEC3){1, 1, 1});
@@ -177,14 +187,14 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 	l->attenuation = 0.002;
 	l->falloff = 150;
 	l->spot_size = 80;*/
-	l = new_light(scene, POINT, (VEC3){0, 25, 150});
-	l->color = (VEC3){1, 207.f / 255.f, 197.f / 255.f};
-	//l->color = (VEC3){1, 1, 1};
+	l = new_light(scene, POINT, (VEC3){0, 2, 1.50});
+	//l->color = (VEC3){1, 207.f / 255.f, 197.f / 255.f};
+	l->color = (VEC3){1, 1, 1};
 	l->cast_shadow = true;
 	l->direction = (VEC3){0, -1, 0};
-	l->power = 2.f;
+	l->power = 1.f;
 	l->attenuation = 0.002;
-	l->falloff = 500;
+	l->falloff = 5;
 	l->spot_size = 80;
 	/*l = new_light(scene, POINT, (VEC3){0, 250, 100});
 	l->color = (VEC3){1, 207.f / 255.f, 197.f / 255.f};
@@ -212,12 +222,9 @@ void	fill_buffers(ENGINE *engine, t_point2 screen_coord, CAST_RETURN *ret)
 
 	if (ret->intersect.intersects)
 	{
-		if (ret->rtprimitive->material)
-		{
-			put_pixel_to_buffer(engine->framebuffer, screen_coord, vec3_to_vec4(ret->rtprimitive->material->base_color, ret->rtprimitive->material->alpha));
-			bufferptr = get_buffer_value(engine->mtlbuffer, screen_coord);
-			*((MATERIAL *)bufferptr) = *ret->rtprimitive->material;
-		}
+		put_pixel_to_buffer(engine->framebuffer, screen_coord, vec3_to_vec4(ret->mtl.base_color, ret->mtl.alpha));
+		bufferptr = get_buffer_value(engine->mtlbuffer, screen_coord);
+		*((MATERIAL *)bufferptr) = ret->mtl;
 		bufferptr = get_buffer_value(engine->positionbuffer, screen_coord);
 		*((VEC3 *)bufferptr) = ret->intersect.position;
 		bufferptr = get_buffer_value(engine->normalbuffer, screen_coord);
@@ -227,6 +234,38 @@ void	fill_buffers(ENGINE *engine, t_point2 screen_coord, CAST_RETURN *ret)
 		if (RENDER_NORMALS)
 			put_pixel_to_buffer(engine->framebuffer, screen_coord, vec4_normalize(vec3_to_vec4(ret->intersect.normal, 1)));
 	}
+}
+
+VEC3	compute_gi(ENGINE *engine, CAST_RETURN *ret)
+{
+	UINT	i;
+	VEC3	col;
+	RAY		r;
+	CAST_RETURN	castret;
+
+	i = 0;
+	col = new_vec3(0, 0, 0);
+	r.origin = vec3_add(ret->intersect.position, vec3_scale(ret->intersect.normal, 0.005f));
+	while (i < 64)
+	{
+		/*r.direction = vec3_normalize(mat3_mult_vec3(ret->tbn,
+		vec3_normalize(vec3_sub(vec3_scale(
+			new_vec3(engine->poisson_disc[i].x, engine->poisson_disc[i].y, 1), 2), new_vec3(1, 1, 1)))));*/
+		r.direction = ret->intersect.normal;
+		castret = cast_ray(engine, engine->active_scene, r);
+		if (castret.intersect.intersects && castret.mtl.alpha > 0.0001 && castret.mtl.emitting.power)
+		{
+			LIGHT l;
+			l.power = castret.mtl.emitting.power;
+			l.falloff = castret.mtl.emitting.falloff;
+			l.color = castret.mtl.emitting.color;
+			l.position = castret.intersect.position;
+			col = vec3_add(col, compute_point_color(l, ret->mtl, ret->intersect, new_ray(r.origin, vec3_negate(r.direction))));
+		}
+		i++;
+	}
+	return (col);
+	//return (vec3_fdiv(col, 4));
 }
 
 BOOL	render_scene(ENGINE *engine, SCENE *scene)
@@ -255,18 +294,23 @@ BOOL	render_scene(ENGINE *engine, SCENE *scene)
 			cam->ray = new_ray(cam->transform->position,
 				mat4_mult_vec3(cam->m4_view, vec3_normalize((VEC3){nscreen_coord.x, nscreen_coord.y, -1})));
 			ret = cast_ray(engine, scene, cam->ray);
+			col = (VEC3){0, 0, 0};
 			if (ret.intersect.intersects && !RENDER_NORMALS)
 			{
-				col = (VEC3){0, 0, 0};
 				fill_buffers(engine, screen_coord, &ret);
+				//col = compute_lighting(engine, &ret);
+				//col = compute_reflection(engine, &ret, &cam->ray);
 				col = vec3_add(compute_lighting(engine, &ret), compute_reflection(engine, &ret, &cam->ray));
 				col = vec3_add(col, compute_refraction(engine, &ret, &cam->ray, 1.f));
 				engine->refr_iteration = 0;
 				engine->refl_iteration = 0;
-				put_pixel_to_buffer(engine->framebuffer, screen_coord, vec3_to_vec4(col, 1));
+				if (ret.mtl.alpha > 0.0001)
+					col = vec3_add(col, compute_gi(engine, &ret));
+				//col = compute_gi(engine, &ret);
 			}
 			else if (ret.intersect.intersects)
 				put_pixel_to_buffer(engine->framebuffer, screen_coord, vec4_normalize(vec3_to_vec4(vec3_normalize(ret.intersect.normal), 1)));
+			put_pixel_to_buffer(engine->framebuffer, screen_coord, vec3_to_vec4(col, 1));
 			if (engine->progress_callback)
 				engine->progress_callback(engine, (screen_coord.x + 1 + (screen_coord.y + 1) * engine->framebuffer.size.y) * 100 / (float)(engine->framebuffer.size.y * engine->framebuffer.size.y + engine->framebuffer.size.x));
 			screen_coord.x++;

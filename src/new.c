@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/15 10:44:45 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/12/27 16:55:46 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/12/31 01:16:35 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,6 +130,6 @@ ENGINE		new_engine()
 	engine.uv_functions[disc] = plane_uv;
 	engine.max_refl = MAX_REFL;
 	engine.max_refr = MAX_REFR;
-	generate_poisson_disc(engine.poisson_disc, 64, 0.05f, new_vec2(-1, 1));
+	generate_poisson_disc(engine.poisson_disc, 64, 0.05f, new_vec2(0, 1));
 	return (engine);
 }

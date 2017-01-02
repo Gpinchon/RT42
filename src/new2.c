@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/15 11:04:09 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/12/22 22:27:47 by gpinchon         ###   ########.fr       */
+/*   Updated: 2016/12/30 22:19:35 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ MATERIAL	*new_material(SCENE *scene, char *name)
 	((MATERIAL*)ezlink_get_data(new_link))->uv_scale = (VEC2){1, 1};
 	((MATERIAL*)ezlink_get_data(new_link))->refraction = 1.f;
 	((MATERIAL*)ezlink_get_data(new_link))->alpha = 1;
+	((MATERIAL*)ezlink_get_data(new_link))->parallax = 0.05;
 	return (ezlink_get_data(new_link));
 }
 

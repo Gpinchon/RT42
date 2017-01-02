@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/14 18:14:04 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/12/05 13:10:57 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/02 16:41:51 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,7 +164,10 @@ VEC3	compute_point_color(LIGHT light, MATERIAL mtl,
 	float	spec;
 	float	att;
 
-	col = mtl.emitting;
+	if (mtl.emitting.power)
+		col = vec3_scale(mtl.emitting.color, mtl.emitting.power);
+	else
+		col = new_vec3(0, 0, 0);
 	att = compute_attenuation(light, inter.position);
 	if (light.type == SPOT)
 		att *= vec3_dot(vec3_normalize(light.direction), vec3_negate(lightdir))

@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:06:34 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/12/27 12:47:12 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/02 16:09:13 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,11 +84,12 @@ typedef struct	s_mtl
 	VEC3		base_color;
 	VEC3		refraction_color;
 	VEC3		reflection_color;
-	VEC3		emitting;
+	LIGHT		emitting;
 	float		roughness;
 	float		metalness;
 	float		refraction;
 	float		alpha;
+	float		parallax;
 }				t_mtl;
 
 typedef struct	s_rtprim
@@ -130,10 +131,9 @@ typedef struct	s_framebuffer
 
 typedef struct	s_cast_return
 {
-	RTPRIMITIVE	*rtprimitive;
 	INTERSECT	intersect;
-	VEC2		uv;
 	MATERIAL	mtl;
+	MAT3		tbn;
 }				t_cast_return;
 
 typedef struct	s_engine
@@ -206,6 +206,8 @@ MATERIAL		*mtl_rock_sliced(ENGINE *engine, SCENE *scene);
 MATERIAL		*mtl_granite(ENGINE *engine, SCENE *scene);
 MATERIAL		*mtl_water(ENGINE *engine, SCENE *scene);
 MATERIAL		*mtl_brick(ENGINE *engine, SCENE *scene);
+MATERIAL		*mtl_harshbricks(ENGINE *engine, SCENE *scene);
+MATERIAL		*mtl_octostone(ENGINE *engine, SCENE *scene);
 MATERIAL		*mtl_scuffed_plastic_red(ENGINE *engine, SCENE *scene);
 MATERIAL		*mtl_scuffed_aluminium(ENGINE *engine, SCENE *scene);
 
