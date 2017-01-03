@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:32:51 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/02 17:12:54 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/03 00:48:37 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -246,12 +246,17 @@ VEC3	compute_gi(ENGINE *engine, CAST_RETURN *ret)
 	i = 0;
 	col = new_vec3(0, 0, 0);
 	r.origin = vec3_add(ret->intersect.position, vec3_scale(ret->intersect.normal, 0.005f));
+	VEC2	*disc = engine->poisson_disc;
 	while (i < 64)
 	{
+		r.direction = vec3_normalize(mat3_mult_vec3(ret->tbn,
+		vec3_normalize(vec3_sub(vec3_scale(
+			new_vec3(disc[i].x * 0.5, disc[i].y * 0.5, 1), 2), new_vec3(1, 1, 1)))));
 		/*r.direction = vec3_normalize(mat3_mult_vec3(ret->tbn,
 		vec3_normalize(vec3_sub(vec3_scale(
-			new_vec3(engine->poisson_disc[i].x, engine->poisson_disc[i].y, 1), 2), new_vec3(1, 1, 1)))));*/
-		r.direction = ret->intersect.normal;
+			new_vec3(0.5, 0.5, 1), 2), new_vec3(1, 1, 1)))));*/
+		//return (r.direction);
+		//r.direction = ret->intersect.normal;
 		castret = cast_ray(engine, engine->active_scene, r);
 		if (castret.intersect.intersects && castret.mtl.alpha > 0.0001 && castret.mtl.emitting.power)
 		{
@@ -264,8 +269,8 @@ VEC3	compute_gi(ENGINE *engine, CAST_RETURN *ret)
 		}
 		i++;
 	}
-	return (col);
-	//return (vec3_fdiv(col, 4));
+	//return (col);
+	return (vec3_fdiv(col, 64));
 }
 
 BOOL	render_scene(ENGINE *engine, SCENE *scene)
