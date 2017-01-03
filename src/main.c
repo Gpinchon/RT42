@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:32:51 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/03 00:48:37 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/03 18:24:13 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,9 +80,9 @@ MATERIAL	*mtl_light(ENGINE *engine, SCENE *scene)
 		return (mtl);
 	mtl = new_material(scene, "light");
 	mtl->refraction = 1.f;
-	mtl->emitting.power = 2.f;
+	mtl->emitting.power = 10.f;
 	mtl->emitting.attenuation = 0.002f;
-	mtl->emitting.falloff = 50.f;
+	mtl->emitting.falloff = 5.f;
 	mtl->emitting.color = new_vec3(1, 1, 1);
 	return (mtl);
 	(void)engine;
@@ -95,9 +95,9 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 	(void)engine;
 	scene->active_camera = new_camera(scene, 90, 0.0001, 1000);
 	scene->active_camera->transform = new_transform(scene,
-		(VEC3){0, 2.5, 2.5}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
+		(VEC3){0, 0.5, 2.5}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
 	scene->active_camera->transform->target = new_transform(scene,
-		(VEC3){0, 2.5, -1}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});;
+		(VEC3){0, 0.5, -1}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});;
 	MATERIAL *mirror = new_material(scene, "mirror");
 	mirror->base_color = (VEC3){0.1, 0.1, 0.1};
 	mirror->reflection_color = (VEC3){1, 1, 1};
@@ -190,11 +190,11 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 	l = new_light(scene, POINT, (VEC3){0, 2, 1.50});
 	//l->color = (VEC3){1, 207.f / 255.f, 197.f / 255.f};
 	l->color = (VEC3){1, 1, 1};
-	l->cast_shadow = true;
+	l->cast_shadow = false;
 	l->direction = (VEC3){0, -1, 0};
 	l->power = 1.f;
 	l->attenuation = 0.002;
-	l->falloff = 5;
+	l->falloff = 3;
 	l->spot_size = 80;
 	/*l = new_light(scene, POINT, (VEC3){0, 250, 100});
 	l->color = (VEC3){1, 207.f / 255.f, 197.f / 255.f};
@@ -246,26 +246,25 @@ VEC3	compute_gi(ENGINE *engine, CAST_RETURN *ret)
 	i = 0;
 	col = new_vec3(0, 0, 0);
 	r.origin = vec3_add(ret->intersect.position, vec3_scale(ret->intersect.normal, 0.005f));
-	VEC2	*disc = engine->poisson_disc;
+	//VEC2	*disc = engine->poisson_disc;
+	RAY		lray = new_ray(engine->active_scene->active_camera->transform->position, new_vec3(0, 1, 0));
 	while (i < 64)
 	{
 		r.direction = vec3_normalize(mat3_mult_vec3(ret->tbn,
-		vec3_normalize(vec3_sub(vec3_scale(
-			new_vec3(disc[i].x * 0.5, disc[i].y * 0.5, 1), 2), new_vec3(1, 1, 1)))));
+		vec3_normalize(new_vec3(
+			frand_a_b(-1, 1), frand_a_b(-1, 1), 1)
+		)));
 		/*r.direction = vec3_normalize(mat3_mult_vec3(ret->tbn,
 		vec3_normalize(vec3_sub(vec3_scale(
-			new_vec3(0.5, 0.5, 1), 2), new_vec3(1, 1, 1)))));*/
+			new_vec3(frand_a_b(-1, 1), frand_a_b(-1, 1), 1), 2), new_vec3(1, 1, 1)))));*/
 		//return (r.direction);
 		//r.direction = ret->intersect.normal;
 		castret = cast_ray(engine, engine->active_scene, r);
 		if (castret.intersect.intersects && castret.mtl.alpha > 0.0001 && castret.mtl.emitting.power)
 		{
-			LIGHT l;
-			l.power = castret.mtl.emitting.power;
-			l.falloff = castret.mtl.emitting.falloff;
-			l.color = castret.mtl.emitting.color;
-			l.position = castret.intersect.position;
-			col = vec3_add(col, compute_point_color(l, ret->mtl, ret->intersect, new_ray(r.origin, vec3_negate(r.direction))));
+			castret.mtl.emitting.position = castret.intersect.position;
+			lray.direction = vec3_negate(r.direction);
+			col = vec3_add(col, compute_point_color(castret.mtl.emitting, ret->mtl, ret->intersect, lray));
 		}
 		i++;
 	}

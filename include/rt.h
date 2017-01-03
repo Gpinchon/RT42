@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:06:34 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/02 16:09:13 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/03 16:37:29 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,8 +132,8 @@ typedef struct	s_framebuffer
 typedef struct	s_cast_return
 {
 	INTERSECT	intersect;
-	MATERIAL	mtl;
 	MAT3		tbn;
+	MATERIAL	mtl;
 }				t_cast_return;
 
 typedef struct	s_engine

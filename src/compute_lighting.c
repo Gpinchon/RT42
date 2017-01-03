@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/02 22:54:03 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/02 16:11:42 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/03 16:38:11 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ VEC3	compute_lighting(ENGINE *engine, CAST_RETURN *ret)
 	RAY			ray;
 	CAST_RETURN	lret;
 
-	color = new_vec3(0, 0, 0);
+	color = ret->mtl.emitting.color;
 	i = 0;
 	while (i < engine->active_scene->lights.length)
 	{

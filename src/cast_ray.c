@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/02 22:52:19 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/02 16:18:06 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/03 16:55:30 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,6 @@ BOOL	check_intersection(float intersection, float current)
 
 void	sample_normal_map(void *normal_map, VEC2 uv, CAST_RETURN *ret)
 {
-	if (!normal_map)
-		return ;
 	ret->intersect.normal = vec3_normalize(mat3_mult_vec3(ret->tbn,
 		vec3_normalize(vec3_sub(vec3_scale(sample_texture_filtered(normal_map, uv), 2), new_vec3(1, 1, 1)))));
 }
@@ -50,24 +48,13 @@ MAT3		tbn_matrix(INTERSECT *inter)
 
 VEC2	sample_height_map(void	*height_map, VEC2 uv, CAST_RETURN *ret, RAY ray)
 {
-	/*VEC3	tvpos = mat3_mult_vec3(ret->tbn, ray.origin);
-	VEC3	tpos = mat3_mult_vec3(ret->tbn, ret->intersect.position);
-	VEC3	viewDir = vec3_normalize(vec3_sub(tvpos, tpos));
-	float height =  1 - sample_texture(height_map, uv).x;    
-    VEC2	p = vec2_scale(vec2_fdiv(vec3_to_vec2(viewDir), viewDir.z), (height * 0.05));
-    return vec2_sub(uv, p);*/
-    /*VEC3	tvpos = mat3_mult_vec3(ret->tbn, ray.origin);
-	VEC3	tpos = mat3_mult_vec3(ret->tbn, ret->intersect.position);*/
-	//VEC3	viewDir = vec3_normalize(vec3_sub(tvpos, tpos));
-	//VEC3	V = mat3_mult_vec3(ret->tbn, e);
-	 // number of depth layers
 	VEC3	viewDir = mat3_mult_vec3(ret->tbn, ray.direction);
-    const float numLayers = interp_linear(100, 50, abs(vec3_dot(ret->intersect.normal, viewDir)));
-    float layerDepth = 1.0 / numLayers;
-    float currentLayerDepth = 0.0;
-    VEC2 P = vec2_scale(vec3_to_vec2(viewDir), ret->mtl.parallax); 
-    VEC2 deltaTexCoords = vec2_fdiv(P, numLayers);
-    VEC2  currentTexCoords = uv;
+	const float numLayers = interp_linear(100, 50, fabs(vec3_dot(ret->intersect.normal, viewDir)));
+	float layerDepth = 1.0 / numLayers;
+	float currentLayerDepth = 0.0;
+	VEC2 P = vec2_scale(vec3_to_vec2(viewDir), ret->mtl.parallax); 
+	VEC2 deltaTexCoords = vec2_fdiv(P, numLayers);
+	VEC2  currentTexCoords = uv;
 	float currentDepthMapValue = 1 - sample_texture(height_map, currentTexCoords).x;
 	while(currentLayerDepth < currentDepthMapValue)
 	{
@@ -76,12 +63,8 @@ VEC2	sample_height_map(void	*height_map, VEC2 uv, CAST_RETURN *ret, RAY ray)
 		currentLayerDepth += layerDepth;  
 	}
 	VEC2 prevTexCoords = vec2_add(currentTexCoords, deltaTexCoords);
-
-	// get depth after and before collision for linear interpolation
 	float afterDepth  = currentDepthMapValue - currentLayerDepth;
 	float beforeDepth = sample_texture(height_map, prevTexCoords).x - currentLayerDepth + layerDepth;
-	 
-	// interpolation of texture coordinates
 	float weight = afterDepth / (afterDepth - beforeDepth);
 	VEC2 finalTexCoords = vec2_add(vec2_scale(prevTexCoords, weight), vec2_scale(currentTexCoords, (1.0 - weight)));
 	float	finaldepth = sample_texture(height_map, finalTexCoords).x;
@@ -94,36 +77,39 @@ CAST_RETURN	cast_ray(ENGINE *engine, SCENE *scene, RAY ray)
 	UINT		i;
 	VEC2		uv;
 	INTERSECT	inter;
-	RTPRIMITIVE	*prim;
+	RTPRIMITIVE	p;
 	CAST_RETURN	ret;
 
 	i = 0;
 	vml_memset(&ret, 0, sizeof(CAST_RETURN));
 	while (i < scene->primitives.length)
 	{
-		prim = ezarray_get_index(scene->primitives, i);
-		if (prim->transform && !prim->transformed)
+		p = *((RTPRIMITIVE*)ezarray_get_index(scene->primitives, i));
+		if (p.transform && !p.transformed)
 		{
-			update_transform(prim->transform);
-			prim->prim.position = mat4_mult_vec3(prim->transform->translate, prim->transform->position);
-			prim->prim.direction = vec3_normalize(mat4_mult_vec3(prim->transform->rotate, prim->transform->rotation));
-			prim->transformed = true;
+			update_transform(p.transform);
+			p.prim.position = mat4_mult_vec3(p.transform->translate, p.transform->position);
+			p.prim.direction = vec3_normalize(mat4_mult_vec3(p.transform->rotate, p.transform->rotation));
+			p.transformed = true;
 		}
-		if (engine->inter_functions[prim->prim.type]
-		&& (inter = engine->inter_functions[prim->prim.type](prim->prim, ray)).intersects)
+		if (engine->inter_functions[p.prim.type]
+		&& (inter = engine->inter_functions[p.prim.type](p.prim, ray)).intersects)
 		{
 			if (ret.intersect.distance[0] == 0 || inter.distance[0] < ret.intersect.distance[0])
 			{
 				ret.intersect = inter;
 				ret.tbn = tbn_matrix(&inter);
-				if (prim->material)
-					ret.mtl = *prim->material;
-				if (engine->uv_functions[prim->prim.type])
-					uv = vec2_mult(engine->uv_functions[prim->prim.type](prim->prim, inter), ret.mtl.uv_scale);
+				if (p.material)
+					ret.mtl = *p.material;
+				if (engine->uv_functions[p.prim.type])
+					uv = vec2_mult(engine->uv_functions[p.prim.type](p.prim, inter), ret.mtl.uv_scale);
 				if (ret.mtl.height_map)
 					uv = sample_height_map(ret.mtl.height_map, uv, &ret, ray);
-				sample_normal_map(ret.mtl.normal_map, uv, &ret);
-					//inter.position = vec3_add(inter.position, vec3_scale(inter.normal, color_to_factor(sample_texture_filtered(ret.mtl.height_map, uv))));
+				if (ret.mtl.normal_map)
+				{
+					sample_normal_map(ret.mtl.normal_map, uv, &ret);
+					ret.tbn = tbn_matrix(&inter);
+				}
 				if (ret.mtl.base_map)
 					ret.mtl.reflection_color = ret.mtl.base_color = sample_texture_filtered(ret.mtl.base_map, uv);
 				if (ret.mtl.rough_map)
