@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:06:34 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/05 19:11:57 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/05 19:58:08 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@
 # define MAX_REFL		3
 # define MAX_REFR		3
 # define MAX_AREA		64
-# define SAMPLING		1
-# define WINDOW_SIZE	(t_point2){1024, 768}
+# define SAMPLING		0.5
+# define WINDOW_SIZE	(t_point2){1920, 1080}
 # define BUFFER_SIZE	(t_point2){WINDOW_SIZE.x * SAMPLING, WINDOW_SIZE.y * SAMPLING}
 # define CCLEAR_VALUE	0
 # define FCLEAR_VALUE	0

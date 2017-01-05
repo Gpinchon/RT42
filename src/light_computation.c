@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/14 18:14:04 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/05 00:03:46 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/05 20:13:31 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,6 +174,8 @@ VEC3	compute_point_color(LIGHT light, MATERIAL mtl,
 		> cos(TO_RADIAN(light.spot_size / 2.0)) ? 1 : 0;
 	if (!att)
 		return (col);
+	if (mtl.alpha < 1 && vec3_dot(inter.normal, lightdir) < 0)
+		inter.normal = vec3_negate(inter.normal);
 	geom = CLAMP(DIFFUSE(inter.normal, viewdir, lightdir, mtl), 0, 1);
 	spec = CLAMP(ggx_specular(inter.normal, viewdir, lightdir, mtl), 0, 1);
 	col = vec3_add(col, vec3_mult(light.color, vec3_scale(mtl.base_color, geom)));

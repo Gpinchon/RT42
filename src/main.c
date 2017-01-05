@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:32:51 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/05 19:47:36 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/05 20:14:53 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 	(void)engine;
 	scene->active_camera = new_camera(scene, 90, 0.0001, 1000);
 	scene->active_camera->transform = new_transform(scene,
-		(VEC3){-0, 1.5, 5.5}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
+		(VEC3){-0, 5, 5.5}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
 	scene->active_camera->transform->target = new_transform(scene,
 		(VEC3){0, 0.5, -1}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});;
 	MATERIAL *mirror = new_material(scene, "mirror");
@@ -138,7 +138,7 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 	p = new_rtprim(scene);
 	p->prim = new_sphere(1, (VEC3){0, 0, 0});
 	p->transform = new_transform(scene,
-		(VEC3){1.25, 1, 0}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
+		(VEC3){1.25, 1, 2.5}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
 	p->material = mtl_scuffed_plastic_red(engine, scene);
 	p = new_rtprim(scene);
 	p->prim = new_sphere(1, (VEC3){0, 0, 0});
