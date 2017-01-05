@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:32:51 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/05 20:14:53 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/06 00:08:19 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ MATERIAL	*mtl_stained_glass(ENGINE *engine, SCENE *scene)
 	//mtl->rough_map = load_image_file(engine->framework, "res/stained_glass/stained_glass_rough.bmp");
 	mtl->alpha_map = load_image_file(engine->framework, "res/stained_glass/stained_glass_alpha.bmp");
 	mtl->parallax = 0.01;
-	mtl->refraction = 1.59f * 2.f;
+	mtl->refraction = 1.52f;
 	mtl->refraction_color = (VEC3){1, 1, 1};
 	mtl->uv_scale = (VEC2){1, 1};
 	mtl->roughness = 0.03;
@@ -120,9 +120,9 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 	(void)engine;
 	scene->active_camera = new_camera(scene, 90, 0.0001, 1000);
 	scene->active_camera->transform = new_transform(scene,
-		(VEC3){-0, 5, 5.5}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
+		(VEC3){-4.75, 1.5, -1.5}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
 	scene->active_camera->transform->target = new_transform(scene,
-		(VEC3){0, 0.5, -1}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});;
+		(VEC3){0, 0, 0}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});;
 	MATERIAL *mirror = new_material(scene, "mirror");
 	mirror->base_color = (VEC3){0.1, 0.1, 0.1};
 	mirror->reflection_color = (VEC3){1, 1, 1};
@@ -156,7 +156,7 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 		(VEC3){-3.75, 1, 0}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
 	p->material = mtl_rock_copper(engine, scene);
 
-	p = new_rtprim(scene);
+	/*p = new_rtprim(scene);
 	p->prim = new_cylinder(1, 0, (VEC3){0, 0, 0}, (VEC3){0, 1, 0});
 	p->transform = new_transform(scene,
 		(VEC3){2.50, 0, -2}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
@@ -171,7 +171,7 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 	p->prim = new_cylinder(1, 0, (VEC3){0, 0, 0}, (VEC3){0, 1, 0});
 	p->transform = new_transform(scene,
 		(VEC3){-2.50, 0, -2}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
-	p->material = mtl_rock_sliced(engine, scene);
+	p->material = mtl_rock_sliced(engine, scene);*/
 
 	/*p = new_rtprim(scene);
 	p->prim = new_cylinder(1, 5, (VEC3){0, 0, 0}, (VEC3){0, 1, 0});
@@ -182,8 +182,8 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 	p = new_rtprim(scene);
 	p->prim = new_plane((VEC3){0, 0, 0}, (VEC3){0, 0, 0});
 	p->transform = new_transform(scene,
-		(VEC3){0, 0, -3}, (VEC3){0, 0, 1}, (VEC3){1, 1, 1});
-	p->material = mtl_harshbricks(engine, scene);
+		(VEC3){0, 0, -3}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
+	p->material = mtl_octostone(engine, scene);
 	/*p = new_rtprim(scene);
 	p->prim = new_plane((VEC3){0, 0, 0}, (VEC3){0, 0, 0});
 	p->transform = new_transform(scene,
@@ -224,7 +224,7 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 	l->attenuation = 0.002;
 	l->falloff = 150;
 	l->spot_size = 80;*/
-	l = new_light(scene, POINT, (VEC3){0, 2, 2});
+	l = new_light(scene, POINT, (VEC3){0, 4, 1.5});
 	//l->color = (VEC3){1, 207.f / 255.f, 197.f / 255.f};
 	l->color = (VEC3){1, 1, 1};
 	l->cast_shadow = true;
@@ -233,7 +233,7 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 	l->attenuation = 0.002;
 	l->falloff = 5;
 	l->spot_size = 80;
-	l->ambient_coef = 0.5f;
+	l->ambient_coef = 0.2f;
 	/*l = new_light(scene, POINT, (VEC3){0, 250, 100});
 	l->color = (VEC3){1, 207.f / 255.f, 197.f / 255.f};
 	l->cast_shadow = false;
@@ -374,8 +374,6 @@ BOOL	render_scene(ENGINE *e, SCENE *scene)
 				col = vec3_add(col, compute_lighting(e, &r));
 				col = vec3_add(col, compute_reflection(e, &r, &cam->ray));
 				col = vec3_add(col, compute_refraction(e, &r, &cam->ray, 1.f));
-				e->refr_iteration = 0;
-				e->refl_iteration = 0;
 				fill_buffers(e, scoord, &r);
 			}
 			put_pixel_to_buffer(f, scoord, vec3_to_vec4(col, 1));

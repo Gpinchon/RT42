@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/02 22:50:09 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/05 19:04:53 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/05 23:13:32 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,10 @@ VEC3	compute_refraction(ENGINE *engine, CAST_RETURN *ret, RAY *cur_ray, float ai
 	CAST_RETURN	refrret;
 
 	if (ret->mtl.alpha >= 1 || engine->refr_iteration >= engine->max_refr)
+	{
+		engine->refr_iteration = 0;
 		return ((VEC3){0, 0, 0});
+	}
 	engine->refr_iteration++;
 	color = (VEC3){0, 0, 0};
 	direction = vec3_refract(cur_ray->direction, ret->intersect.normal, ret->mtl.refraction, aior);
@@ -78,7 +81,10 @@ VEC3	compute_reflection(ENGINE *engine, CAST_RETURN *ret, RAY *cur_ray)
 	CAST_RETURN	reflret;
 
 	if (engine->refl_iteration >= engine->max_refl)
+	{
+		engine->refl_iteration = 0;
 		return ((VEC3){0, 0, 0});
+	}
 	engine->refl_iteration++;
 	color = (VEC3){0, 0, 0};
 	ray = new_ray(vec3_add(ret->intersect.position, vec3_scale(ret->intersect.normal, 0.0005)), vec3_reflect(cur_ray->direction, ret->intersect.normal));

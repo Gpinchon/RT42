@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/02 22:54:03 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/05 15:55:24 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/05 23:49:27 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ VEC3	compute_lighting(ENGINE *engine, CAST_RETURN *ret)
 			get_ret_mtl(&lret);
 			lcolor = compute_point_color(l, ret->mtl, ret->intersect, ray);
 			if (l.ambient_coef)
-				color = vec3_add(color, (lcolor = vec3_scale(lcolor, l.ambient_coef)));
+				color = vec3_add(color, (vec3_scale(lcolor, l.ambient_coef)));
 			if (lret.mtl.alpha < 1)
 			{
 				float	final_alpha;
@@ -53,7 +53,7 @@ VEC3	compute_lighting(ENGINE *engine, CAST_RETURN *ret)
 					final_alpha += lret.mtl.alpha;
 					ray.origin = vec3_add(lret.intersect.position, vec3_scale(ray.direction, 0.0001));
 				}
-				color = vec3_add(color, vec3_scale(lcolor, (1 - CLAMP(final_alpha, 0, 1))));
+				color = vec3_add(color, vec3_scale(lcolor, (1 - CLAMP(final_alpha, 0, 1 - l.ambient_coef))));
 			}
 		}
 		else
