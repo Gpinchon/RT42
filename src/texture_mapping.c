@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/02 22:57:17 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/04 17:13:09 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/05 18:52:27 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,16 +63,12 @@ VEC3		sample_texture_filtered(void *image, VEC2 uv)
 	float fv = (uv.y) * img.size.y;
 	int	u[4];
 	int v[4];
-	//uv1
 	u[0] = u[2] = CLAMP(((int)fu) % img.size.x, 0, img.size.x - 1);
 	v[0] = v[1] = CLAMP(((int)fv) % img.size.y, 0, img.size.y - 1);
-	//uv2
 	u[1] = u[3] = CLAMP((u[0] + 1) % img.size.x, 0, img.size.x - 1);
 	v[2] = v[3] = CLAMP((v[0] + 1) % img.size.y, 0, img.size.y - 1);
-	// calculate fractional parts of u and v
 	float fracu = fu - floorf( fu );
 	float fracv = fv - floorf( fv );
-	// calculate weight factors
 	float weight[4];
 	weight[0] = ((1 - fracu) * (1 - fracv));
 	weight[1] = (fracu * (1 - fracv));
@@ -91,9 +87,7 @@ VEC3		sample_texture_filtered(void *image, VEC2 uv)
 
 		}
 		else if (img.opp == 1)
-		{
 			color.x = color.y = color.z += (pixel[0] / 255.f) * weight[i];
-		}
 		i++;
 	}
 	return (color);
@@ -182,7 +176,7 @@ VEC2	plane_uv(PRIMITIVE plane, INTERSECT inter)
 		dir = vec3_normalize(vec3_sub(npos, inter.position));
 		alpha = vec3_dot(t, dir);
 	}
-	uv.x = cos(acosf(alpha)) * d / 10.f;
-	uv.y = sin(acosf(alpha)) * d / 10.f;
+	uv.x = cos(acosf(alpha)) * d / 5.f;
+	uv.y = sin(acosf(alpha)) * d / 5.f;
 	return (uv);
 }

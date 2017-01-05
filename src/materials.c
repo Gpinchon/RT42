@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/05 22:09:17 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/05 01:02:54 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/05 16:41:51 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ MATERIAL	*mtl_aquamarine(ENGINE *engine, SCENE *scene)
 	mtl->uv_scale = (VEC2){3, 3};
 	mtl->roughness = 0.03;
 	mtl->metalness = 0.5;
-	mtl->alpha = 0.5;
+	mtl->alpha = 0.05;
 	return (mtl);
 	(void)engine;
 }

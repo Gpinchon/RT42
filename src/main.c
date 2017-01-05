@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:32:51 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/05 00:59:06 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/05 19:47:36 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,30 @@ MATERIAL	*mtl_light(ENGINE *engine, SCENE *scene)
 	return (mtl);
 	(void)engine;
 }
+
+MATERIAL	*mtl_stained_glass(ENGINE *engine, SCENE *scene)
+{
+	MATERIAL	*mtl;
+
+	if ((mtl = get_mtl_by_name(scene, "stained_glass")))
+		return (mtl);
+	mtl = new_material(scene, "stained_glass");
+	mtl->base_map = load_image_file(engine->framework, "res/stained_glass/stained_glass_base.bmp");
+	mtl->metal_map = load_image_file(engine->framework, "res/stained_glass/stained_glass_metal.bmp");
+	mtl->normal_map = load_image_file(engine->framework, "res/stained_glass/stained_glass_normal.bmp");
+	mtl->height_map = load_image_file(engine->framework, "res/stained_glass/stained_glass_height.bmp");
+	//mtl->rough_map = load_image_file(engine->framework, "res/stained_glass/stained_glass_rough.bmp");
+	mtl->alpha_map = load_image_file(engine->framework, "res/stained_glass/stained_glass_alpha.bmp");
+	mtl->parallax = 0.01;
+	mtl->refraction = 1.59f * 2.f;
+	mtl->refraction_color = (VEC3){1, 1, 1};
+	mtl->uv_scale = (VEC2){1, 1};
+	mtl->roughness = 0.03;
+	mtl->metalness = 0.5;
+	mtl->alpha = 0.05;
+	return (mtl);
+}
+
 void	default_scene(ENGINE *engine, SCENE *scene)
 {
 	RTPRIMITIVE	*p;
@@ -96,7 +120,7 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 	(void)engine;
 	scene->active_camera = new_camera(scene, 90, 0.0001, 1000);
 	scene->active_camera->transform = new_transform(scene,
-		(VEC3){0, 1.5, 2.5}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
+		(VEC3){-0, 1.5, 5.5}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
 	scene->active_camera->transform->target = new_transform(scene,
 		(VEC3){0, 0.5, -1}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});;
 	MATERIAL *mirror = new_material(scene, "mirror");
@@ -120,7 +144,7 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 	p->prim = new_sphere(1, (VEC3){0, 0, 0});
 	p->transform = new_transform(scene,
 		(VEC3){-1.25, 1, 0}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
-	p->material = mtl_aquamarine(engine, scene);
+	p->material = mtl_stained_glass(engine, scene);
 	p = new_rtprim(scene);
 	p->prim = new_sphere(0.2, (VEC3){0, 0, 0});
 	p->transform = new_transform(scene,
@@ -178,8 +202,8 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 	p = new_rtprim(scene);
 	p->prim = new_plane((VEC3){0, 0, 0}, (VEC3){0, 0, 0});
 	p->transform = new_transform(scene,
-		(VEC3){0, 0, 0}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
-	p->material = mtl_octostone(engine, scene);
+		(VEC3){0, 0, 1.1}, (VEC3){0, 0, -1}, (VEC3){1, 1, 1});
+	p->material = mtl_stained_glass(engine, scene);
 	/*p = new_rtprim(scene);
 	p->prim = new_plane((VEC3){0, 0, 0}, (VEC3){0, 0, 0});
 	p->transform = new_transform(scene,
@@ -200,16 +224,16 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 	l->attenuation = 0.002;
 	l->falloff = 150;
 	l->spot_size = 80;*/
-	l = new_light(scene, POINT, (VEC3){0, 2, 1.50});
+	l = new_light(scene, POINT, (VEC3){0, 2, 2});
 	//l->color = (VEC3){1, 207.f / 255.f, 197.f / 255.f};
 	l->color = (VEC3){1, 1, 1};
 	l->cast_shadow = true;
 	l->direction = (VEC3){0, -1, 0};
-	l->power = 1.f;
+	l->power = 2.f;
 	l->attenuation = 0.002;
-	l->falloff = 3;
+	l->falloff = 5;
 	l->spot_size = 80;
-	l->ambient_coef = 0.5;
+	l->ambient_coef = 0.5f;
 	/*l = new_light(scene, POINT, (VEC3){0, 250, 100});
 	l->color = (VEC3){1, 207.f / 255.f, 197.f / 255.f};
 	l->cast_shadow = false;
@@ -306,9 +330,7 @@ BOOL	scene_contains_area_light(SCENE *scene)
 		&& p.material->emitting.color.x > 0
 		&& p.material->emitting.color.y > 0
 		&& p.material->emitting.color.z > 0)
-		{
 			return (true);
-		}
 		i++;
 	}
 	return (false);

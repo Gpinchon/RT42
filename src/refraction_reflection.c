@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/02 22:50:09 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/04 22:38:19 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/05 19:04:53 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,9 @@ VEC3	compute_refraction(ENGINE *engine, CAST_RETURN *ret, RAY *cur_ray, float ai
 		get_ret_mtl(&refrret);
 		color = compute_refraction(engine, &refrret, &ray, ret->mtl.refraction);
 		color = vec3_add(color, compute_lighting(engine, &refrret));
-		color = vec3_mult(color, ret->mtl.refraction_color);
 		color = vec3_interp(interp_linear, color, (VEC3){0, 0, 0}, ret->mtl.alpha);
 		color = vec3_interp(interp_linear, color, (VEC3){0, 0, 0}, ret->mtl.roughness);
+		color = vec3_mult(color, ret->mtl.refraction_color);
 	}
 	return (color);
 }
@@ -91,7 +91,7 @@ VEC3	compute_reflection(ENGINE *engine, CAST_RETURN *ret, RAY *cur_ray)
 		engine->refr_iteration = 0;
 		color = vec3_add(color, compute_lighting(engine, &reflret));
 		color = vec3_interp(interp_linear, color, (VEC3){0, 0, 0}, ret->mtl.roughness);
-		color = vec3_interp(interp_linear, color, (VEC3){0, 0, 0}, CLAMP(1 - ret->mtl.metalness, 0.1, 1));
+		color = vec3_interp(interp_linear, color, (VEC3){0, 0, 0}, CLAMP(1 - ret->mtl.metalness, 0.2, 1));
 		//color = vec3_interp(interp_linear, color, (VEC3){0, 0, 0}, 1 - ret->mtl.alpha);
 		color = vec3_mult(color, ret->mtl.reflection_color);
 	}

@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:06:34 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/04 23:55:52 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/05 19:11:57 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ typedef struct	s_mtl
 	void		*rough_map;
 	void		*ao_map;
 	void		*height_map;
+	void		*alpha_map;
 	VEC2		uv_scale;
 	VEC3		base_color;
 	VEC3		refraction_color;

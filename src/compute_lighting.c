@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/02 22:54:03 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/05 01:33:00 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/05 15:55:24 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,23 +35,25 @@ VEC3	compute_lighting(ENGINE *engine, CAST_RETURN *ret)
 			get_ret_mtl(&lret);
 			lcolor = compute_point_color(l, ret->mtl, ret->intersect, ray);
 			if (l.ambient_coef)
-				color = vec3_add(color, vec3_scale(lcolor, l.ambient_coef));
+				color = vec3_add(color, (lcolor = vec3_scale(lcolor, l.ambient_coef)));
 			if (lret.mtl.alpha < 1)
 			{
-				color = vec3_add(color, vec3_scale(lcolor, (1 - lret.mtl.alpha) * (1 - l.ambient_coef) * (1 - (lret.intersect.distance[1] - lret.intersect.distance[0]))));
-				//color = vec3_add(color, vec3_scale(vec3_add(lcolor, vec3_mult(lret.mtl.base_color, l.color)), (1 - lret.mtl.alpha) * (1 - (lret.intersect.distance[1] - lret.intersect.distance[0]))));
-				/*if (!l.ambient_coef)
-					color = vec3_add(color, lcolor);*/
+				float	final_alpha;
+				final_alpha = lret.mtl.alpha;
 				ray.origin = vec3_add(lret.intersect.position, vec3_scale(ray.direction, 0.0001));
-				color = vec3_add(color, vec3_scale(lcolor, lret.mtl.alpha));
+				//color = vec3_add(color, vec3_scale(lcolor, lret.mtl.alpha));
+				color = vec3_mult(lcolor, lret.mtl.base_color);
 				while ((lret = cast_ray(engine, engine->active_scene, ray)).intersect.intersects
 				&& lret.intersect.distance[0] < vec3_distance(l.position, ret->intersect.position)
-				&& lret.mtl.alpha < 1)
+				&& lret.mtl.alpha < 1
+				&& final_alpha < 1)
 				{
-					//color = vec3_add(color, compute_point_color(*l, ret->mtl, ret->intersect, ray));
-					color = vec3_add(color, vec3_scale(lcolor, (1 - lret.mtl.alpha) * (1 - l.ambient_coef) * (1 - (lret.intersect.distance[1] - lret.intersect.distance[0]))));
+					get_ret_mtl(&lret);
+					lcolor = vec3_mult(lcolor, lret.mtl.base_color);
+					final_alpha += lret.mtl.alpha;
 					ray.origin = vec3_add(lret.intersect.position, vec3_scale(ray.direction, 0.0001));
 				}
+				color = vec3_add(color, vec3_scale(lcolor, (1 - CLAMP(final_alpha, 0, 1))));
 			}
 		}
 		else

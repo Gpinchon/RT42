@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/15 10:44:45 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/04 22:50:22 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/05 19:45:28 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ INTERSECT	intersect_plane2(t_primitive cp, t_ray r)
 	inter = new_intersect();
 	normal = vec3_negate(cp.direction);
 	denom = vec3_dot(normal, r.direction);
-	if (denom > FLOAT_ZERO)
+	if (!float_equal(denom, 0.f))
 	{
 		if ((t = vec3_dot(vec3_sub(cp.position, r.origin), normal) / denom) >= FLOAT_ZERO)
 		{
@@ -50,6 +50,8 @@ INTERSECT	intersect_plane2(t_primitive cp, t_ray r)
 			inter.distance[0] = inter.distance[1] = t;
 			inter.position = intersect_compute_position(r, inter.distance[0]);
 			inter.normal = plane_normal(inter.position, cp);
+			if (denom < 0)
+				inter.normal = vec3_negate(inter.normal);
 		}
 	}
 	return (inter);
@@ -119,7 +121,7 @@ ENGINE		new_engine()
 	engine.inter_functions[sphere] = intersect_sphere;
 	engine.inter_functions[cylinder] = intersect_cylinder;
 	engine.inter_functions[capped_cylinder] = intersect_capped_cylinder;
-	engine.inter_functions[plane] = intersect_plane;
+	engine.inter_functions[plane] = intersect_plane2;
 	engine.inter_functions[triangle] = intersect_triangle;
 	engine.inter_functions[disc] = intersect_disc;
 	engine.uv_functions[cone] = cylinder_uv;
