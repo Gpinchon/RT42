@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:06:34 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/03 16:37:29 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/04 23:55:52 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,9 @@
 # define TRANSFORM		struct s_transform
 # define CAST_RETURN	struct s_cast_return
 # define UPVEC			(VEC3){0, 1, 0}
-# define MAX_REFL		4
-# define MAX_REFR		4
+# define MAX_REFL		3
+# define MAX_REFR		3
+# define MAX_AREA		64
 # define SAMPLING		1
 # define WINDOW_SIZE	(t_point2){1024, 768}
 # define BUFFER_SIZE	(t_point2){WINDOW_SIZE.x * SAMPLING, WINDOW_SIZE.y * SAMPLING}
@@ -66,6 +67,7 @@ typedef struct	s_light
 	float		attenuation;
 	float		falloff;
 	float		spot_size;
+	float		ambient_coef;
 	VEC3		color;
 	VEC3		position;
 	VEC3		direction;
@@ -131,6 +133,8 @@ typedef struct	s_framebuffer
 
 typedef struct	s_cast_return
 {
+	VEC2		uv;
+	RAY			ray;
 	INTERSECT	intersect;
 	MAT3		tbn;
 	MATERIAL	mtl;
@@ -143,6 +147,7 @@ typedef struct	s_engine
 	UINT		max_refl;
 	UINT		refl_iteration;
 	UINT		refr_iteration;
+	UINT		area_sampling;
 	void		*framework;
 	void		*window;
 	void		*image;
@@ -182,6 +187,8 @@ VEC3			sample_texture(void *image, VEC2 uv);
 VEC3			sample_texture_filtered(void *image, VEC2 uv);
 
 CAST_RETURN		cast_ray(ENGINE *engine, SCENE *scene, RAY ray);
+CAST_RETURN		cast_light_ray(ENGINE *engine, SCENE *scene, RAY ray);
+void			get_ret_mtl(CAST_RETURN	*ret);
 VEC3			compute_lighting(ENGINE *engine, CAST_RETURN *ret);
 VEC3			compute_refraction(ENGINE *engine, CAST_RETURN *ret, RAY *cur_ray, float aior);
 VEC3			compute_reflection(ENGINE *engine, CAST_RETURN *ret, RAY *cur_ray);

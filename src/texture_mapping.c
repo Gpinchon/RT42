@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/02 22:57:17 by gpinchon          #+#    #+#             */
-/*   Updated: 2016/12/30 23:15:31 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/04 17:13:09 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,7 @@ VEC3		sample_texture(void *image, VEC2 uv)
 	}
 	else if (img.opp == 1)
 	{
-		color.x = pixel[0] / 255.f;
-		color = (VEC3){color.x, color.x, color.x};
+		color.x = color.y = color.z = pixel[0] / 255.f;
 	}
 	return (color);
 }
