@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/02 22:54:03 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/05 23:49:27 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/06 13:12:40 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,9 @@ VEC3	compute_lighting(ENGINE *engine, CAST_RETURN *ret)
 				ray.origin = vec3_add(lret.intersect.position, vec3_scale(ray.direction, 0.0001));
 				//color = vec3_add(color, vec3_scale(lcolor, lret.mtl.alpha));
 				color = vec3_mult(lcolor, lret.mtl.base_color);
+				VEC3	ldir = vec3_normalize(vec3_sub(ret->intersect.position, l.position));
 				while ((lret = cast_ray(engine, engine->active_scene, ray)).intersect.intersects
+				&& !vec3_dot(vec3_normalize(vec3_sub(lret.intersect.position, l.position)), ldir)
 				&& lret.intersect.distance[0] < vec3_distance(l.position, ret->intersect.position)
 				&& lret.mtl.alpha < 1
 				&& final_alpha < 1)

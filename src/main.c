@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:32:51 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/06 00:08:19 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/06 14:10:43 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 	(void)engine;
 	scene->active_camera = new_camera(scene, 90, 0.0001, 1000);
 	scene->active_camera->transform = new_transform(scene,
-		(VEC3){-4.75, 1.5, -1.5}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
+		(VEC3){1.5, 1.5, -4}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
 	scene->active_camera->transform->target = new_transform(scene,
 		(VEC3){0, 0, 0}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});;
 	MATERIAL *mirror = new_material(scene, "mirror");
@@ -141,9 +141,9 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 		(VEC3){1.25, 1, 2.5}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
 	p->material = mtl_scuffed_plastic_red(engine, scene);
 	p = new_rtprim(scene);
-	p->prim = new_sphere(1, (VEC3){0, 0, 0});
+	p->prim = new_sphere(0.5, (VEC3){0, 0, 0});
 	p->transform = new_transform(scene,
-		(VEC3){-1.25, 1, 0}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
+		(VEC3){-1.25, 2.5, 0}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
 	p->material = mtl_stained_glass(engine, scene);
 	p = new_rtprim(scene);
 	p->prim = new_sphere(0.2, (VEC3){0, 0, 0});
@@ -199,11 +199,11 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 	p->transform = new_transform(scene,
 		(VEC3){-5, 0, 0}, (VEC3){1, 0, 0}, (VEC3){1, 1, 1});
 	p->material = mtl_brick(engine, scene);*/
-	p = new_rtprim(scene);
+	/*p = new_rtprim(scene);
 	p->prim = new_plane((VEC3){0, 0, 0}, (VEC3){0, 0, 0});
 	p->transform = new_transform(scene,
 		(VEC3){0, 0, 1.1}, (VEC3){0, 0, -1}, (VEC3){1, 1, 1});
-	p->material = mtl_stained_glass(engine, scene);
+	p->material = mtl_stained_glass(engine, scene);*/
 	/*p = new_rtprim(scene);
 	p->prim = new_plane((VEC3){0, 0, 0}, (VEC3){0, 0, 0});
 	p->transform = new_transform(scene,
@@ -224,7 +224,7 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 	l->attenuation = 0.002;
 	l->falloff = 150;
 	l->spot_size = 80;*/
-	l = new_light(scene, POINT, (VEC3){0, 4, 1.5});
+	l = new_light(scene, POINT, (VEC3){-1.25, 2.5, 0});
 	//l->color = (VEC3){1, 207.f / 255.f, 197.f / 255.f};
 	l->color = (VEC3){1, 1, 1};
 	l->cast_shadow = true;
@@ -365,9 +365,9 @@ BOOL	render_scene(ENGINE *e, SCENE *scene)
 			nscoord = normalize_screen_coord(scoord, f.size);
 			cam->ray = new_ray(cam->transform->position,
 				mat4_mult_vec3(cam->m4_view, vec3_normalize((VEC3){nscoord.x, nscoord.y, -1})));
+			col = new_vec3(0, 0, 0);
 			if ((r = cast_ray(e, scene, cam->ray)).intersect.intersects)
 			{
-				col = new_vec3(0, 0, 0);
 				get_ret_mtl(&r);
 				if (area_lights && r.mtl.alpha > 0.0001)
 					col = vec3_add(col, compute_area_lighting(e, &r));
