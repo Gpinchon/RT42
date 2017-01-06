@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:06:34 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/05 23:16:12 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/06 22:51:12 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,6 +141,15 @@ typedef struct	s_cast_return
 	MATERIAL	mtl;
 }				t_cast_return;
 
+typedef struct	s_engine_opt
+{
+	UINT		max_refr;
+	UINT		max_refl;
+	UINT		area_sampling;
+	t_point2	window_size;
+	t_point2	internal_size;
+}				t_engine_opt;
+
 typedef struct	s_engine
 {
 	BOOL		stop_rendering;
@@ -169,7 +178,8 @@ typedef struct	s_engine
 
 FRAMEBUFFER		new_framebuffer(TYPE type, t_point2 size, Uint8 depth);
 SCENE			new_scene();
-ENGINE			new_engine();
+ENGINE			new_engine(t_engine_opt options);
+void			print_progress(ENGINE *engine, float progress);
 void			put_pixel_to_buffer(FRAMEBUFFER buffer,
 				t_point2 coord, VEC4 color);
 void			put_value_to_buffer(FRAMEBUFFER buffer,

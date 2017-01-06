@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/15 10:44:45 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/05 23:16:02 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/06 22:46:22 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,20 +102,22 @@ INTERSECT intersect_capped_cylinder(t_primitive cp, t_ray r)
 	return (i);
 }
 
-ENGINE		new_engine()
+ENGINE		new_engine(t_engine_opt options)
 {
 	ENGINE	engine;
 
 	memset(&engine, 0, sizeof(ENGINE));
 	engine.framework = new_framework();
-	engine.window = new_window(engine.framework, WINDOW_SIZE.x, WINDOW_SIZE.y, "RT");
+	engine.window = new_window(engine.framework, options.window_size.x, options.window_size.y, "RT");
 	set_loop_hook(engine.framework, new_callback((void(*)(void*))refresh_window, engine.window));
-	engine.image = new_image(engine.framework, WINDOW_SIZE.x, WINDOW_SIZE.y);
-	engine.framebuffer = new_framebuffer(unsigned_char, BUFFER_SIZE, 4);
-	engine.positionbuffer = new_framebuffer(FLOAT, BUFFER_SIZE, 3);
-	engine.normalbuffer = new_framebuffer(FLOAT, BUFFER_SIZE, 3);
-	engine.depthbuffer = new_framebuffer(FLOAT, BUFFER_SIZE, 1);
-	engine.mtlbuffer = new_framebuffer(FLOAT, BUFFER_SIZE, sizeof(t_mtl) / sizeof(float));
+	engine.progress_callback = print_progress;
+	engine.loading_screen = load_image_file(engine.framework, "./res/loading_screen.bmp");
+	engine.image = new_image(engine.framework, options.window_size.x, options.window_size.y);
+	engine.framebuffer = new_framebuffer(unsigned_char, options.internal_size, 4);
+	engine.positionbuffer = new_framebuffer(FLOAT, options.internal_size, 3);
+	engine.normalbuffer = new_framebuffer(FLOAT, options.internal_size, 3);
+	engine.depthbuffer = new_framebuffer(FLOAT, options.internal_size, 1);
+	engine.mtlbuffer = new_framebuffer(FLOAT, options.internal_size, sizeof(t_mtl) / sizeof(float));
 	attach_image_to_window(engine.window, engine.image);
 	engine.inter_functions[cone] = intersect_cone;
 	engine.inter_functions[sphere] = intersect_sphere;
@@ -130,9 +132,9 @@ ENGINE		new_engine()
 	engine.uv_functions[capped_cylinder] = cylinder_uv;
 	engine.uv_functions[plane] = plane_uv;
 	engine.uv_functions[disc] = plane_uv;
-	engine.max_refl = MAX_REFL;
-	engine.max_refr = MAX_REFR;
-	engine.area_sampling = MAX_AREA;
+	engine.max_refl = options.max_refl;
+	engine.max_refr = options.max_refr;
+	engine.area_sampling = options.area_sampling;
 	generate_poisson_disc(engine.poisson_disc, 64, 0.05f, new_vec2(0, 1));
 	return (engine);
 }

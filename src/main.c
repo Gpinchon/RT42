@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:32:51 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/06 14:10:43 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/06 22:53:01 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,7 +143,7 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 	p = new_rtprim(scene);
 	p->prim = new_sphere(0.5, (VEC3){0, 0, 0});
 	p->transform = new_transform(scene,
-		(VEC3){-1.25, 2.5, 0}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
+		(VEC3){0, 2.5, 0}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
 	p->material = mtl_stained_glass(engine, scene);
 	p = new_rtprim(scene);
 	p->prim = new_sphere(0.2, (VEC3){0, 0, 0});
@@ -224,7 +224,7 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 	l->attenuation = 0.002;
 	l->falloff = 150;
 	l->spot_size = 80;*/
-	l = new_light(scene, POINT, (VEC3){-1.25, 2.5, 0});
+	l = new_light(scene, POINT, (VEC3){0, 2.5, 0});
 	//l->color = (VEC3){1, 207.f / 255.f, 197.f / 255.f};
 	l->color = (VEC3){1, 1, 1};
 	l->cast_shadow = true;
@@ -423,11 +423,13 @@ int		do_post_treatment(ENGINE *engine)
 
 int		main(int argc, char *argv[])
 {
-	ENGINE	engine;
+	ENGINE			engine;
+	t_engine_opt	options;
 
-	engine = new_engine();
-	engine.progress_callback = print_progress;
-	engine.loading_screen = load_image_file(engine.framework, "./res/loading_screen.bmp");
+	options.window_size = options.internal_size = (t_point2){1024, 1024};
+	options.max_refr = options.max_refl = 3;
+	options.area_sampling = 32;
+	engine = new_engine(options);
 	default_scene(&engine, &engine.scene);
 	clear_renderer(&engine);
 	if (render_scene(&engine, &engine.scene))
@@ -438,6 +440,5 @@ int		main(int argc, char *argv[])
 	}
 	destroy_framework(engine.framework);
 	destroy_engine(&engine);
-	//destroy_engine(&engine);
 	return (argv[argc - 1][0]);
 }
