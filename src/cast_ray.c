@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/02 22:52:19 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/05 19:17:42 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/07 19:58:51 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ MAT3		tbn_matrix(VEC3 normal)
 VEC2	sample_height_map(void	*height_map, VEC2 uv, CAST_RETURN *ret, RAY ray)
 {
 	VEC3	viewDir = mat3_mult_vec3(ret->tbn, ray.direction);
-	const float numLayers = interp_linear(100, 50, fabs(vec3_dot(ret->intersect.normal, viewDir)));
+	const float numLayers = interp_linear(20, 100, fabs(vec3_dot(ret->intersect.normal, viewDir)));
 	float layerDepth = 1.0 / numLayers;
 	float currentLayerDepth = 0.0;
 	VEC2 deltaTexCoords = vec2_fdiv(vec2_scale(vec3_to_vec2(viewDir), ret->mtl.parallax), numLayers);

@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/02 22:57:17 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/05 18:52:27 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/07 19:56:11 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,17 +63,17 @@ VEC3		sample_texture_filtered(void *image, VEC2 uv)
 	float fv = (uv.y) * img.size.y;
 	int	u[4];
 	int v[4];
-	u[0] = u[2] = CLAMP(((int)fu) % img.size.x, 0, img.size.x - 1);
-	v[0] = v[1] = CLAMP(((int)fv) % img.size.y, 0, img.size.y - 1);
-	u[1] = u[3] = CLAMP((u[0] + 1) % img.size.x, 0, img.size.x - 1);
-	v[2] = v[3] = CLAMP((v[0] + 1) % img.size.y, 0, img.size.y - 1);
-	float fracu = fu - floorf( fu );
-	float fracv = fv - floorf( fv );
+	u[0] = u[2] = (int)fu % img.size.x;
+	v[0] = v[1] = (int)fv % img.size.y;
+	u[1] = u[3] = (u[0] + 1) % img.size.x;
+	v[2] = v[3] = (v[0] + 1) % img.size.y;
+	fu = fu - floorf( fu );
+	fv = fv - floorf( fv );
 	float weight[4];
-	weight[0] = ((1 - fracu) * (1 - fracv));
-	weight[1] = (fracu * (1 - fracv));
-	weight[2] = ((1 - fracu) * fracv);
-	weight[3] = (fracu *  fracv);
+	weight[0] = ((1 - fu) * (1 - fv));
+	weight[1] = (fu * (1 - fv));
+	weight[2] = ((1 - fu) * fv);
+	weight[3] = (fu *  fv);
 	
 	int i = 0;
 	while (i < 4)
@@ -115,10 +115,10 @@ VEC2		sphere_uv(PRIMITIVE sphere, INTERSECT inter)
 	ve = vec3_cross(vn, (VEC3){0, 0, 1});
 	vp = vec3_normalize(vec3_sub(inter.position, sphere.position));
 	phi = acosf(-vec3_dot(vn, vp));
-	uv.y = phi / M_PI;
-	uv.x = acosf(CLAMP(vec3_dot(vp, ve) / sin(phi), -1, 1)) / (2.f * M_PI);
+	uv.y = phi / M_PI + 1;
+	uv.x = acosf(CLAMP(vec3_dot(vp, ve) / sin(phi), -1, 1)) / (2.f * M_PI) + 1;
 	if (vec3_dot(vec3_cross(vn, ve), vp) <= 0)
-		uv.x = 1 - uv.x;
+		uv.x = 1 - uv.x + 1;
 	return (uv);
 }
 
@@ -138,10 +138,10 @@ VEC2		cylinder_uv(PRIMITIVE cylinder, INTERSECT inter)
 	cylinder.position = vec3_sub(cylinder.position, vec3_scale(cylinder.direction, cylinder.size ? cylinder.size : 10.f));
 	ve = vec3_cross(vn, (VEC3){0, 0, 1});
 	vp = vec3_normalize(vec3_sub(inter.position, cylinder.position));
-	uv.x = acosf(CLAMP(vec3_dot(vp, ve) / sin(acosf(-vec3_dot(vn, vp))), -1, 1)) / (2.f * M_PI);
+	uv.x = acosf(CLAMP(vec3_dot(vp, ve) / sin(acosf(-vec3_dot(vn, vp))), -1, 1)) / (2.f * M_PI) + 1;
 	if (vec3_dot(vec3_cross(vn, ve), vp) <= 0)
-		uv.x = 1 - uv.x;
-	uv.y = sqrt(pow(vec3_distance(cylinder.position, inter.position), 2) - cylinder.radius2) / 10.f;
+		uv.x = 1 - uv.x + 1;
+	uv.y = sqrt(pow(vec3_distance(cylinder.position, inter.position), 2) - cylinder.radius2) / 10.f + 1;
 	return (uv);
 }
 
@@ -176,7 +176,7 @@ VEC2	plane_uv(PRIMITIVE plane, INTERSECT inter)
 		dir = vec3_normalize(vec3_sub(npos, inter.position));
 		alpha = vec3_dot(t, dir);
 	}
-	uv.x = cos(acosf(alpha)) * d / 5.f;
-	uv.y = sin(acosf(alpha)) * d / 5.f;
+	uv.x = cos(acosf(alpha)) * d / 5.f + 1;
+	uv.y = sin(acosf(alpha)) * d / 5.f + 1;
 	return (uv);
 }
