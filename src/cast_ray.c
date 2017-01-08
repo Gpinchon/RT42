@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/02 22:52:19 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/08 12:21:01 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/08 20:49:02 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,24 +27,12 @@ MAT3		tbn_matrix(VEC3 normal)
 {
 	VEC3	t;
 
-	t = vec3_cross(normal, new_vec3(0.0, 1.0, 0.0));
+	t = vec3_cross((normal), new_vec3(0.0, 1.0, 0.0));
 	if (!vec3_length(t))
-		t = vec3_cross(normal, new_vec3(0.0, 0.0, 1.0));
+		t = vec3_cross((normal), new_vec3(0.0, 0.0, 1.0));
 	t = vec3_normalize(t);
-	return (new_mat3(t, vec3_normalize((vec3_cross(normal, t))), normal));
+	return (new_mat3(t, vec3_normalize(vec3_cross(vec3_negate(normal), t)), normal));
 }
-
-/*VEC2	sample_height_map(void	*height_map, VEC2 uv, CAST_RETURN *ret, RAY ray)
-{
-	VEC2	offset;
-	float	depth;
-
-	VEC3	V = mat3_mult_vec3(mat3_inverse(ret->tbn), ray.direction);
-	depth = color_to_factor(sample_texture_filtered(height_map, uv));
-	offset = vec2_scale(vec3_to_vec2(V), 0.05);
-	offset = vec2_fdiv(offset, V.z * depth);
-	return (vec2_sub(uv, offset));
-}*/
 
 VEC2	sample_height_map(void	*height_map, VEC2 uv, CAST_RETURN *ret, RAY ray)
 {
@@ -118,7 +106,6 @@ CAST_RETURN	cast_ray(ENGINE *engine, SCENE *scene, RAY ray)
 		}
 		if (engine->inter_functions[p.prim.type]
 		&& (inter = engine->inter_functions[p.prim.type](p.prim, ray)).intersects)
-		//&& (inter = intersect_julia(p.prim, ray)).intersects)
 		{
 			if (ret.intersect.distance[0] == 0 || inter.distance[0] < ret.intersect.distance[0])
 			{

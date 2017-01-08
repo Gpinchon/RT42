@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/15 10:44:45 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/08 19:28:51 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/08 20:27:42 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,9 +144,6 @@ INTERSECT		intersect_cone1(t_primitive cp, t_ray r)
 			inter.normal = vec3_normalize(vec3_sub(vec3_sub(inter.position, cp.position), vec3_scale(cp.direction, rad * m)));
 			//inter.normal = cone_normal2(inter.position, cp);
 		}
-
-		/*if ()
-		printf("%f\n", vec3_distance(cp.position, vec3_add(cp.position, vec3_scale(cp.direction, rdpd * inter.distance[0] + copd))));*/
 	}
 	return (inter);
 }
