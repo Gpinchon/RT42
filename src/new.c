@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/15 10:44:45 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/06 22:46:22 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/08 19:28:51 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,55 @@ INTERSECT intersect_capped_cylinder(t_primitive cp, t_ray r)
 	return (i);
 }
 
+VEC3		cone_normal2(VEC3 inter, t_primitive obj)
+{
+	float	radius;
+	VEC3	ctop;
+	VEC3	qtop;
+
+	ctop = vec3_sub(inter, obj.position);
+	radius = vec3_dot((ctop), obj.direction);
+	qtop = vec3_sub(ctop, vec3_scale(obj.direction, radius));
+	return (vec3_normalize(vec3_fdiv(qtop, obj.radius)));
+}
+
+/*
+	a	= D|D - (1+k*k)*(D|V)^2
+	b/2	= D|X - (1+k*k)*(D|V)*(X|V)
+	c	= X|X - (1+k*k)*(X|V)^2
+*/
+
+INTERSECT		intersect_cone1(t_primitive cp, t_ray r)
+{
+	INTERSECT	inter;
+	VEC3	co = vec3_sub(r.origin, cp.position);
+	float	rdpd = vec3_dot(r.direction, cp.direction);
+	float	copd = vec3_dot(co, cp.direction);
+	float	rad = 1 + cp.radius2;
+	if ((inter.intersects = (solve_quadratic(vec3_dot(r.direction, r.direction) - rad * pow(rdpd, 2),
+		2 * (vec3_dot(r.direction, co) - rad * rdpd * copd), vec3_dot(co, co) - rad * pow(copd, 2), inter.distance)
+	&& intersect_test(inter.distance))))
+	{
+		if (inter.distance[0] <= 0)
+			inter.distance[0] = inter.distance[1];
+		inter.position = intersect_compute_position(r, inter.distance[0]);
+		float	m = rdpd * inter.distance[0] + copd;
+		if (vec3_dot(cp.direction, vec3_normalize(vec3_sub(inter.position, cp.position))) < 0)
+			inter.intersects = 0;
+		else if (cp.size >= 0)
+			inter.intersects = (vec3_distance(cp.position, vec3_add(cp.position, vec3_scale(cp.direction, m))) <= cp.size);
+		if (inter.intersects)
+		{
+			inter.normal = vec3_normalize(vec3_sub(vec3_sub(inter.position, cp.position), vec3_scale(cp.direction, rad * m)));
+			//inter.normal = cone_normal2(inter.position, cp);
+		}
+
+		/*if ()
+		printf("%f\n", vec3_distance(cp.position, vec3_add(cp.position, vec3_scale(cp.direction, rdpd * inter.distance[0] + copd))));*/
+	}
+	return (inter);
+}
+
 ENGINE		new_engine(t_engine_opt options)
 {
 	ENGINE	engine;
@@ -119,7 +168,7 @@ ENGINE		new_engine(t_engine_opt options)
 	engine.depthbuffer = new_framebuffer(FLOAT, options.internal_size, 1);
 	engine.mtlbuffer = new_framebuffer(FLOAT, options.internal_size, sizeof(t_mtl) / sizeof(float));
 	attach_image_to_window(engine.window, engine.image);
-	engine.inter_functions[cone] = intersect_cone;
+	engine.inter_functions[cone] = intersect_cone1;
 	engine.inter_functions[sphere] = intersect_sphere;
 	engine.inter_functions[cylinder] = intersect_cylinder;
 	engine.inter_functions[capped_cylinder] = intersect_capped_cylinder;

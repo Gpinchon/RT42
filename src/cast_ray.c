@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/02 22:52:19 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/07 19:58:51 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/08 12:21:01 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,7 @@ CAST_RETURN	cast_ray(ENGINE *engine, SCENE *scene, RAY ray)
 		}
 		if (engine->inter_functions[p.prim.type]
 		&& (inter = engine->inter_functions[p.prim.type](p.prim, ray)).intersects)
+		//&& (inter = intersect_julia(p.prim, ray)).intersects)
 		{
 			if (ret.intersect.distance[0] == 0 || inter.distance[0] < ret.intersect.distance[0])
 			{

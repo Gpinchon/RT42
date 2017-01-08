@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:32:51 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/07 19:59:31 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/08 20:17:49 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 	(void)engine;
 	scene->active_camera = new_camera(scene, 90, 0.0001, 1000);
 	scene->active_camera->transform = new_transform(scene,
-		(VEC3){1.5, 0.5, -4}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
+		(VEC3){1.5, 1.5, -4}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
 	scene->active_camera->transform->target = new_transform(scene,
 		(VEC3){0, 0, 0}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});;
 	MATERIAL *mirror = new_material(scene, "mirror");
@@ -131,21 +131,21 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 	mirror->metalness = 1;
 	mirror->alpha = 1;
 	p = new_rtprim(scene);
-	p->prim = new_sphere(1, (VEC3){0, 0, 0});
+	p->prim = new_sphere(0.2, (VEC3){0, 0, 0});
 	p->transform = new_transform(scene,
-		(VEC3){3.75, 1, 0}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
-	p->material = mtl_scuffed_aluminium(engine, scene);
-	p = new_rtprim(scene);
-	p->prim = new_sphere(1, (VEC3){0, 0, 0});
-	p->transform = new_transform(scene,
-		(VEC3){1.25, 1, 2.5}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
-	p->material = mtl_scuffed_plastic_red(engine, scene);
-	p = new_rtprim(scene);
-	p->prim = new_sphere(0.5, (VEC3){0, 0, 0});
-	p->transform = new_transform(scene,
-		(VEC3){0, 2.5, 0}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
+		(VEC3){0, 2, 0}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
 	p->material = mtl_stained_glass(engine, scene);
 	p = new_rtprim(scene);
+	p->prim = new_cylinder(0.1, 2, (VEC3){0, 0, 0}, (VEC3){0, 1, 0});
+	p->transform = new_transform(scene,
+		(VEC3){0, 0.8, 0}, (VEC3){0, -1, 0}, (VEC3){1, 1, 1});
+	p->material = mtl_rusted_metal(engine, scene);
+	/*p = new_rtprim(scene);
+	p->prim = new_sphere(0.5, (VEC3){0, 0, 0});
+	p->transform = new_transform(scene,
+		(VEC3){0, 0.5, 0}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
+	p->material = mtl_stained_glass(engine, scene);*/
+	/*p = new_rtprim(scene);
 	p->prim = new_sphere(0.2, (VEC3){0, 0, 0});
 	p->transform = new_transform(scene,
 		(VEC3){-1.5, 0.2, 0.5}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
@@ -154,77 +154,39 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 	p->prim = new_sphere(1, (VEC3){0, 0, 0});
 	p->transform = new_transform(scene,
 		(VEC3){-3.75, 1, 0}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
-	p->material = mtl_rock_copper(engine, scene);
+	p->material = mtl_rock_copper(engine, scene);*/
 
-	/*p = new_rtprim(scene);
-	p->prim = new_cylinder(1, 0, (VEC3){0, 0, 0}, (VEC3){0, 1, 0});
+	p = new_rtprim(scene);
+	p->prim = new_cone(0.5, 0.5, (VEC3){0, 0, 0}, (VEC3){0, 1, 0});
 	p->transform = new_transform(scene,
-		(VEC3){2.50, 0, -2}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
+		(VEC3){0, 2.5, 0}, (VEC3){0, -1, 0}, (VEC3){1, 1, 1});
 	p->material = mtl_rusted_metal(engine, scene);
-	p = new_rtprim(scene);
-	p->prim = new_cylinder(1, 0, (VEC3){0, 0, 0}, (VEC3){0, 1, 0});
-	//p->prim = new_sphere(1, (VEC3){0, 0, 0});
-	p->transform = new_transform(scene,
-		(VEC3){0, 2, -2}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
-	p->material = mtl_greasy_metal(engine, scene);
-	p = new_rtprim(scene);
-	p->prim = new_cylinder(1, 0, (VEC3){0, 0, 0}, (VEC3){0, 1, 0});
-	p->transform = new_transform(scene,
-		(VEC3){-2.50, 0, -2}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
-	p->material = mtl_rock_sliced(engine, scene);*/
-
-	/*p = new_rtprim(scene);
-	p->prim = new_cylinder(1, 5, (VEC3){0, 0, 0}, (VEC3){0, 1, 0});
-	p->transform = new_transform(scene,
-		(VEC3){0, 3, 2}, (VEC3){1, 0, 0}, (VEC3){1, 1, 1});
-	p->material = mtl_light(engine, scene);*/
 
 	p = new_rtprim(scene);
 	p->prim = new_plane((VEC3){0, 0, 0}, (VEC3){0, 0, 0});
 	p->transform = new_transform(scene,
-		(VEC3){0, 0, -3}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
+		(VEC3){-2, 0, -3}, (VEC3){-1, 0, 0}, (VEC3){1, 1, 1});
+	p->material = mtl_brick(engine, scene);
+	p = new_rtprim(scene);
+	p->prim = new_plane((VEC3){0, 0, 0}, (VEC3){0, 0, 0});
+	p->transform = new_transform(scene,
+		(VEC3){0, 0, 3}, (VEC3){0, 0, 1}, (VEC3){1, 1, 1});
+	p->material = mtl_brick(engine, scene);
+
+	p = new_rtprim(scene);
+	p->prim = new_plane((VEC3){0, 0, 0}, (VEC3){0, 0, 0});
+	p->transform = new_transform(scene,
+		(VEC3){0, 0, 0}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
 	p->material = mtl_octostone(engine, scene);
-	/*p = new_rtprim(scene);
-	p->prim = new_plane((VEC3){0, 0, 0}, (VEC3){0, 0, 0});
-	p->transform = new_transform(scene,
-		(VEC3){0, 0, 5}, (VEC3){0, 0, -1}, (VEC3){1, 1, 1});
-	p->material = mtl_brick(engine, scene);
-	p = new_rtprim(scene);
-	p->prim = new_plane((VEC3){0, 0, 0}, (VEC3){0, 0, 0});
-	p->transform = new_transform(scene,
-		(VEC3){5, 0, 0}, (VEC3){-1, 0, 0}, (VEC3){1, 1, 1});
-	p->material = mtl_brick(engine, scene);*/
-	/*p = new_rtprim(scene);
-	p->prim = new_plane((VEC3){0, 0, 0}, (VEC3){0, 0, 0});
-	p->transform = new_transform(scene,
-		(VEC3){-5, 0, 0}, (VEC3){1, 0, 0}, (VEC3){1, 1, 1});
-	p->material = mtl_brick(engine, scene);*/
-	/*p = new_rtprim(scene);
-	p->prim = new_plane((VEC3){0, 0, 0}, (VEC3){0, 0, 0});
-	p->transform = new_transform(scene,
-		(VEC3){0, 0, 1.1}, (VEC3){0, 0, -1}, (VEC3){1, 1, 1});
-	p->material = mtl_stained_glass(engine, scene);*/
-	/*p = new_rtprim(scene);
-	p->prim = new_plane((VEC3){0, 0, 0}, (VEC3){0, 0, 0});
-	p->transform = new_transform(scene,
-		(VEC3){0, 500, 0}, (VEC3){0, -1, 0}, (VEC3){1, 1, 1});
-	p->material = mtl_brick(engine, scene);
-	p = new_rtprim(scene);
-	p->prim = new_disc(50, (VEC3){0, 0, 0}, (VEC3){0, 0, 0});
-	p->transform = new_transform(scene,
-		(VEC3){0, 250, 0}, (VEC3){0, -1, 0}, (VEC3){1, 1, 1});
-	p->material = mtl_brick(engine, scene);*/
-	/*p->prim = new_plane((VEC3){0, 0, 0}, (VEC3){0, 0, 0});
-	p->transform = new_transform(scene,
-		(VEC3){0, 0, -50}, (VEC3){0, 0, 1}, (VEC3){1, 1, 1});
-	p->material = mtl_water(engine, scene);*/
-	/*l = new_light(scene, DIRECTIONAL, (VEC3){200, 200, -200});
+	l = new_light(scene, DIRECTIONAL, (VEC3){200, 200, -200});
+	l->power = 0.5f;
+	l->color = (VEC3){1, 1, 1};
 	l->cast_shadow = false;
 	l->direction = (VEC3){0, -1, 0};
 	l->attenuation = 0.002;
 	l->falloff = 150;
-	l->spot_size = 80;*/
-	l = new_light(scene, POINT, (VEC3){0, 2.5, 0});
+	l->spot_size = 80;
+	l = new_light(scene, POINT, (VEC3){0, 2, 0});
 	//l->color = (VEC3){1, 207.f / 255.f, 197.f / 255.f};
 	l->color = (VEC3){1, 1, 1};
 	l->cast_shadow = true;
@@ -244,7 +206,6 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 	l->spot_size = 80;*/
 	/*scene->active_camera->transform->target = new_transform(scene,
 		(VEC3){-200, 200, 200}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});*/
-
 }
 
 VEC2	normalize_screen_coord(t_point2 screen_coord, t_point2 resolution)
