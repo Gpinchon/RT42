@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:32:51 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/08 21:19:12 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/08 23:28:28 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,9 +120,9 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 	(void)engine;
 	scene->active_camera = new_camera(scene, 90, 0.0001, 1000);
 	scene->active_camera->transform = new_transform(scene,
-		(VEC3){1.5, 1.5, -4}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
+		(VEC3){1.5, 1.5, -1.5}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
 	scene->active_camera->transform->target = new_transform(scene,
-		(VEC3){0, 0, 0}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});;
+		(VEC3){0, 1, 0}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});;
 	MATERIAL *mirror = new_material(scene, "mirror");
 	mirror->base_color = (VEC3){0.1, 0.1, 0.1};
 	mirror->reflection_color = (VEC3){1, 1, 1};
@@ -131,15 +131,15 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 	mirror->metalness = 1;
 	mirror->alpha = 1;
 	p = new_rtprim(scene);
-	p->prim = new_sphere(0.2, (VEC3){0, 0, 0});
+	p->prim = new_sphere(1, (VEC3){0, 0, 0});
 	p->transform = new_transform(scene,
-		(VEC3){0, 2, 0}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
-	p->material = mtl_stained_glass(engine, scene);
-	p = new_rtprim(scene);
+		(VEC3){0, 1, 0}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
+	p->material = mtl_brick(engine, scene);
+	/*p = new_rtprim(scene);
 	p->prim = new_cylinder(0.1, 2, (VEC3){0, 0, 0}, (VEC3){0, 1, 0});
 	p->transform = new_transform(scene,
 		(VEC3){0, 0.8, 0}, (VEC3){0, -1, 0}, (VEC3){1, 1, 1});
-	p->material = mtl_rusted_metal(engine, scene);
+	p->material = mtl_rusted_metal(engine, scene);*/
 	/*p = new_rtprim(scene);
 	p->prim = new_sphere(0.5, (VEC3){0, 0, 0});
 	p->transform = new_transform(scene,
@@ -156,13 +156,13 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 		(VEC3){-3.75, 1, 0}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
 	p->material = mtl_rock_copper(engine, scene);*/
 
-	p = new_rtprim(scene);
+	/*p = new_rtprim(scene);
 	p->prim = new_cone(0.5, 0.5, (VEC3){0, 0, 0}, (VEC3){0, 1, 0});
 	p->transform = new_transform(scene,
 		(VEC3){0, 2.5, 0}, (VEC3){0, -1, 0}, (VEC3){1, 1, 1});
-	p->material = mtl_rusted_metal(engine, scene);
+	p->material = mtl_rusted_metal(engine, scene);*/
 
-	p = new_rtprim(scene);
+	/*p = new_rtprim(scene);
 	p->prim = new_plane((VEC3){0, 0, 0}, (VEC3){0, 0, 0});
 	p->transform = new_transform(scene,
 		(VEC3){-2, 0, -3}, (VEC3){-1, 0, 0}, (VEC3){1, 1, 1});
@@ -171,12 +171,12 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 	p->prim = new_plane((VEC3){0, 0, 0}, (VEC3){0, 0, 0});
 	p->transform = new_transform(scene,
 		(VEC3){0, 0, 3}, (VEC3){0, 0, 1}, (VEC3){1, 1, 1});
-	p->material = mtl_brick(engine, scene);
+	p->material = mtl_brick(engine, scene);*/
 
 	p = new_rtprim(scene);
 	p->prim = new_plane((VEC3){0, 0, 0}, (VEC3){0, 0, 0});
 	p->transform = new_transform(scene,
-		(VEC3){0, 0, 0}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
+		(VEC3){0, 0, 0}, (VEC3){1, 1, 0}, (VEC3){1, 1, 1});
 	p->material = mtl_octostone(engine, scene);
 	l = new_light(scene, DIRECTIONAL, (VEC3){200, 200, -200});
 	l->power = 0.5f;
@@ -186,10 +186,10 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 	l->attenuation = 0.002;
 	l->falloff = 150;
 	l->spot_size = 80;
-	l = new_light(scene, POINT, (VEC3){0, 2, 0});
+	l = new_light(scene, POINT, (VEC3){2.5, 2.5, 2.5});
 	//l->color = (VEC3){1, 207.f / 255.f, 197.f / 255.f};
 	l->color = (VEC3){1, 1, 1};
-	l->cast_shadow = true;
+	l->cast_shadow = false;
 	l->direction = (VEC3){0, -1, 0};
 	l->power = 2.f;
 	l->attenuation = 0.002;

@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/02 22:52:19 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/08 20:49:02 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/08 23:31:50 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,21 +23,53 @@ VEC3	sample_normal_map(void *normal_map, VEC2 uv, MAT3 tbn)
 			vec3_normalize(vec3_sub(vec3_scale(sample_texture_filtered(normal_map, uv), 2), new_vec3(1, 1, 1))))));
 }
 
+float	fract(float f)
+{
+	return (f - (int)f);
+}
+
+VEC3 vec3_orthogonal(VEC3 v)
+{
+	float k = fract(abs(v.x) + 0.5);
+	return new_vec3(-v.y, v.x - k * v.z, k * v.y);
+}
+
 MAT3		tbn_matrix(VEC3 normal)
 {
 	VEC3	t;
 
-	t = vec3_cross((normal), new_vec3(0.0, 1.0, 0.0));
+	//t = vec3_orthogonal(vec3_negate(normal));
+	//t = vec3_cross(normal, vec3_orthogonal(normal));
+	t = vec3_cross(normal, new_vec3(0.0, 1.0, 0.0));
 	if (!vec3_length(t))
-		t = vec3_cross((normal), new_vec3(0.0, 0.0, 1.0));
+		t = vec3_cross(normal, new_vec3(0.0, 0.0, 1.0));
+	t = vec3_normalize(t);
+	//return (new_mat3(t, vec3_normalize(vec3_orthogonal(t)), normal));
+	return (new_mat3(t, vec3_normalize(vec3_cross(normal, t)), normal));
+}
+
+MAT3		plane_tbn_matrix(VEC3 normal)
+{
+	VEC3	t;
+
+	//t = vec3_orthogonal(vec3_negate(normal));
+	//t = vec3_cross(normal, vec3_orthogonal(normal));
+	t = vec3_cross(normal, new_vec3(0.0, 0.0, -1.0));
+	if (!vec3_length(t))
+		t = vec3_cross(normal, new_vec3(0.0, 0.0, 1.0));
 	t = vec3_normalize(t);
 	return (new_mat3(t, vec3_normalize(vec3_cross(vec3_negate(normal), t)), normal));
 }
 
 VEC2	sample_height_map(void	*height_map, VEC2 uv, CAST_RETURN *ret, RAY ray)
 {
-	VEC3	viewDir = mat3_mult_vec3(ret->tbn, ray.direction);
-	const float numLayers = interp_linear(20, 100, fabs(vec3_dot(ret->intersect.normal, viewDir)));
+	//VEC3	viewDir = mat3_mult_vec3(ret->tbn, ray.direction);
+	VEC3	viewDir;
+	viewDir.x = vec3_dot(new_vec3(ret->tbn.m[0], ret->tbn.m[3], ret->tbn.m[6]), ray.direction);
+	viewDir.y = vec3_dot(new_vec3(ret->tbn.m[1], ret->tbn.m[4], ret->tbn.m[7]), ray.direction);
+	viewDir.z = -ret->mtl.parallax * vec3_dot(new_vec3(ret->tbn.m[2], ret->tbn.m[5], ret->tbn.m[8]), ray.direction);
+	//viewDir.z = -ret->mtl.parallax * viewDir.z;
+	const float numLayers = interp_linear(50, 100, fabs(vec3_dot(ret->intersect.normal, viewDir)));
 	float layerDepth = 1.0 / numLayers;
 	float currentLayerDepth = 0.0;
 	VEC2 deltaTexCoords = vec2_fdiv(vec2_scale(vec3_to_vec2(viewDir), ret->mtl.parallax), numLayers);
@@ -110,7 +142,11 @@ CAST_RETURN	cast_ray(ENGINE *engine, SCENE *scene, RAY ray)
 			if (ret.intersect.distance[0] == 0 || inter.distance[0] < ret.intersect.distance[0])
 			{
 				ret.intersect = inter;
-				ret.tbn = tbn_matrix(inter.normal);
+				if (p.prim.type == plane)
+					ret.tbn = plane_tbn_matrix(inter.normal);
+				else
+					ret.tbn = tbn_matrix(inter.normal);
+				//ret.tbn = tbn_matrix1(inter.normal, ray.direction);
 				if (p.material)
 					ret.mtl = *p.material;
 				if (engine->uv_functions[p.prim.type])

@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/02 22:57:17 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/07 19:56:11 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/08 21:58:34 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,7 +153,7 @@ VEC2	plane_uv(PRIMITIVE plane, INTERSECT inter)
 	float	alpha;
 	float 	d;
 
-	t = vec3_cross(inter.normal, new_vec3(0.0, 1.0, 0.0));
+	t = vec3_cross(vec3_negate(inter.normal), new_vec3(0.0, 1.0, 0.0));
 	if (!vec3_length(t))
 		t = vec3_cross(inter.normal, new_vec3(0.0, 0.0, 1.0));
 	t = vec3_normalize(t);
