@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/02 22:57:17 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/08 21:58:34 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/09 14:07:55 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,14 +61,17 @@ VEC3		sample_texture_filtered(void *image, VEC2 uv)
 	img = get_image_data(image);
 	float fu = (uv.x) * img.size.x;
 	float fv = (uv.y) * img.size.y;
+	fu = fabs(fu);
+	fv = fabs(fv);
+	//printf("%f, %f\n", fu, fv);
 	int	u[4];
 	int v[4];
 	u[0] = u[2] = (int)fu % img.size.x;
 	v[0] = v[1] = (int)fv % img.size.y;
 	u[1] = u[3] = (u[0] + 1) % img.size.x;
 	v[2] = v[3] = (v[0] + 1) % img.size.y;
-	fu = fu - floorf( fu );
-	fv = fv - floorf( fv );
+	fu = fu - floorf(fu);
+	fv = fv - floorf(fv);
 	float weight[4];
 	weight[0] = ((1 - fu) * (1 - fv));
 	weight[1] = (fu * (1 - fv));

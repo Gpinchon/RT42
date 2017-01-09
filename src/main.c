@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:32:51 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/08 23:28:28 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/09 14:50:11 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,9 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 	mirror->metalness = 1;
 	mirror->alpha = 1;
 	p = new_rtprim(scene);
-	p->prim = new_sphere(1, (VEC3){0, 0, 0});
+	//p->prim = new_cone(0.5, 2, (VEC3){0, 0, 0}, (VEC3){0, 1, 0});
+	p->prim = new_cylinder(1, 2, (VEC3){0, 0, 0}, (VEC3){0, 1, 0});
+	//p->prim = new_sphere(1, (VEC3){0, 0, 0});
 	p->transform = new_transform(scene,
 		(VEC3){0, 1, 0}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
 	p->material = mtl_brick(engine, scene);
@@ -176,20 +178,21 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 	p = new_rtprim(scene);
 	p->prim = new_plane((VEC3){0, 0, 0}, (VEC3){0, 0, 0});
 	p->transform = new_transform(scene,
-		(VEC3){0, 0, 0}, (VEC3){1, 1, 0}, (VEC3){1, 1, 1});
+		(VEC3){0, 0, 0}, (VEC3){1, 1, 1}, (VEC3){1, 1, 1});
 	p->material = mtl_octostone(engine, scene);
+
 	l = new_light(scene, DIRECTIONAL, (VEC3){200, 200, -200});
 	l->power = 0.5f;
 	l->color = (VEC3){1, 1, 1};
-	l->cast_shadow = false;
+	l->cast_shadow = true;
 	l->direction = (VEC3){0, -1, 0};
 	l->attenuation = 0.002;
 	l->falloff = 150;
 	l->spot_size = 80;
-	l = new_light(scene, POINT, (VEC3){2.5, 2.5, 2.5});
+	l = new_light(scene, POINT, (VEC3){1.5, 1.5, -1.5});
 	//l->color = (VEC3){1, 207.f / 255.f, 197.f / 255.f};
 	l->color = (VEC3){1, 1, 1};
-	l->cast_shadow = false;
+	l->cast_shadow = true;
 	l->direction = (VEC3){0, -1, 0};
 	l->power = 2.f;
 	l->attenuation = 0.002;
