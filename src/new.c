@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/15 10:44:45 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/08 20:27:42 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/09 18:39:53 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,11 +59,18 @@ INTERSECT	intersect_plane2(t_primitive cp, t_ray r)
 
 INTERSECT intersect_capped_cylinder(t_primitive cp, t_ray r)
 {
-	t_vec3		v[6];
+	//t_vec3		v[6];
 	INTERSECT	i;
 
 	i = new_intersect();
-	v[0] = vec3_proj(cp.position, cp.direction);
+	VEC3	co = vec3_sub(r.origin, cp.position);
+	float	a = vec3_dot(r.direction, r.direction) - pow(vec3_dot(r.direction, cp.direction), 2);
+	float	b = vec3_dot(r.direction, co) - vec3_dot(r.direction, cp.direction) * vec3_dot(co, cp.direction);
+	b *= 2;
+	float	c = vec3_dot(co, co) - pow(vec3_dot(co, cp.direction), 2) - cp.radius2;
+	if (!(i.intersects = solve_quadratic(a, b, c, i.distance)))
+		return (i);
+	/*v[0] = vec3_proj(cp.position, cp.direction);
 	v[1] = vec3_sub(cp.position, v[0]);
 	v[2] = vec3_proj(r.origin, cp.direction);
 	v[3] = vec3_proj(r.direction, cp.direction);
@@ -71,12 +78,12 @@ INTERSECT intersect_capped_cylinder(t_primitive cp, t_ray r)
 	v[5] = vec3_sub(vec3_sub(r.origin, v[2]), v[1]);
 	if (!(i.intersects = solve_quadratic(vec3_dot(v[4], v[4]),
 		vec3_dot(v[5], v[4]) * 2.0, vec3_dot(v[5], v[5]) - (cp.radius2), i.distance)))
-		return (i);
-	if (cp.size > 0)
+		return (i);*/
+	/*if (cp.size > 0)
 	{
 		i.distance[0] *= (vec3_length(vec3_sub(vec3_add(v[2], vec3_scale(v[3], i.distance[0])), v[0])) <= cp.size / 2.f);
 		i.distance[1] *= (vec3_length(vec3_sub(vec3_add(v[2], vec3_scale(v[3], i.distance[1])), v[0])) <= cp.size / 2.f);
-	}
+	}*/
 	if (i.distance[0] <= 0)
 	{
 		i.position = intersect_compute_position(r, (i.distance[0] = i.distance[1]));
@@ -140,12 +147,79 @@ INTERSECT		intersect_cone1(t_primitive cp, t_ray r)
 		else if (cp.size >= 0)
 			inter.intersects = (vec3_distance(cp.position, vec3_add(cp.position, vec3_scale(cp.direction, m))) <= cp.size);
 		if (inter.intersects)
-		{
 			inter.normal = vec3_normalize(vec3_sub(vec3_sub(inter.position, cp.position), vec3_scale(cp.direction, rad * m)));
-			//inter.normal = cone_normal2(inter.position, cp);
-		}
 	}
 	return (inter);
+}
+
+char	solve_quadratic2(float a, float b, float c, float *t)
+{
+	float	discrim;
+	float	q;
+
+	discrim = (b * b - 4.f * a * c);
+	if (discrim <= 0)
+		return (0);
+	q = -.5f * (b < 0 ? (b - sqrtf(discrim)) : (b + sqrtf(discrim)));
+	t[0] = q / a;
+	t[1] = c / q;
+	if (t[0] > t[1])
+	{
+		q = t[0];
+		t[0] = t[1];
+		t[1] = q;
+	}
+	return (1);
+}
+
+INTERSECT intersect_cylinder2(t_primitive cp, t_ray r)
+{
+	INTERSECT	i;
+
+
+	i = new_intersect();
+	VEC3	co = vec3_sub(r.origin, cp.position);
+	float	rdpd = vec3_dot(r.direction, cp.direction);
+	float	copd = vec3_dot(co, cp.direction);
+	if (!(i.intersects = solve_quadratic(
+		vec3_dot(r.direction, r.direction) - pow(rdpd, 2),
+		2 * (vec3_dot(r.direction, co) - rdpd * copd),
+		vec3_dot(co, co) - pow(copd, 2) - cp.radius2, i.distance)))
+		return (i);
+	if (!(i.intersects = intersect_test(i.distance)))
+		return (i);
+	//i.distance[0] = i.distance[0] <= 0 ? i.distance[1] : i.distance[0];
+	if (cp.size > 0)
+	{
+		float	m = rdpd * (i.distance[0] <= 0 ? i.distance[1] : i.distance[0]) + copd;
+		if (!(i.intersects = (m < cp.size)))
+			return (i);
+		if (i.distance[0] <= 0)
+			i.distance[0] = i.distance[1];
+		i.position = intersect_compute_position(r, i.distance[0]);
+		i.normal = (cylinder_normal(i.position, cp));
+		if (vec3_dot(cp.direction, vec3_normalize(vec3_sub(i.position, cp.position))) < 0)
+			i.intersects = 0;
+		/*if (i.distance[0] <= 0)
+		{
+			//printf("%f, %f\n", i.distance[0], i.distance[1]);
+			i.position = intersect_compute_position(r, (i.distance[0] = i.distance[1]));
+			i.normal = vec3_negate(cylinder_normal(i.position, cp));
+		}
+		else
+		{
+			i.position = intersect_compute_position(r, i.distance[0]);
+			i.normal = cylinder_normal(i.position, cp);
+		}
+		if (!(i.intersects = (vec3_dot(cp.direction, vec3_normalize(vec3_sub(i.position, cp.position))) < 0)))
+			return (i);*/
+	}
+	else
+	{
+		i.position = intersect_compute_position(r, (i.distance[0] = i.distance[1]));
+		i.normal = (cylinder_normal(i.position, cp));
+	}
+	return (i);
 }
 
 ENGINE		new_engine(t_engine_opt options)

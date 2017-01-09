@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/02 22:52:19 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/09 15:35:07 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/09 19:04:49 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,22 +63,22 @@ MAT3		plane_tbn_matrix(VEC3 normal)
 	return (new_mat3(t, vec3_normalize(vec3_cross(vec3_negate(normal), t)), normal));
 }
 
+void	mat3_print(MAT3 m)
+{
+	UINT	i;
+
+	i = 0;
+	while (i < 9)
+	{
+		printf("%f, %f, %f\n", m.m[i], m.m[i + 1], m.m[i + 2]);
+		i+=3;
+	}
+}
+
 VEC2	sample_height_map(void	*height_map, VEC2 uv, CAST_RETURN *ret, RAY ray)
 {
 	VEC3	viewDir = mat3_mult_vec3(mat3_inverse(ret->tbn), ray.direction);
-	/*VEC3	viewDir;
-	viewDir.x = vec3_dot(new_vec3(ret->tbn.m[0], ret->tbn.m[3], ret->tbn.m[6]), ray.direction);
-	viewDir.y = vec3_dot(new_vec3(ret->tbn.m[1], ret->tbn.m[4], ret->tbn.m[7]), ray.direction);
-	viewDir.z = -ret->mtl.parallax * vec3_dot(new_vec3(ret->tbn.m[2], ret->tbn.m[5], ret->tbn.m[8]), ray.direction);*/
-	//viewDir.z = -ret->mtl.parallax * viewDir.z;
-	//VEC3	viewDir = ray.direction;
 	const float numLayers = interp_linear(50, 100, fabs(viewDir.z));
-	/*if (isnan(viewDir.z))
-	{
-		printf("%s\n", ret->mtl.name);
-		printf("normal %f, %f, %f\n", ret->intersect.normal.x, ret->intersect.normal.y, ret->intersect.normal.z);
-		printf("tangent %f, %f, %f\n", ret->tbn.m[0], ret->tbn.m[3], ret->tbn.m[6]);
-	}*/
 	float layerDepth = 1.0 / numLayers;
 	float currentLayerDepth = 0.0;
 	VEC2 deltaTexCoords = vec2_fdiv(vec2_scale(vec3_to_vec2(viewDir), ret->mtl.parallax), numLayers);
