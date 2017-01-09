@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/02 22:52:19 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/09 19:04:49 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/10 00:35:01 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ VEC2	sample_height_map(void	*height_map, VEC2 uv, CAST_RETURN *ret, RAY ray)
 	}
 	VEC2 prevTexCoords = vec2_add(currentTexCoords, deltaTexCoords);
 	float afterDepth  = currentDepthMapValue - currentLayerDepth;
-	float weight = afterDepth / (afterDepth - sample_texture_filtered(height_map, prevTexCoords).x - currentLayerDepth + layerDepth);
+	float weight = afterDepth / (afterDepth - 1 - sample_texture_filtered(height_map, prevTexCoords).x - currentLayerDepth + layerDepth);
 	return (vec2_add(vec2_scale(prevTexCoords, weight), vec2_scale(currentTexCoords, (1.0 - weight)))); 	
 }
 

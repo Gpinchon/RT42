@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/05 22:09:17 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/08 22:20:29 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/10 00:42:11 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,51 @@ MATERIAL	*mtl_greasy_metal(ENGINE *engine, SCENE *scene)
 	mtl->rough_map = load_image_file(engine->framework, "res/greasy_metal/greasy_metal_rough.bmp");
 	mtl->uv_scale = (VEC2){1, 1};
 	mtl->refraction = 1.59f;
+	return (mtl);
+}
+
+MATERIAL	*mtl_stained_glass(ENGINE *engine, SCENE *scene)
+{
+	MATERIAL	*mtl;
+
+	if ((mtl = get_mtl_by_name(scene, "stained_glass")))
+		return (mtl);
+	mtl = new_material(scene, "stained_glass");
+	mtl->base_map = load_image_file(engine->framework, "res/stained_glass/stained_glass_base.bmp");
+	mtl->metal_map = load_image_file(engine->framework, "res/stained_glass/stained_glass_metal.bmp");
+	mtl->normal_map = load_image_file(engine->framework, "res/stained_glass/stained_glass_normal.bmp");
+	mtl->height_map = load_image_file(engine->framework, "res/stained_glass/stained_glass_height.bmp");
+	mtl->alpha_map = load_image_file(engine->framework, "res/stained_glass/stained_glass_alpha.bmp");
+	mtl->parallax = 0.01;
+	mtl->refraction = 1.52f;
+	mtl->refraction_color = (VEC3){1, 1, 1};
+	mtl->uv_scale = (VEC2){1, 1};
+	mtl->roughness = 0.03;
+	mtl->metalness = 0.5;
+	mtl->alpha = 0.05;
+	return (mtl);
+}
+
+MATERIAL	*mtl_rock_waterworn(ENGINE *engine, SCENE *scene)
+{
+	MATERIAL	*mtl;
+
+	if ((mtl = get_mtl_by_name(scene, "rock_waterworn")))
+		return (mtl);
+	mtl = new_material(scene, "rock_waterworn");
+	mtl->base_map = load_image_file(engine->framework, "res/rock_waterworn/rock_waterworn_base.bmp");
+	mtl->metal_map = load_image_file(engine->framework, "res/rock_waterworn/rock_waterworn_metal.bmp");
+	mtl->normal_map = load_image_file(engine->framework, "res/rock_waterworn/rock_waterworn_normal.bmp");
+	mtl->height_map = load_image_file(engine->framework, "res/rock_waterworn/rock_waterworn_height.bmp");
+	mtl->rough_map = load_image_file(engine->framework, "res/rock_waterworn/rock_waterworn_rough.bmp");
+	mtl->ao_map = load_image_file(engine->framework, "res/rock_waterworn/rock_waterworn_ao.bmp");
+	mtl->parallax = 0.1;
+	mtl->refraction = 1.5f;
+	mtl->refraction_color = (VEC3){1, 1, 1};
+	mtl->uv_scale = (VEC2){1, 1};
+	mtl->roughness = 0.03;
+	mtl->metalness = 0.5;
+	mtl->alpha = 0.05;
 	return (mtl);
 }
 

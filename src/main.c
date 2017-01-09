@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:32:51 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/09 19:09:34 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/10 00:36:13 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,28 +89,6 @@ MATERIAL	*mtl_light(ENGINE *engine, SCENE *scene)
 	(void)engine;
 }
 
-MATERIAL	*mtl_stained_glass(ENGINE *engine, SCENE *scene)
-{
-	MATERIAL	*mtl;
-
-	if ((mtl = get_mtl_by_name(scene, "stained_glass")))
-		return (mtl);
-	mtl = new_material(scene, "stained_glass");
-	mtl->base_map = load_image_file(engine->framework, "res/stained_glass/stained_glass_base.bmp");
-	mtl->metal_map = load_image_file(engine->framework, "res/stained_glass/stained_glass_metal.bmp");
-	mtl->normal_map = load_image_file(engine->framework, "res/stained_glass/stained_glass_normal.bmp");
-	mtl->height_map = load_image_file(engine->framework, "res/stained_glass/stained_glass_height.bmp");
-	//mtl->rough_map = load_image_file(engine->framework, "res/stained_glass/stained_glass_rough.bmp");
-	mtl->alpha_map = load_image_file(engine->framework, "res/stained_glass/stained_glass_alpha.bmp");
-	mtl->parallax = 0.01;
-	mtl->refraction = 1.52f;
-	mtl->refraction_color = (VEC3){1, 1, 1};
-	mtl->uv_scale = (VEC2){1, 1};
-	mtl->roughness = 0.03;
-	mtl->metalness = 0.5;
-	mtl->alpha = 0.05;
-	return (mtl);
-}
 
 void	default_scene(ENGINE *engine, SCENE *scene)
 {
@@ -122,7 +100,7 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 	scene->active_camera->transform = new_transform(scene,
 		(VEC3){1.5, 0.5, 1.5}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
 	scene->active_camera->transform->target = new_transform(scene,
-		(VEC3){0, 0, 0}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});;
+		(VEC3){0, 0.5, 0}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});;
 	MATERIAL *mirror = new_material(scene, "mirror");
 	mirror->base_color = (VEC3){0.1, 0.1, 0.1};
 	mirror->reflection_color = (VEC3){1, 1, 1};
@@ -136,7 +114,7 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 	p->prim = new_sphere(1, (VEC3){0, 0, 0});
 	p->transform = new_transform(scene,
 		(VEC3){0, 1, 0}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
-	p->material = mtl_brick(engine, scene);
+	p->material = mtl_rock_waterworn(engine, scene);
 	/*p = new_rtprim(scene);
 	p->prim = new_cylinder(0.1, 2, (VEC3){0, 0, 0}, (VEC3){0, 1, 0});
 	p->transform = new_transform(scene,
@@ -152,11 +130,11 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 	p->transform = new_transform(scene,
 		(VEC3){-1.5, 0.2, 0.5}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
 	p->material = mtl_aquamarine(engine, scene);*/
-	p = new_rtprim(scene);
+	/*p = new_rtprim(scene);
 	p->prim = new_sphere(1, (VEC3){0, 0, 0});
 	p->transform = new_transform(scene,
 		(VEC3){0, 5, 0}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
-	p->material = mtl_light(engine, scene);
+	p->material = mtl_light(engine, scene);*/
 
 	/*p = new_rtprim(scene);
 	p->prim = new_cone(0.5, 0.5, (VEC3){0, 0, 0}, (VEC3){0, 1, 0});
@@ -179,7 +157,7 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 	p->prim = new_plane((VEC3){0, 0, 0}, (VEC3){0, 0, 0});
 	p->transform = new_transform(scene,
 		(VEC3){0, 0, 0}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
-	p->material = mtl_octostone(engine, scene);
+	p->material = mtl_rock_waterworn(engine, scene);
 
 	l = new_light(scene, DIRECTIONAL, (VEC3){200, 200, -200});
 	l->power = 0.5f;
