@@ -169,7 +169,7 @@ typedef struct	s_engine
 }				t_engine;
 
 FRAMEBUFFER		new_framebuffer(TYPE type, t_point2 size, Uint8 depth);
-SCENE			new_scene();
+SCENE			new_scene(void);
 ENGINE			new_engine(t_engine_opt options);
 void			print_progress(ENGINE *engine, float progress);
 void			put_pixel_to_buffer(FRAMEBUFFER buffer,
