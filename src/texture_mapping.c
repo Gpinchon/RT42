@@ -63,7 +63,6 @@ VEC3		sample_texture_filtered(void *image, VEC2 uv)
 	float fv = (uv.y) * img.size.y;
 	fu = fabs(fu);
 	fv = fabs(fv);
-	//printf("%f, %f\n", fu, fv);
 	int	u[4];
 	int v[4];
 	u[0] = u[2] = (int)fu % img.size.x;
@@ -101,7 +100,7 @@ float	color_to_factor(VEC3 color)
 	return ((color.x + color.y + color.z) / 3.f);
 }
 
-VEC2		sphere_uv(PRIMITIVE sphere, INTERSECT inter)
+VEC2		sphere_uv(u_obj sphere, INTERSECT inter, TRANSFORM *t)
 {
 	float	phi;
 	VEC2	uv;
@@ -109,46 +108,48 @@ VEC2		sphere_uv(PRIMITIVE sphere, INTERSECT inter)
 	VEC3	vn;
 	VEC3	ve;
 
-	if (!sphere.direction.x
-	&& !sphere.direction.y
-	&& !sphere.direction.z)
+	if (!t->rotation.x
+	&& !t->rotation.y
+	&& !t->rotation.z)
 		vn = UPVEC;
 	else
-		vn = sphere.direction;
+		vn = t->rotation;
 	ve = vec3_cross(vn, (VEC3){0, 0, 1});
-	vp = vec3_normalize(vec3_sub(inter.position, sphere.position));
+	vp = vec3_normalize(vec3_sub(inter.position, t->position));
 	phi = acosf(-vec3_dot(vn, vp));
 	uv.y = phi / M_PI + 1;
 	uv.x = acosf(CLAMP(vec3_dot(vp, ve) / sin(phi), -1, 1)) / (2.f * M_PI) + 1;
 	if (vec3_dot(vec3_cross(vn, ve), vp) <= 0)
 		uv.x = 1 - uv.x + 1;
 	return (uv);
+	(void)sphere;
 }
 
-VEC2		cylinder_uv(PRIMITIVE cylinder, INTERSECT inter)
+VEC2		cylinder_uv(u_obj o, INTERSECT inter, TRANSFORM *t)
 {
 	VEC2	uv;
 	VEC3	vp;
 	VEC3	vn;
 	VEC3	ve;
+	VEC3	cp;
 
-	if (!cylinder.direction.x
-	&& !cylinder.direction.y
-	&& !cylinder.direction.z)
+	if (!t->rotation.x
+	&& !t->rotation.y
+	&& !t->rotation.z)
 		vn = UPVEC;
 	else
-		vn = cylinder.direction;
-	cylinder.position = vec3_sub(cylinder.position, vec3_scale(cylinder.direction, cylinder.size ? cylinder.size : 10.f));
+		vn = t->rotation;
+	cp = vec3_sub(t->position, vec3_scale(t->rotation, o.cylinder.size ? o.cylinder.size : 10.f));
 	ve = vec3_cross(vn, (VEC3){0, 0, 1});
-	vp = vec3_normalize(vec3_sub(inter.position, cylinder.position));
+	vp = vec3_normalize(vec3_sub(inter.position, cp));
 	uv.x = acosf(CLAMP(vec3_dot(vp, ve) / sin(acosf(-vec3_dot(vn, vp))), -1, 1)) / (2.f * M_PI) + 1;
 	if (vec3_dot(vec3_cross(vn, ve), vp) <= 0)
 		uv.x = 1 - uv.x + 1;
-	uv.y = sqrt(pow(vec3_distance(cylinder.position, inter.position), 2) - cylinder.radius2) / 10.f + 1;
+	uv.y = sqrt(pow(vec3_distance(cp, inter.position), 2) - o.cylinder.radius2) / 10.f + 1;
 	return (uv);
 }
 
-VEC2	plane_uv(PRIMITIVE plane, INTERSECT inter)
+VEC2	plane_uv(u_obj plane, INTERSECT inter, TRANSFORM *tr)
 {
 	VEC2	uv;
 	VEC3	t;
@@ -161,10 +162,10 @@ VEC2	plane_uv(PRIMITIVE plane, INTERSECT inter)
 		t = vec3_cross(inter.normal, new_vec3(0.0, 0.0, 1.0));
 	t = vec3_normalize(t);
 	VEC3	b = vec3_cross(t, inter.normal);
-	d = vec3_distance(inter.position, plane.position);
-	dir = vec3_normalize(vec3_sub(plane.position, inter.position));
+	d = vec3_distance(inter.position, tr->position);
+	dir = vec3_normalize(vec3_sub(tr->position, inter.position));
 	alpha = vec3_dot(t, dir);
-	VEC3	npos = plane.position;
+	VEC3	npos = tr->position;
 	while (alpha < 0)
 	{
 		npos = vec3_add(npos, vec3_scale(t, 10.f));
@@ -182,4 +183,5 @@ VEC2	plane_uv(PRIMITIVE plane, INTERSECT inter)
 	uv.x = cos(acosf(alpha)) * d / 5.f + 1;
 	uv.y = sin(acosf(alpha)) * d / 5.f + 1;
 	return (uv);
+	(void)plane;
 }

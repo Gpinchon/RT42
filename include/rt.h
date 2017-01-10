@@ -25,7 +25,7 @@
 # define RTPRIMITIVE	struct s_rtprim
 # define MATERIAL		struct s_mtl
 # define CAMERA			struct s_camera
-# define TRANSFORM		struct s_transform
+# define RTTRANSFORM	struct s_rttransform
 # define CAST_RETURN	struct s_cast_return
 # define UPVEC			(VEC3){0, 1, 0}
 # define MAX_REFL		3
@@ -43,24 +43,16 @@
 # define SPECULAR		trowbridge_reitz_specular
 # define RENDER_NORMALS	false
 
-typedef struct	s_transform
+typedef struct	s_rttransform
 {
-	UCHAR		updated;
-	TRANSFORM	*parent;
-	TRANSFORM	*target;
-	VEC3		position;
-	VEC3		rotation;
-	VEC3		scaling;
-	VEC3		up;
-	MAT4		matrix;
-	MAT4		translate;
-	MAT4		rotate;
-	MAT4		scale;
-}				t_transform;
+	RTTRANSFORM	*parent;
+	RTTRANSFORM	*target;
+	TRANSFORM	current;
+}				t_rttransform;
 
 typedef struct	s_light
 {
-	TRANSFORM	*target;
+	RTTRANSFORM	*target;
 	UCHAR		type;
 	UCHAR		cast_shadow;
 	float		power;
@@ -98,14 +90,14 @@ typedef struct	s_mtl
 typedef struct	s_rtprim
 {
 	UCHAR		transformed;
-	TRANSFORM	*transform;
+	RTTRANSFORM	*transform;
 	MATERIAL	*material;
 	PRIMITIVE	prim;
 }				t_rtprim;
 
 typedef struct	s_camera
 {
-	TRANSFORM	*transform;
+	RTTRANSFORM	*transform;
 	float		fov;
 	float		znear;
 	float		zfar;
@@ -162,8 +154,8 @@ typedef struct	s_engine
 	void		*window;
 	void		*image;
 	void		*loading_screen;
-	INTERSECT	(*inter_functions[10])(PRIMITIVE, RAY);
-	VEC2		(*uv_functions[10])(PRIMITIVE, INTERSECT);
+	INTERSECT	(*inter_functions[10])(OBJ, RAY, TRANSFORM*);
+	VEC2		(*uv_functions[10])(OBJ, INTERSECT, TRANSFORM*);
 	void		(*progress_callback)(ENGINE*, float);
 	Uint32		last_time;
 	SCENE		*active_scene;
@@ -191,9 +183,9 @@ float			frand_a_b(float a, float b);
 
 t_point2		map_uv(void *image, VEC2 uv);
 float			color_to_factor(VEC3 color);
-VEC2			sphere_uv(PRIMITIVE sphere, INTERSECT inter);
-VEC2			cylinder_uv(PRIMITIVE cylinder, INTERSECT inter);
-VEC2			plane_uv(PRIMITIVE plane, INTERSECT inter);
+VEC2			sphere_uv(u_obj sphere, INTERSECT inter, TRANSFORM *transform);
+VEC2			cylinder_uv(u_obj cylinder, INTERSECT inter, TRANSFORM *transform);
+VEC2			plane_uv(u_obj plane, INTERSECT inter, TRANSFORM *transform);
 VEC3			sample_texture(void *image, VEC2 uv);
 VEC3			sample_texture_filtered(void *image, VEC2 uv);
 
@@ -204,16 +196,16 @@ VEC3			compute_lighting(ENGINE *engine, CAST_RETURN *ret);
 VEC3			compute_refraction(ENGINE *engine, CAST_RETURN *ret, RAY *cur_ray, float aior);
 VEC3			compute_reflection(ENGINE *engine, CAST_RETURN *ret, RAY *cur_ray);
 VEC3			compute_radiosity(ENGINE *engine, CAST_RETURN *ret);
-void			update_transform(TRANSFORM *transform);
 
 void			destroy_scene(SCENE *scene);
 void			destroy_engine(ENGINE *engine);
 
-TRANSFORM		*new_transform(SCENE *scene, VEC3 position, VEC3 rotation, VEC3 scale);
+RTTRANSFORM		*new_rttransform(SCENE *scene, VEC3 position, VEC3 rotation, VEC3 scale);
 RTPRIMITIVE		*new_rtprim(SCENE *scene);
 MATERIAL		*new_material(SCENE *scene, char *name);
 CAMERA			*new_camera(SCENE *scene, float fov, float znear, float zfar);
 LIGHT			*new_light(SCENE *scene, UCHAR type, VEC3 position);
+void			update_rttransform(RTTRANSFORM *transform);
 
 MATERIAL		*get_mtl_by_name(SCENE *scene, char *name);
 MATERIAL		*mtl_aquamarine(ENGINE *engine, SCENE *scene);

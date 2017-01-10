@@ -63,18 +63,17 @@ CAMERA		*new_camera(SCENE *scene, float fov, float znear, float zfar)
 	return (ezlink_get_data(new_link));
 }
 
-TRANSFORM	*new_transform(SCENE *scene, VEC3 position, VEC3 rotation, VEC3 scaling)
+RTTRANSFORM	*new_rttransform(SCENE *scene, VEC3 position, VEC3 rotation, VEC3 scaling)
 {
 	LINK		*new_link;
 
-	new_link = new_ezlink(other, 1, sizeof(TRANSFORM));
+	new_link = new_ezlink(other, 1, sizeof(RTTRANSFORM));
 	if (!scene->transforms)
 		scene->transforms = new_link;
 	else
 		ezlink_append(scene->transforms, new_link);
-	((TRANSFORM*)ezlink_get_data(new_link))->position = position;
-	((TRANSFORM*)ezlink_get_data(new_link))->rotation = rotation;
-	((TRANSFORM*)ezlink_get_data(new_link))->scaling = scaling;
+	((RTTRANSFORM*)ezlink_get_data(new_link))->current = new_transform(position, rotation, scaling, UPVEC);
+	//transform_update(&(((RTTRANSFORM*)ezlink_get_data(new_link))->current));
 	return (ezlink_get_data(new_link));
 }
 

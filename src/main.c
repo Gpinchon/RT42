@@ -97,10 +97,10 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 
 	(void)engine;
 	scene->active_camera = new_camera(scene, 90, 0.0001, 1000);
-	scene->active_camera->transform = new_transform(scene,
-		(VEC3){1.5, 0.5, 1.5}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
-	scene->active_camera->transform->target = new_transform(scene,
-		(VEC3){0, 0.5, 0}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});;
+	scene->active_camera->transform = new_rttransform(scene,
+		(VEC3){0, 1.5, 1.5}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
+	scene->active_camera->transform->target = new_rttransform(scene,
+		(VEC3){0, 0, 0}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
 	MATERIAL *mirror = new_material(scene, "mirror");
 	mirror->base_color = (VEC3){0.1, 0.1, 0.1};
 	mirror->reflection_color = (VEC3){1, 1, 1};
@@ -109,55 +109,18 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 	mirror->metalness = 1;
 	mirror->alpha = 1;
 	p = new_rtprim(scene);
-	//p->prim = new_cone(0.5, 2, (VEC3){0, 0, 0}, (VEC3){0, 1, 0});
-	//p->prim = new_cylinder(0.5, 1, (VEC3){0, 0, 0}, (VEC3){0, 1, 0});
-	p->prim = new_sphere(1, (VEC3){0, 0, 0});
-	p->transform = new_transform(scene,
-		(VEC3){0, 1, 0}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
-	p->material = mtl_rock_waterworn(engine, scene);
-	/*p = new_rtprim(scene);
-	p->prim = new_cylinder(0.1, 2, (VEC3){0, 0, 0}, (VEC3){0, 1, 0});
-	p->transform = new_transform(scene,
-		(VEC3){0, 0.8, 0}, (VEC3){0, -1, 0}, (VEC3){1, 1, 1});
-	p->material = mtl_rusted_metal(engine, scene);*/
-	/*p = new_rtprim(scene);
-	p->prim = new_sphere(0.5, (VEC3){0, 0, 0});
-	p->transform = new_transform(scene,
-		(VEC3){0, 0.5, 0}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
-	p->material = mtl_stained_glass(engine, scene);*/
-	/*p = new_rtprim(scene);
-	p->prim = new_sphere(0.2, (VEC3){0, 0, 0});
-	p->transform = new_transform(scene,
-		(VEC3){-1.5, 0.2, 0.5}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
-	p->material = mtl_aquamarine(engine, scene);*/
-	/*p = new_rtprim(scene);
-	p->prim = new_sphere(1, (VEC3){0, 0, 0});
-	p->transform = new_transform(scene,
-		(VEC3){0, 5, 0}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
-	p->material = mtl_light(engine, scene);*/
-
-	/*p = new_rtprim(scene);
-	p->prim = new_cone(0.5, 0.5, (VEC3){0, 0, 0}, (VEC3){0, 1, 0});
-	p->transform = new_transform(scene,
-		(VEC3){0, 2.5, 0}, (VEC3){0, -1, 0}, (VEC3){1, 1, 1});
-	p->material = mtl_rusted_metal(engine, scene);*/
-
-	/*p = new_rtprim(scene);
-	p->prim = new_plane((VEC3){0, 0, 0}, (VEC3){0, 0, 0});
-	p->transform = new_transform(scene,
-		(VEC3){-2, 0, -3}, (VEC3){-1, 0, 0}, (VEC3){1, 1, 1});
+	//p->prim = new_cone(0.5, 2);
+	//p->prim = new_cylinder(0.5, 0.5);
+	p->prim = new_sphere(1);
+	p->transform = new_rttransform(scene,
+		(VEC3){0, 0.5, 0}, vec3_normalize((VEC3){1, 1, 0}), (VEC3){1, 1, 1});
 	p->material = mtl_brick(engine, scene);
-	p = new_rtprim(scene);
-	p->prim = new_plane((VEC3){0, 0, 0}, (VEC3){0, 0, 0});
-	p->transform = new_transform(scene,
-		(VEC3){0, 0, 3}, (VEC3){0, 0, 1}, (VEC3){1, 1, 1});
-	p->material = mtl_brick(engine, scene);*/
 
 	p = new_rtprim(scene);
-	p->prim = new_plane((VEC3){0, 0, 0}, (VEC3){0, 0, 0});
-	p->transform = new_transform(scene,
-		(VEC3){0, 0, 0}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});
-	p->material = mtl_rock_waterworn(engine, scene);
+	p->prim = new_plane();
+	p->transform = new_rttransform(scene,
+		(VEC3){0, 0, 0}, vec3_normalize((VEC3){0, 1, 0}), (VEC3){1, 1, 1});
+	p->material = mtl_octostone(engine, scene);
 
 	l = new_light(scene, DIRECTIONAL, (VEC3){200, 200, -200});
 	l->power = 0.5f;
@@ -186,7 +149,7 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 	l->attenuation = 0.002;
 	l->falloff = 500;
 	l->spot_size = 80;*/
-	/*scene->active_camera->transform->target = new_transform(scene,
+	/*scene->active_camera->transform->target = new_rttransform(scene,
 		(VEC3){-200, 200, 200}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});*/
 }
 
@@ -229,7 +192,7 @@ VEC3	compute_area_lighting(ENGINE *engine, CAST_RETURN *ret)
 	col = new_vec3(0, 0, 0);
 	r.origin = vec3_add(ret->intersect.position, vec3_scale(ret->intersect.normal, 0.005f));
 	//VEC2	*disc = engine->poisson_disc;
-	RAY		lray = new_ray(engine->active_scene->active_camera->transform->position, new_vec3(0, 1, 0));
+	RAY		lray = new_ray(engine->active_scene->active_camera->transform->current.position, new_vec3(0, 1, 0));
 	VEC3	ndir = ret->intersect.normal;
 	UINT	hits = 0;
 	max = engine->area_sampling;
@@ -292,10 +255,10 @@ BOOL	render_scene(ENGINE *e, SCENE *scene)
 	if (!(cam = scene->active_camera) || !cam->transform)
 		return (false);
 	e->active_scene = scene;
-	update_transform(cam->transform);
+	update_rttransform(cam->transform);
 	scoord = (t_point2){0, 0};
 	f = e->framebuffer;
-	cam->m4_view = mat4_mult_mat4(cam->transform->matrix,
+	cam->m4_view = mat4_mult_mat4(cam->transform->current.transform,
 			mat4_perspective(cam->fov, f.size.y / (float)f.size.x, cam->znear, cam->zfar));
 	area_lights = scene_contains_area_light(scene);
 	while (scoord.y < f.size.y)
@@ -306,7 +269,7 @@ BOOL	render_scene(ENGINE *e, SCENE *scene)
 			if (e->stop_rendering)
 				return (false);
 			nscoord = normalize_screen_coord(scoord, f.size);
-			cam->ray = new_ray(cam->transform->position,
+			cam->ray = new_ray(cam->transform->current.position,
 				mat4_mult_vec3(cam->m4_view, vec3_normalize((VEC3){nscoord.x, nscoord.y, -1})));
 			col = new_vec3(0, 0, 0);
 			if ((r = cast_ray(e, scene, cam->ray)).intersect.intersects)

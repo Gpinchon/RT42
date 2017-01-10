@@ -12,20 +12,13 @@
 
 #include <rt.h>
 
-void	update_transform(TRANSFORM *transform)
+void	update_rttransform(RTTRANSFORM *t)
 {
-	VEC3	direction;
-
-	if (!transform || transform->updated)
+	if (!t || t->current.updated)
 		return ;
-	if (transform->target)
-	{
-		direction = vec3_normalize(vec3_sub(transform->target->position, transform->position));
-		transform->rotation = (VEC3){asin(direction.y), -atan2(direction.x, direction.z), transform->rotation.z};
-	}
-	transform->translate = mat4_translate(transform->position);
-	transform->rotate = mat4_rotation(transform->rotation);
-	transform->scale = mat4_scale(transform->scaling);
-	transform->matrix = mat4_combine(transform->translate, transform->rotate, transform->scale);
-	transform->updated = true;
+	if (t->target)
+		transform_set_target(&t->current, &t->target->current);
+	if (t->parent)
+		transform_set_parent(&t->current, &t->parent->current);
+	t->current.updated = vmltrue;
 }
