@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:32:51 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/10 00:36:13 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/13 01:28:13 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 	scene->active_camera->transform = new_rttransform(scene,
 		(VEC3){0, 1.5, 1.5}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
 	scene->active_camera->transform->target = new_rttransform(scene,
-		(VEC3){0, 0, 0}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
+		(VEC3){0, 1, 0}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
 	MATERIAL *mirror = new_material(scene, "mirror");
 	mirror->base_color = (VEC3){0.1, 0.1, 0.1};
 	mirror->reflection_color = (VEC3){1, 1, 1};
@@ -113,7 +113,7 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 	//p->prim = new_cylinder(0.5, 0.5);
 	p->prim = new_sphere(1);
 	p->transform = new_rttransform(scene,
-		(VEC3){0, 0.5, 0}, vec3_normalize((VEC3){1, 1, 0}), (VEC3){1, 1, 1});
+		(VEC3){0, 1, 0}, vec3_normalize((VEC3){1, 1, 0}), (VEC3){1, 1, 1});
 	p->material = mtl_brick(engine, scene);
 
 	p = new_rtprim(scene);
@@ -166,7 +166,7 @@ void	fill_buffers(ENGINE *engine, t_point2 screen_coord, CAST_RETURN *ret)
 
 	if (ret->intersect.intersects)
 	{
-		put_pixel_to_buffer(engine->framebuffer, screen_coord, vec3_to_vec4(ret->mtl.base_color, ret->mtl.alpha));
+		//put_pixel_to_buffer(engine->framebuffer, screen_coord, vec3_to_vec4(ret->mtl.base_color, ret->mtl.alpha));
 		bufferptr = get_buffer_value(engine->mtlbuffer, screen_coord);
 		*((MATERIAL *)bufferptr) = ret->mtl;
 		bufferptr = get_buffer_value(engine->positionbuffer, screen_coord);
@@ -272,6 +272,7 @@ BOOL	render_scene(ENGINE *e, SCENE *scene)
 			cam->ray = new_ray(cam->transform->current.position,
 				mat4_mult_vec3(cam->m4_view, vec3_normalize((VEC3){nscoord.x, nscoord.y, -1})));
 			col = new_vec3(0, 0, 0);
+			vml_memset(&r, 0, sizeof(CAST_RETURN));
 			if ((r = cast_ray(e, scene, cam->ray)).intersect.intersects)
 			{
 				get_ret_mtl(&r);
@@ -280,9 +281,9 @@ BOOL	render_scene(ENGINE *e, SCENE *scene)
 				col = vec3_add(col, compute_lighting(e, &r));
 				col = vec3_add(col, compute_reflection(e, &r, &cam->ray));
 				col = vec3_add(col, compute_refraction(e, &r, &cam->ray, 1.f));
-				fill_buffers(e, scoord, &r);
 			}
 			put_pixel_to_buffer(f, scoord, vec3_to_vec4(col, 1));
+			fill_buffers(e, scoord, &r);
 			if (e->progress_callback)
 				e->progress_callback(e, (scoord.x + 1 + (scoord.y + 1) * f.size.y) * 100 / (float)(f.size.y * f.size.y + f.size.x));
 			scoord.x++;
@@ -320,27 +321,120 @@ void	print_progress(ENGINE *engine, float progress)
 	}
 }
 
-int		do_post_treatment(ENGINE *engine)
+VEC4		blur_sample(ENGINE *engine, t_point2 coord, float intensity)
 {
+	UCHAR		*color;
+	VEC4		vcolor;
+	UINT		i;
+	VEC2		uv;
+	t_point2	size;
 
+	i = 0;
+	size = engine->framebuffer.size;
+	uv = new_vec2(coord.x / (float)size.x, coord.y / (float)size.y);
+	vcolor = new_vec4(0, 0, 0, 0);
+	while (i < 32)
+	{
+		coord = (t_point2){(uv.x + (engine->poisson_disc[i].x * 2 - 1) * intensity) * size.x, (uv.y + (engine->poisson_disc[i].y * 2 - 1) * intensity) * size.y};
+		coord = (t_point2){CLAMP(coord.x, 0, size.x - 1), CLAMP(coord.y, 0, size.y - 1)};
+		color = get_buffer_value(engine->framebuffer, coord);
+		vcolor = vec4_add(vcolor, new_vec4(color[2] / 255.f, color[1] / 255.f, color[0] / 255.f, color[3] / 255.f));
+		i++;
+	}
+	return (vec4_fdiv(vcolor, 32.f));
+}
+
+void		gamma_correction(ENGINE *engine, t_point2 coord)
+{
+	UCHAR		*color;
+	VEC4		vcolor;
+	float		gamma;
+
+	gamma = 1 / 0.65f;
+	color = get_buffer_value(engine->framebuffer, coord);
+	vcolor = new_vec4(pow(color[2] / 255.f, gamma), pow(color[1] / 255.f, gamma), pow(color[0] / 255.f, gamma), color[3] / 255.f);
+	put_pixel_to_buffer(engine->finalbuffer, coord, vcolor);
+}
+
+void		depth_of_field(ENGINE *engine, t_point2 coord)
+{
+	VEC4		vcolor;
+	float		distance;
+	float		center_distance;
+
+	distance = *((float*)get_buffer_value(engine->depthbuffer, coord));
+	center_distance = *((float*)get_buffer_value(engine->depthbuffer, (t_point2){engine->depthbuffer.size.x / 2, engine->depthbuffer.size.y / 2}));
+	vcolor = blur_sample(engine, coord, CLAMP((fabs(distance - center_distance) - center_distance) / 100.f, 0, 0.0025));
+	put_pixel_to_buffer(engine->finalbuffer, coord, vcolor);
+}
+
+int		do_post_treatment(ENGINE *engine, t_callback *callback)
+{
+	t_point2			coord[2];
+
+	coord[0].x = 0;
+	coord[1] = engine->framebuffer.size;
+	if (!callback || !callback->function)
+		return (false);
+	while (coord[0].x < coord[1].x)
+	{
+		coord[0].y = 0;
+		while (coord[0].y < coord[1].y)
+		{
+			callback->function(callback->arg, coord[0]);
+			coord[0].y++;
+		}
+		coord[0].x++;
+	}
 	return (true);
-	(void)engine;
+}
+
+void		blit_framebuffer(FRAMEBUFFER f1, FRAMEBUFFER f2)
+{
+	t_point2	coord[2];
+	UCHAR		*color;
+
+	coord[0].x = 0;
+	coord[1] = f1.size;
+	while (coord[0].x < coord[1].x)
+	{
+		coord[0].y = 0;
+		while (coord[0].y < coord[1].y)
+		{
+			color = get_buffer_value(f1, coord[0]);
+			put_pixel_to_buffer(f2, coord[0], new_vec4(color[2] / 255.f, color[1] / 255.f, color[0] / 255.f, color[3] / 255.f));
+			coord[0].y++;
+		}
+		coord[0].x++;
+	}
 }
 
 int		main(int argc, char *argv[])
 {
 	ENGINE			engine;
 	t_engine_opt	options;
+	t_callback		callback;
 
 	options.window_size = options.internal_size = (t_point2){1024, 1024};
 	options.max_refr = options.max_refl = 3;
 	options.area_sampling = 32;
 	engine = new_engine(options);
+	callback = new_callback(depth_of_field, &engine);
+	ezarray_push(&engine.post_treatments, &callback);
+	callback = new_callback(gamma_correction, &engine);
+	ezarray_push(&engine.post_treatments, &callback);
 	default_scene(&engine, &engine.scene);
 	clear_renderer(&engine);
 	if (render_scene(&engine, &engine.scene))
 	{
-		blit_buffer(engine.framebuffer, engine.image);
+		UINT	i = 0;
+		while (i < engine.post_treatments.length)
+		{
+			do_post_treatment(&engine, ezarray_get_index(engine.post_treatments, i));
+			blit_framebuffer(engine.finalbuffer, engine.framebuffer);
+			i++;
+		}
+		blit_buffer(engine.finalbuffer, engine.image);
 		refresh_window(engine.window);
 		framework_loop(engine.framework);
 	}

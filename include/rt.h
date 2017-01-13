@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:06:34 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/10 00:23:38 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/13 00:57:25 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,6 +142,12 @@ typedef struct	s_engine_opt
 	t_point2	internal_size;
 }				t_engine_opt;
 
+typedef struct	s_pixel_callback
+{
+	void		*arg;
+	void		(*function)(void *arg, t_point2 coord);
+}				t_pixel_callback;
+
 typedef struct	s_engine
 {
 	BOOL		stop_rendering;
@@ -154,12 +160,16 @@ typedef struct	s_engine
 	void		*window;
 	void		*image;
 	void		*loading_screen;
+	SCENE		*active_scene;
+	void		(*progress_callback)(ENGINE*, float);
 	INTERSECT	(*inter_functions[10])(OBJ, RAY, TRANSFORM*);
 	VEC2		(*uv_functions[10])(OBJ, INTERSECT, TRANSFORM*);
-	void		(*progress_callback)(ENGINE*, float);
+	//float		brightness_threshold;
 	Uint32		last_time;
-	SCENE		*active_scene;
+	ARRAY		post_treatments;
 	FRAMEBUFFER	framebuffer;
+	FRAMEBUFFER	finalbuffer;
+	//FRAMEBUFFER	brightbuffer;
 	FRAMEBUFFER	positionbuffer;
 	FRAMEBUFFER	normalbuffer;
 	FRAMEBUFFER	mtlbuffer;
@@ -222,6 +232,8 @@ MATERIAL		*mtl_scuffed_plastic_red(ENGINE *engine, SCENE *scene);
 MATERIAL		*mtl_scuffed_aluminium(ENGINE *engine, SCENE *scene);
 MATERIAL		*mtl_stained_glass(ENGINE *engine, SCENE *scene);
 MATERIAL		*mtl_rock_waterworn(ENGINE *engine, SCENE *scene);
+MATERIAL		*mtl_metal_floor(ENGINE *engine, SCENE *scene);
+MATERIAL		*mtl_grape_leaves(ENGINE *engine, SCENE *scene);
 
 void			clear_renderer(ENGINE *engine);
 void			clear_buffers(ENGINE *engine);

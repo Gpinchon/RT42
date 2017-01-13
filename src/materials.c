@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/05 22:09:17 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/10 00:42:11 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/13 01:00:11 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,51 @@ MATERIAL	*mtl_stained_glass(ENGINE *engine, SCENE *scene)
 	mtl->refraction = 1.52f;
 	mtl->refraction_color = (VEC3){1, 1, 1};
 	mtl->uv_scale = (VEC2){1, 1};
+	mtl->roughness = 0.03;
+	mtl->metalness = 0.5;
+	mtl->alpha = 0.05;
+	return (mtl);
+}
+
+MATERIAL	*mtl_grape_leaves(ENGINE *engine, SCENE *scene)
+{
+	MATERIAL	*mtl;
+
+	if ((mtl = get_mtl_by_name(scene, "grape_leaves")))
+		return (mtl);
+	mtl = new_material(scene, "grape_leaves");
+	mtl->base_map = load_image_file(engine->framework, "res/grape_leaves/grape_leaves_base.bmp");
+	mtl->normal_map = load_image_file(engine->framework, "res/grape_leaves/grape_leaves_normal.bmp");
+	mtl->height_map = load_image_file(engine->framework, "res/grape_leaves/grape_leaves_height.bmp");
+	mtl->rough_map = load_image_file(engine->framework, "res/grape_leaves/grape_leaves_rough.bmp");
+	mtl->ao_map = load_image_file(engine->framework, "res/grape_leaves/grape_leaves_ao.bmp");
+	mtl->parallax = 0.1;
+	mtl->refraction = 1.5f;
+	mtl->refraction_color = (VEC3){1, 1, 1};
+	mtl->uv_scale = (VEC2){2, 2};
+	mtl->roughness = 0.03;
+	mtl->metalness = 0.5;
+	mtl->alpha = 1;
+	return (mtl);
+}
+
+MATERIAL	*mtl_metal_floor(ENGINE *engine, SCENE *scene)
+{
+	MATERIAL	*mtl;
+
+	if ((mtl = get_mtl_by_name(scene, "metal_floor")))
+		return (mtl);
+	mtl = new_material(scene, "metal_floor");
+	mtl->base_map = load_image_file(engine->framework, "res/metal_floor/metal_floor_base.bmp");
+	mtl->metal_map = load_image_file(engine->framework, "res/metal_floor/metal_floor_metal.bmp");
+	mtl->normal_map = load_image_file(engine->framework, "res/metal_floor/metal_floor_normal.bmp");
+	mtl->height_map = load_image_file(engine->framework, "res/metal_floor/metal_floor_height.bmp");
+	mtl->rough_map = load_image_file(engine->framework, "res/metal_floor/metal_floor_rough.bmp");
+	mtl->ao_map = load_image_file(engine->framework, "res/metal_floor/metal_floor_ao.bmp");
+	mtl->parallax = 0.1;
+	mtl->refraction = 1.5f;
+	mtl->refraction_color = (VEC3){1, 1, 1};
+	mtl->uv_scale = (VEC2){2, 2};
 	mtl->roughness = 0.03;
 	mtl->metalness = 0.5;
 	mtl->alpha = 0.05;

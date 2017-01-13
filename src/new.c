@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/15 10:44:45 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/09 18:39:53 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/11 00:48:02 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,13 @@ ENGINE		new_engine(t_engine_opt options)
 	engine.loading_screen = load_image_file(engine.framework, "./res/loading_screen.bmp");
 	engine.image = new_image(engine.framework, options.window_size.x, options.window_size.y);
 	engine.framebuffer = new_framebuffer(unsigned_char, options.internal_size, 4);
+	engine.finalbuffer = new_framebuffer(unsigned_char, options.internal_size, 4);
+	//engine.brightbuffer = new_framebuffer(FLOAT, options.internal_size, 3);
 	engine.positionbuffer = new_framebuffer(FLOAT, options.internal_size, 3);
 	engine.normalbuffer = new_framebuffer(FLOAT, options.internal_size, 3);
 	engine.depthbuffer = new_framebuffer(FLOAT, options.internal_size, 1);
 	engine.mtlbuffer = new_framebuffer(FLOAT, options.internal_size, sizeof(t_mtl) / sizeof(float));
+	engine.post_treatments = new_ezarray(other, 0, sizeof(t_callback));
 	attach_image_to_window(engine.window, engine.image);
 	engine.inter_functions[cone] = intersect_cone;
 	engine.inter_functions[sphere] = intersect_sphere;
