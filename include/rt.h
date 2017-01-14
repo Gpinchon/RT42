@@ -205,7 +205,6 @@ void			get_ret_mtl(CAST_RETURN	*ret);
 VEC3			compute_lighting(ENGINE *engine, CAST_RETURN *ret);
 VEC3			compute_refraction(ENGINE *engine, CAST_RETURN *ret, RAY *cur_ray, float aior);
 VEC3			compute_reflection(ENGINE *engine, CAST_RETURN *ret, RAY *cur_ray);
-VEC3			compute_radiosity(ENGINE *engine, CAST_RETURN *ret);
 
 void			destroy_scene(SCENE *scene);
 void			destroy_engine(ENGINE *engine);
@@ -233,7 +232,6 @@ MATERIAL		*mtl_scuffed_aluminium(ENGINE *engine, SCENE *scene);
 MATERIAL		*mtl_stained_glass(ENGINE *engine, SCENE *scene);
 MATERIAL		*mtl_rock_waterworn(ENGINE *engine, SCENE *scene);
 MATERIAL		*mtl_metal_floor(ENGINE *engine, SCENE *scene);
-MATERIAL		*mtl_grape_leaves(ENGINE *engine, SCENE *scene);
 
 void			clear_renderer(ENGINE *engine);
 void			clear_buffers(ENGINE *engine);

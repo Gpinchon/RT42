@@ -65,10 +65,10 @@ VEC3		sample_texture_filtered(void *image, VEC2 uv)
 	fv = fabs(fv);
 	int	u[4];
 	int v[4];
-	u[0] = u[2] = (int)fu % img.size.x;
-	v[0] = v[1] = (int)fv % img.size.y;
-	u[1] = u[3] = (u[0] + 1) % img.size.x;
-	v[2] = v[3] = (v[0] + 1) % img.size.y;
+	u[0] = u[2] = CLAMP((int)fu % img.size.x, 0, img.size.x);
+	v[0] = v[1] = CLAMP((int)fv % img.size.y, 0, img.size.y);
+	u[1] = u[3] = CLAMP((u[0] + 1) % img.size.x, 0, img.size.x);
+	v[2] = v[3] = CLAMP((v[0] + 1) % img.size.y, 0, img.size.y);
 	fu = fu - floorf(fu);
 	fv = fv - floorf(fv);
 	float weight[4];
@@ -76,7 +76,6 @@ VEC3		sample_texture_filtered(void *image, VEC2 uv)
 	weight[1] = (fu * (1 - fv));
 	weight[2] = ((1 - fu) * fv);
 	weight[3] = (fu *  fv);
-	
 	int i = 0;
 	while (i < 4)
 	{

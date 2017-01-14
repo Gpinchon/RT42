@@ -16,7 +16,6 @@ SRC		=	./src/main.c					\
 			./src/cast_ray.c				\
 			./src/compute_lighting.c		\
 			./src/refraction_reflection.c	\
-			./src/radiosity.c				\
 			./src/texture_mapping.c			\
 			./src/transform.c				\
 			./src/materials.c				\

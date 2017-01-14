@@ -98,7 +98,7 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 	(void)engine;
 	scene->active_camera = new_camera(scene, 90, 0.0001, 1000);
 	scene->active_camera->transform = new_rttransform(scene,
-		(VEC3){0, 1.5, 1.5}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
+		(VEC3){0.5, 0.5, 1.5}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
 	scene->active_camera->transform->target = new_rttransform(scene,
 		(VEC3){0, 1, 0}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
 	MATERIAL *mirror = new_material(scene, "mirror");
@@ -110,16 +110,19 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 	mirror->alpha = 1;
 	p = new_rtprim(scene);
 	//p->prim = new_cone(0.5, 2);
-	//p->prim = new_cylinder(0.5, 0.5);
+	//p->prim = new_cylinder(1, 1);
 	p->prim = new_sphere(1);
 	p->transform = new_rttransform(scene,
 		(VEC3){0, 1, 0}, vec3_normalize((VEC3){1, 1, 0}), (VEC3){1, 1, 1});
-	p->material = mtl_brick(engine, scene);
+	//p->material = mtl_rock_copper(engine, scene);
+	p->material = mtl_scuffed_plastic_red(engine, scene);
+	//p->material = mtl_stained_glass(engine, scene);
 
 	p = new_rtprim(scene);
 	p->prim = new_plane();
 	p->transform = new_rttransform(scene,
 		(VEC3){0, 0, 0}, vec3_normalize((VEC3){0, 1, 0}), (VEC3){1, 1, 1});
+	//p->material = mtl_rock_sliced(engine, scene);
 	p->material = mtl_octostone(engine, scene);
 
 	l = new_light(scene, DIRECTIONAL, (VEC3){200, 200, -200});
@@ -166,7 +169,6 @@ void	fill_buffers(ENGINE *engine, t_point2 screen_coord, CAST_RETURN *ret)
 
 	if (ret->intersect.intersects)
 	{
-		//put_pixel_to_buffer(engine->framebuffer, screen_coord, vec3_to_vec4(ret->mtl.base_color, ret->mtl.alpha));
 		bufferptr = get_buffer_value(engine->mtlbuffer, screen_coord);
 		*((MATERIAL *)bufferptr) = ret->mtl;
 		bufferptr = get_buffer_value(engine->positionbuffer, screen_coord);
@@ -191,7 +193,6 @@ VEC3	compute_area_lighting(ENGINE *engine, CAST_RETURN *ret)
 	i = 0;
 	col = new_vec3(0, 0, 0);
 	r.origin = vec3_add(ret->intersect.position, vec3_scale(ret->intersect.normal, 0.005f));
-	//VEC2	*disc = engine->poisson_disc;
 	RAY		lray = new_ray(engine->active_scene->active_camera->transform->current.position, new_vec3(0, 1, 0));
 	VEC3	ndir = ret->intersect.normal;
 	UINT	hits = 0;
@@ -207,14 +208,9 @@ VEC3	compute_area_lighting(ENGINE *engine, CAST_RETURN *ret)
 			col = vec3_add(col, compute_point_color(castret.mtl.emitting, ret->mtl, ret->intersect, lray));
 		}
 		ndir = new_vec3(frand_a_b(-1, 1), frand_a_b(-1, 1), frand_a_b(-1, 1));
-		//ndir = new_vec3(disc[i].x * 2.f - 1.f, disc[i].y * 2.f - 1.f, (disc[i].x * 2.f - 1.f) * (disc[i].y * 2.f - 1.f));
 		r.direction = vec3_normalize(mat3_mult_vec3(ret->tbn, ndir));
-		//r.direction = ndir;
-		//ndir = new_vec3(disc[i].x * 2.f - 1.f, disc[i].y * 2.f - 1.f, disc[i].x * disc[i].y * 2.f - 1.f);
-		//r.direction = vec3_normalize(mat3_mult_vec3(ret->tbn, ndir));
 		i++;
 	}
-	//return (col);
 	if (hits)
 		return (vec3_fdiv(col, hits));
 	else return (col);

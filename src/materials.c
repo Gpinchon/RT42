@@ -134,28 +134,6 @@ MATERIAL	*mtl_stained_glass(ENGINE *engine, SCENE *scene)
 	return (mtl);
 }
 
-MATERIAL	*mtl_grape_leaves(ENGINE *engine, SCENE *scene)
-{
-	MATERIAL	*mtl;
-
-	if ((mtl = get_mtl_by_name(scene, "grape_leaves")))
-		return (mtl);
-	mtl = new_material(scene, "grape_leaves");
-	mtl->base_map = load_image_file(engine->framework, "res/grape_leaves/grape_leaves_base.bmp");
-	mtl->normal_map = load_image_file(engine->framework, "res/grape_leaves/grape_leaves_normal.bmp");
-	mtl->height_map = load_image_file(engine->framework, "res/grape_leaves/grape_leaves_height.bmp");
-	mtl->rough_map = load_image_file(engine->framework, "res/grape_leaves/grape_leaves_rough.bmp");
-	mtl->ao_map = load_image_file(engine->framework, "res/grape_leaves/grape_leaves_ao.bmp");
-	mtl->parallax = 0.1;
-	mtl->refraction = 1.5f;
-	mtl->refraction_color = (VEC3){1, 1, 1};
-	mtl->uv_scale = (VEC2){2, 2};
-	mtl->roughness = 0.03;
-	mtl->metalness = 0.5;
-	mtl->alpha = 1;
-	return (mtl);
-}
-
 MATERIAL	*mtl_metal_floor(ENGINE *engine, SCENE *scene)
 {
 	MATERIAL	*mtl;
