@@ -42,15 +42,10 @@ MAT3		tbn_matrix(VEC3 normal, VEC3 pdir)
 {
 	VEC3	t;
 
-	//t = vec3_orthogonal(vec3_negate(normal));
-	//t = vec3_cross(normal, vec3_orthogonal(normal));
-	//t = vec3_cross(normal, pdir);
 	t = vec3_cross(normal, pdir);
 	if (!vec3_length(t))
 		t = vec3_cross(normal, vec3_orthogonal(normal));
 	t = vec3_normalize(t);
-	//t = pdir;
-	//return (new_mat3(t, vec3_normalize(vec3_orthogonal(t)), normal));
 	return (new_mat3(t, vec3_normalize(vec3_cross(normal, t)), normal));
 }
 
@@ -65,18 +60,6 @@ MAT3		plane_tbn_matrix(VEC3 normal)
 		t = vec3_cross(normal, new_vec3(0.0, 0.0, 1.0));
 	t = vec3_normalize(t);
 	return (new_mat3(t, vec3_normalize(vec3_cross(vec3_negate(normal), t)), normal));
-}
-
-void	mat3_print(MAT3 m)
-{
-	UINT	i;
-
-	i = 0;
-	while (i < 9)
-	{
-		printf("%f, %f, %f\n", m.m[i], m.m[i + 1], m.m[i + 2]);
-		i+=3;
-	}
 }
 
 VEC2	sample_height_map(void	*height_map, VEC2 uv, CAST_RETURN *ret, RAY ray)
@@ -110,10 +93,7 @@ void	get_ret_mtl(CAST_RETURN	*ret)
 	if (mtl.height_map)
 		uv = ret->uv = sample_height_map(mtl.height_map, uv, ret, ret->ray);
 	if (mtl.normal_map)
-	{
 		ret->intersect.normal = sample_normal_map(mtl.normal_map, uv, ret->tbn);
-		//ret->tbn = tbn_matrix(ret->intersect.normal);
-	}
 	if (mtl.base_map)
 		mtl.reflection_color = mtl.base_color = sample_texture_filtered(mtl.base_map, uv);
 	if (mtl.rough_map)
@@ -140,32 +120,22 @@ CAST_RETURN	cast_ray(ENGINE *engine, SCENE *scene, RAY ray)
 	ret.intersect.intersects = ret.intersect.distance[0] = 0;
 	ret.ray = ray;
 	primitives = scene->primitives;
+	vml_memset(&ret, 0, sizeof(CAST_RETURN));
 	while (i < primitives.length)
 	{
 		p = *((RTPRIMITIVE*)ezarray_get_index(primitives, i));
 		t.rotation = UPVEC;
 		t.position = new_vec3(0, 0, 0);
-		if (p.transform)// && !p.transformed)
+		if (p.transform)
 		{
-			/*update_rttransform(p.transform);
-			t.position = mat4_mult_vec3(p.transform->current.translate, p.transform->current.position);
-			t.rotation = vec3_normalize(mat4_mult_vec3(p.transform->current.rotate, p.transform->current.rotation));
-			p.transformed = true;*/
 			t.position = p.transform->current.position;
 			t.rotation = p.transform->current.rotation;
 		}
-		/*if (p.prim.type == sphere)
-		{
-			printf("%f, %f\npos : %f, %f, %f\n", p.prim.data.sphere.radius, p.prim.data.sphere.radius2,
-				t.position.x, t.position.y, t.position.z);
-		}*/
 		if (engine->inter_functions[p.prim.type]
 		&& (inter = engine->inter_functions[p.prim.type](p.prim.data, ray, &t)).intersects)
 		{
 			if (ret.intersect.distance[0] == 0 || inter.distance[0] < ret.intersect.distance[0])
 			{
-				/*if (p.prim.type == sphere)
-					printf("woot\n");*/
 				ret.intersect = inter;
 				if (p.prim.type == plane)
 					ret.tbn = plane_tbn_matrix(inter.normal);
@@ -175,8 +145,6 @@ CAST_RETURN	cast_ray(ENGINE *engine, SCENE *scene, RAY ray)
 					ret.mtl = *p.material;
 				if (engine->uv_functions[p.prim.type])
 					ret.uv = vec2_mult(engine->uv_functions[p.prim.type](p.prim.data, inter, &t), ret.mtl.uv_scale);
-				/*if (p.prim.type == sphere)
-					printf("%f\n", ret.mtl.alpha);*/
 			}
 		}
 		i++;
@@ -202,12 +170,8 @@ CAST_RETURN	cast_light_ray(ENGINE *engine, SCENE *scene, RAY ray)
 		p = *((RTPRIMITIVE*)ezarray_get_index(primitives, i));
 		t.rotation = UPVEC;
 		t.position = new_vec3(0, 0, 0);
-		if (p.transform)// && !p.transformed)
+		if (p.transform)
 		{
-			/*update_rttransform(p.transform);
-			t.position = mat4_mult_vec3(p.transform->current.translate, p.transform->current.position);
-			t.rotation = vec3_normalize(mat4_mult_vec3(p.transform->current.rotate, p.transform->current.rotation));
-			p.transformed = true;*/
 			t.position = p.transform->current.position;
 			t.rotation = p.transform->current.rotation;
 		}

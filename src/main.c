@@ -115,7 +115,7 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 	p->transform = new_rttransform(scene,
 		(VEC3){0, 1, 0}, vec3_normalize((VEC3){1, 1, 0}), (VEC3){1, 1, 1});
 	//p->material = mtl_rock_copper(engine, scene);
-	p->material = mtl_scuffed_plastic_red(engine, scene);
+	//p->material = mtl_scuffed_plastic_red(engine, scene);
 	//p->material = mtl_stained_glass(engine, scene);
 
 	p = new_rtprim(scene);
