@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/05 22:09:17 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/13 01:00:11 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/14 23:58:45 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ MATERIAL	*mtl_water(ENGINE *engine, SCENE *scene)
 	mtl->refraction_color = (VEC3){0.9, 0.9, 1};
 	mtl->reflection_color = (VEC3){1, 1, 1};
 	mtl->normal_map = load_image_file(engine->framework, "res/water/water_normal.bmp");
+	mtl->height_map = load_image_file(engine->framework, "res/water/water_height.bmp");
 	mtl->uv_scale = (VEC2){2, 2};
 	mtl->roughness = 0.05;
 	mtl->metalness = 0.5;
@@ -172,11 +173,7 @@ MATERIAL	*mtl_rock_waterworn(ENGINE *engine, SCENE *scene)
 	mtl->ao_map = load_image_file(engine->framework, "res/rock_waterworn/rock_waterworn_ao.bmp");
 	mtl->parallax = 0.1;
 	mtl->refraction = 1.5f;
-	mtl->refraction_color = (VEC3){1, 1, 1};
 	mtl->uv_scale = (VEC2){1, 1};
-	mtl->roughness = 0.03;
-	mtl->metalness = 0.5;
-	mtl->alpha = 0.05;
 	return (mtl);
 }
 
@@ -232,6 +229,39 @@ MATERIAL	*mtl_octostone(ENGINE *engine, SCENE *scene)
 	mtl->refraction = 1.33f;
 	mtl->parallax = 0.1;
 	return (mtl);
+}
+
+MATERIAL	*mtl_skin(ENGINE *engine, SCENE *scene)
+{
+	MATERIAL	*mtl;
+
+	if ((mtl = get_mtl_by_name(scene, "skin")))
+		return (mtl);
+	mtl = new_material(scene, "skin");
+	mtl->base_map = load_image_file(engine->framework, "res/skin/skin_base.bmp");
+	mtl->normal_map = load_image_file(engine->framework, "res/skin/skin_normal.bmp");
+	mtl->rough_map = load_image_file(engine->framework, "res/skin/skin_rough.bmp");
+	mtl->ao_map = load_image_file(engine->framework, "res/skin/skin_ao.bmp");
+	mtl->height_map = load_image_file(engine->framework, "res/skin/skin_height.bmp");
+	mtl->uv_scale = (VEC2){5, 5};
+	mtl->refraction = 1.33f;
+	mtl->roughness = 0.5f;
+	mtl->parallax = 0.1;
+	return (mtl);
+}
+
+MATERIAL	*mtl_mirror(ENGINE *engine, SCENE *scene)
+{
+	MATERIAL *mirror;
+	mirror = new_material(scene, "mirror");
+	mirror->base_color = (VEC3){0.1, 0.1, 0.1};
+	mirror->reflection_color = (VEC3){1, 1, 1};
+	mirror->refraction = 1.90f;
+	mirror->roughness = 0;
+	mirror->metalness = 1;
+	mirror->alpha = 1;
+	return (mirror);
+	(void)engine;
 }
 
 MATERIAL	*mtl_harshbricks(ENGINE *engine, SCENE *scene)

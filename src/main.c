@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:32:51 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/13 01:28:13 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/15 16:05:26 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,35 +95,37 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 	RTPRIMITIVE	*p;
 	LIGHT		*l;
 
-	(void)engine;
 	scene->active_camera = new_camera(scene, 90, 0.0001, 1000);
 	scene->active_camera->transform = new_rttransform(scene,
-		(VEC3){0.5, 0.5, 1.5}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
+		(VEC3){1.5, 0.5, 2.5}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
 	scene->active_camera->transform->target = new_rttransform(scene,
-		(VEC3){0, 1, 0}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
-	MATERIAL *mirror = new_material(scene, "mirror");
-	mirror->base_color = (VEC3){0.1, 0.1, 0.1};
-	mirror->reflection_color = (VEC3){1, 1, 1};
-	mirror->refraction = 1.90f;
-	mirror->roughness = 0;
-	mirror->metalness = 1;
-	mirror->alpha = 1;
+		(VEC3){0, 0.5, 0}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
 	p = new_rtprim(scene);
 	//p->prim = new_cone(0.5, 2);
 	//p->prim = new_cylinder(1, 1);
 	p->prim = new_sphere(1);
 	p->transform = new_rttransform(scene,
 		(VEC3){0, 1, 0}, vec3_normalize((VEC3){1, 1, 0}), (VEC3){1, 1, 1});
-	//p->material = mtl_rock_copper(engine, scene);
+	//p->material = mtl_rock_waterworn(engine, scene);
+	p->material = mtl_rock_copper(engine, scene);
 	//p->material = mtl_scuffed_plastic_red(engine, scene);
 	//p->material = mtl_stained_glass(engine, scene);
 
 	p = new_rtprim(scene);
 	p->prim = new_plane();
 	p->transform = new_rttransform(scene,
+		(VEC3){0, 0.2, 0}, vec3_normalize((VEC3){0, 1, 0}), (VEC3){1, 1, 1});
+	//p->material = mtl_rock_sliced(engine, scene);
+	//p->material = mtl_harshbricks(engine, scene);
+	p->material = mtl_water(engine, scene);
+
+	p = new_rtprim(scene);
+	p->prim = new_plane();
+	p->transform = new_rttransform(scene,
 		(VEC3){0, 0, 0}, vec3_normalize((VEC3){0, 1, 0}), (VEC3){1, 1, 1});
 	//p->material = mtl_rock_sliced(engine, scene);
-	p->material = mtl_octostone(engine, scene);
+	//p->material = mtl_harshbricks(engine, scene);
+	p->material = mtl_rock_waterworn(engine, scene);
 
 	l = new_light(scene, DIRECTIONAL, (VEC3){200, 200, -200});
 	l->power = 0.5f;
@@ -144,14 +146,14 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 	l->falloff = 5;
 	l->spot_size = 80;
 	l->ambient_coef = 0.2f;
-	/*l = new_light(scene, POINT, (VEC3){0, 250, 100});
+	l = new_light(scene, DIRECTIONAL, (VEC3){0, 250, 100});
 	l->color = (VEC3){1, 207.f / 255.f, 197.f / 255.f};
 	l->cast_shadow = false;
 	l->direction = (VEC3){0, -1, 0};
 	l->power = 1.f;
 	l->attenuation = 0.002;
 	l->falloff = 500;
-	l->spot_size = 80;*/
+	l->spot_size = 80;
 	/*scene->active_camera->transform->target = new_rttransform(scene,
 		(VEC3){-200, 200, 200}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});*/
 }

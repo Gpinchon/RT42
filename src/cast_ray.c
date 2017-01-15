@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/02 22:52:19 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/13 01:23:52 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/14 23:23:15 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,10 +117,9 @@ CAST_RETURN	cast_ray(ENGINE *engine, SCENE *scene, RAY ray)
 	TRANSFORM	t;
 
 	i = 0;
-	ret.intersect.intersects = ret.intersect.distance[0] = 0;
+	vml_memset(&ret, 0, sizeof(CAST_RETURN));
 	ret.ray = ray;
 	primitives = scene->primitives;
-	vml_memset(&ret, 0, sizeof(CAST_RETURN));
 	while (i < primitives.length)
 	{
 		p = *((RTPRIMITIVE*)ezarray_get_index(primitives, i));

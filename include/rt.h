@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:06:34 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/13 00:57:25 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/14 23:58:51 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -232,6 +232,7 @@ MATERIAL		*mtl_scuffed_aluminium(ENGINE *engine, SCENE *scene);
 MATERIAL		*mtl_stained_glass(ENGINE *engine, SCENE *scene);
 MATERIAL		*mtl_rock_waterworn(ENGINE *engine, SCENE *scene);
 MATERIAL		*mtl_metal_floor(ENGINE *engine, SCENE *scene);
+MATERIAL		*mtl_skin(ENGINE *engine, SCENE *scene);
 
 void			clear_renderer(ENGINE *engine);
 void			clear_buffers(ENGINE *engine);
