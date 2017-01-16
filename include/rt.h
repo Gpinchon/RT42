@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:06:34 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/14 23:58:51 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/16 14:51:06 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,6 +196,8 @@ VEC2			cylinder_uv(u_obj cylinder, INTERSECT inter, TRANSFORM *transform);
 VEC2			plane_uv(u_obj plane, INTERSECT inter, TRANSFORM *transform);
 VEC3			sample_texture(void *image, VEC2 uv);
 VEC3			sample_texture_filtered(void *image, VEC2 uv);
+VEC2			sample_height_map(void	*height_map, VEC2 uv, CAST_RETURN *ret, RAY ray);
+
 
 CAST_RETURN		cast_ray(ENGINE *engine, SCENE *scene, RAY ray);
 CAST_RETURN		cast_light_ray(ENGINE *engine, SCENE *scene, RAY ray);
