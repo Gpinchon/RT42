@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/02 22:57:17 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/16 14:52:24 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/16 14:53:46 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,10 @@ VEC3		sample_texture(void *image, VEC2 uv)
 
 VEC3		sample_texture_filtered(void *image, VEC2 uv)
 {
-	IMGDATA		img;
-	UCHAR		*pixel;
-	VEC3		color;
+	IMGDATA	img;
+	UCHAR	*pixel;
+	VEC3	color;
+	float 	weight[4];
 
 	if (!image)
 		return ((VEC3){0, 0, 0});
@@ -71,7 +72,6 @@ VEC3		sample_texture_filtered(void *image, VEC2 uv)
 	v[2] = v[3] = CLAMP((v[0] + 1) % img.size.y, 0, img.size.y);
 	fu = fu - floorf(fu);
 	fv = fv - floorf(fv);
-	float weight[4];
 	weight[0] = ((1 - fu) * (1 - fv));
 	weight[1] = (fu * (1 - fv));
 	weight[2] = ((1 - fu) * fv);
