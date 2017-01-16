@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/02 22:52:19 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/16 14:42:47 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/16 14:52:15 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,6 @@
 BOOL	check_intersection(float intersection, float current)
 {
 	return (current == 0 || intersection < current);
-}
-
-VEC3	sample_normal_map(void *normal_map, VEC2 uv, MAT3 tbn)
-{
-	VEC3	tnorm = sample_texture_filtered(normal_map, uv);
-	tnorm = vec3_sub(vec3_scale(tnorm, 2), new_vec3(1, 1, 1));
-	tnorm.x *= -1;
-	tnorm.y *= -1;
-	return (vec3_normalize(mat3_mult_vec3(tbn,
-			vec3_normalize(tnorm))));
 }
 
 MAT3		tbn_matrix(VEC3 normal, VEC3 pdir)
