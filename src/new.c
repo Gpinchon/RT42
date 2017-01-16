@@ -32,6 +32,31 @@ SCENE		new_scene()
 	return (scene);
 }
 
+void		create_framebuffers(ENGINE *engine, t_engine_opt options)
+{
+	engine->framebuffer = new_framebuffer(unsigned_char, options.internal_size, 4);
+	engine->finalbuffer = new_framebuffer(unsigned_char, options.internal_size, 4);
+	engine->positionbuffer = new_framebuffer(FLOAT, options.internal_size, 3);
+	engine->normalbuffer = new_framebuffer(FLOAT, options.internal_size, 3);
+	engine->depthbuffer = new_framebuffer(FLOAT, options.internal_size, 1);
+	engine->mtlbuffer = new_framebuffer(FLOAT, options.internal_size, sizeof(t_mtl) / sizeof(float));
+}
+
+void		assign_functions(ENGINE *engine)
+{
+	engine->inter_functions[cone] = intersect_cone;
+	engine->inter_functions[sphere] = intersect_sphere;
+	engine->inter_functions[cylinder] = intersect_cylinder;
+	engine->inter_functions[plane] = intersect_plane;
+	engine->inter_functions[triangle] = intersect_triangle;
+	engine->inter_functions[disc] = intersect_disc;
+	engine->uv_functions[cone] = cylinder_uv;
+	engine->uv_functions[sphere] = sphere_uv;
+	engine->uv_functions[cylinder] = cylinder_uv;
+	engine->uv_functions[plane] = plane_uv;
+	engine->uv_functions[disc] = plane_uv;
+}
+
 ENGINE		new_engine(t_engine_opt options)
 {
 	ENGINE	engine;
@@ -43,27 +68,10 @@ ENGINE		new_engine(t_engine_opt options)
 	engine.progress_callback = print_progress;
 	engine.loading_screen = load_image_file(engine.framework, "./res/loading_screen.bmp");
 	engine.image = new_image(engine.framework, options.window_size.x, options.window_size.y);
-	engine.framebuffer = new_framebuffer(unsigned_char, options.internal_size, 4);
-	engine.finalbuffer = new_framebuffer(unsigned_char, options.internal_size, 4);
-	//engine.brightbuffer = new_framebuffer(FLOAT, options.internal_size, 3);
-	engine.positionbuffer = new_framebuffer(FLOAT, options.internal_size, 3);
-	engine.normalbuffer = new_framebuffer(FLOAT, options.internal_size, 3);
-	engine.depthbuffer = new_framebuffer(FLOAT, options.internal_size, 1);
-	engine.mtlbuffer = new_framebuffer(FLOAT, options.internal_size, sizeof(t_mtl) / sizeof(float));
-	engine.post_treatments = new_ezarray(other, 0, sizeof(t_callback));
 	attach_image_to_window(engine.window, engine.image);
-	engine.inter_functions[cone] = intersect_cone;
-	engine.inter_functions[sphere] = intersect_sphere;
-	engine.inter_functions[cylinder] = intersect_cylinder;
-	engine.inter_functions[plane] = intersect_plane;
-	engine.inter_functions[triangle] = intersect_triangle;
-	engine.inter_functions[disc] = intersect_disc;
-	engine.uv_functions[cone] = cylinder_uv;
-	engine.uv_functions[sphere] = sphere_uv;
-	engine.uv_functions[cylinder] = cylinder_uv;
-	engine.uv_functions[capped_cylinder] = cylinder_uv;
-	engine.uv_functions[plane] = plane_uv;
-	engine.uv_functions[disc] = plane_uv;
+	create_framebuffers(&engine, options);
+	engine.post_treatments = new_ezarray(other, 0, sizeof(t_callback));
+	assign_functions(&engine);
 	engine.max_refl = options.max_refl;
 	engine.max_refr = options.max_refr;
 	engine.area_sampling = options.area_sampling;

@@ -6,7 +6,7 @@
 #    By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/11/13 17:17:47 by gpinchon          #+#    #+#              #
-#    Updated: 2017/01/09 17:36:50 by gpinchon         ###   ########.fr        #
+#    Updated: 2017/01/16 14:49:45 by gpinchon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,12 +19,17 @@ SRC		=	./src/main.c					\
 			./src/texture_mapping.c			\
 			./src/transform.c				\
 			./src/materials.c				\
+			./src/mtllib.c					\
+			./src/mtllib1.c					\
+			./src/mtllib2.c					\
+			./src/mtllib3.c					\
 			./src/new.c						\
 			./src/new2.c					\
 			./src/destroy.c					\
 			./src/clear.c					\
 			./src/put_pixel.c				\
-			./src/random.c
+			./src/random.c					\
+			./src/uv.c
 
 OBJ		=	$(SRC:.c=.o)
 CC		=	gcc

@@ -12,19 +12,6 @@
 
 #include <rt.h>
 
-void	mat4_print(MAT4 m)
-{
-	int	i;
-
-	i = 0;
-	while (i < 16)
-	{
-		printf("%c%f\t", !(i % 4) ? '\n' : 0, m.m[i]);
-		i++;
-	}
-	printf("\n\n");
-}
-
 void	blit_buffer_scaled(FRAMEBUFFER buffer, void *image)
 {
 	t_rgba		rgbacol;
@@ -111,13 +98,11 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 	//p->material = mtl_scuffed_plastic_red(engine, scene);
 	//p->material = mtl_stained_glass(engine, scene);
 
-	p = new_rtprim(scene);
+	/*p = new_rtprim(scene);
 	p->prim = new_plane();
 	p->transform = new_rttransform(scene,
 		(VEC3){0, 0.2, 0}, vec3_normalize((VEC3){0, 1, 0}), (VEC3){1, 1, 1});
-	//p->material = mtl_rock_sliced(engine, scene);
-	//p->material = mtl_harshbricks(engine, scene);
-	p->material = mtl_water(engine, scene);
+	p->material = mtl_water(engine, scene);*/
 
 	p = new_rtprim(scene);
 	p->prim = new_plane();

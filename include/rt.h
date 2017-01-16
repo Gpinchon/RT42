@@ -16,7 +16,7 @@
 # include <sdl_framework.h>
 # include <vml.h>
 # include <ezmem.h>
-# include <stdio.h>
+# include <time.h>
 
 # define ENGINE			struct s_engine
 # define SCENE			struct s_scene
@@ -164,12 +164,10 @@ typedef struct	s_engine
 	void		(*progress_callback)(ENGINE*, float);
 	INTERSECT	(*inter_functions[10])(OBJ, RAY, TRANSFORM*);
 	VEC2		(*uv_functions[10])(OBJ, INTERSECT, TRANSFORM*);
-	//float		brightness_threshold;
 	Uint32		last_time;
 	ARRAY		post_treatments;
 	FRAMEBUFFER	framebuffer;
 	FRAMEBUFFER	finalbuffer;
-	//FRAMEBUFFER	brightbuffer;
 	FRAMEBUFFER	positionbuffer;
 	FRAMEBUFFER	normalbuffer;
 	FRAMEBUFFER	mtlbuffer;

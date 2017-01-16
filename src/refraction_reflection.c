@@ -12,94 +12,60 @@
 
 #include <rt.h>
 
-VEC3	compute_refraction(ENGINE *engine, CAST_RETURN *ret, RAY *cur_ray, float aior)
+VEC3	compute_refraction(ENGINE *e, CAST_RETURN *re, RAY *r, float a)
 {
-	VEC3		color;
+	VEC3		c;
 	RAY			ray;
-	VEC3		direction;
-	CAST_RETURN	refrret;
+	VEC3		d;
+	CAST_RETURN	cr;
 
-	if (ret->mtl.alpha >= 1 || engine->refr_iteration >= engine->max_refr)
+	if (re->mtl.alpha >= 1 || e->refr_iteration >= e->max_refr)
 	{
-		engine->refr_iteration = 0;
+		e->refr_iteration = 0;
 		return ((VEC3){0, 0, 0});
 	}
-	engine->refr_iteration++;
-	color = (VEC3){0, 0, 0};
-	direction = vec3_refract(cur_ray->direction, ret->intersect.normal, ret->mtl.refraction, aior);
-	ray = new_ray(vec3_add(ret->intersect.position, vec3_scale(direction, 0.0005)), direction);
-	if ((refrret = cast_ray(engine, engine->active_scene, ray)).intersect.intersects)
+	e->refr_iteration++;
+	c = (VEC3){0, 0, 0};
+	d = vec3_refract(r->direction, re->intersect.normal, re->mtl.refraction, a);
+	ray = new_ray(vec3_add(re->intersect.position, vec3_scale(d, 0.0005)), d);
+	if ((cr = cast_ray(e, e->active_scene, ray)).intersect.intersects)
 	{
-		get_ret_mtl(&refrret);
-		color = compute_refraction(engine, &refrret, &ray, ret->mtl.refraction);
-		color = vec3_add(color, compute_lighting(engine, &refrret));
-		color = vec3_interp(interp_linear, color, (VEC3){0, 0, 0}, ret->mtl.alpha);
-		color = vec3_interp(interp_linear, color, (VEC3){0, 0, 0}, ret->mtl.roughness);
-		color = vec3_mult(color, ret->mtl.refraction_color);
+		get_ret_mtl(&cr);
+		c = compute_refraction(e, &cr, &ray, re->mtl.refraction);
+		c = vec3_add(c, compute_lighting(e, &cr));
+		c = vec3_interp(interp_linear, c, (VEC3){0, 0, 0}, re->mtl.alpha);
+		c = vec3_interp(interp_linear, c, (VEC3){0, 0, 0}, re->mtl.roughness);
+		c = vec3_mult(c, re->mtl.refraction_color);
 	}
-	return (color);
+	return (c);
 }
 
-/*VEC3	compute_reflection(ENGINE *engine, CAST_RETURN *ret, RAY *cur_ray)
+VEC3	compute_reflection(ENGINE *e, CAST_RETURN *re, RAY *r)
 {
-	VEC3		color;
+	VEC3		c;
 	RAY			ray;
-	CAST_RETURN	reflret;
-	VEC3		raydir;
-	int			i;
+	CAST_RETURN	cr;
 
-	if (engine->refl_iteration >= engine->max_refl)
-		return ((VEC3){0, 0, 0});
-	engine->refl_iteration++;
-	color = (VEC3){0, 0, 0};
-	raydir = vec3_reflect(cur_ray->direction, ret->intersect.normal);
-	ray = new_ray(vec3_add(ret->intersect.position, vec3_scale(ret->intersect.normal, 0.0005)), raydir);
-	i = 0;
-	while (i < 16)
+	if (e->refl_iteration >= e->max_refl)
 	{
-		ray.direction = vec3_normalize(vec3_fadd(raydir, vec2_to_vec3(vec2_scale(new_vec2(engine->poisson_disc[i].x * 2 - 1, engine->poisson_disc[i].y * 2 - 1), ret->mtl.roughness), 1)));
-		if (ret->mtl.roughness < 1 && (reflret = cast_ray(engine, engine->active_scene, ray)).intersect.intersects)
-		{
-			get_ret_mtl(&reflret);
-			color = vec3_add(color, compute_reflection(engine, &reflret, &ray));
-			color = vec3_add(color, compute_refraction(engine, &reflret, &ray, 1.f));
-			engine->refr_iteration = 0;
-			color = vec3_add(color, compute_lighting(engine, &reflret));
-			color = vec3_interp(interp_linear, color, (VEC3){0, 0, 0}, ret->mtl.roughness);
-			color = vec3_interp(interp_linear, color, (VEC3){0, 0, 0}, CLAMP(1 - ret->mtl.metalness, 0.1, 1));
-			color = vec3_mult(color, ret->mtl.reflection_color);
-		}
-		i++;
-	}
-	return (color);
-}*/
-
-VEC3	compute_reflection(ENGINE *engine, CAST_RETURN *ret, RAY *cur_ray)
-{
-	VEC3		color;
-	RAY			ray;
-	CAST_RETURN	reflret;
-
-	if (engine->refl_iteration >= engine->max_refl)
-	{
-		engine->refl_iteration = 0;
+		e->refl_iteration = 0;
 		return ((VEC3){0, 0, 0});
 	}
-	engine->refl_iteration++;
-	color = (VEC3){0, 0, 0};
-	ray = new_ray(vec3_add(ret->intersect.position, vec3_scale(ret->intersect.normal, 0.0005)), vec3_reflect(cur_ray->direction, ret->intersect.normal));
-	ray.direction = vec3_normalize(vec3_fadd(ray.direction, (engine->poisson_disc[CLAMP((int)(ret->mtl.roughness * 63.f), 0, 63)].x * 2 - 1) * ret->mtl.roughness));
-	if ((reflret = cast_ray(engine, engine->active_scene, ray)).intersect.intersects && ret->mtl.roughness < 1)
+	e->refl_iteration++;
+	c = (VEC3){0, 0, 0};
+	ray = new_ray(vec3_add(re->intersect.position, vec3_scale(re->intersect.normal, 0.0005)),
+		vec3_normalize(vec3_fadd(vec3_reflect(r->direction, re->intersect.normal),
+		(e->poisson_disc[CLAMP((int)(re->mtl.roughness * 63.f), 0, 63)].x * 2 - 1) * re->mtl.roughness)));
+	if ((cr = cast_ray(e, e->active_scene, ray)).intersect.intersects && re->mtl.roughness < 1)
 	{
-		get_ret_mtl(&reflret);
-		color = vec3_add(color, compute_reflection(engine, &reflret, &ray));
-		color = vec3_add(color, compute_refraction(engine, &reflret, &ray, 1.f));
-		engine->refr_iteration = 0;
-		color = vec3_add(color, compute_lighting(engine, &reflret));
-		color = vec3_interp(interp_linear, color, (VEC3){0, 0, 0}, ret->mtl.roughness);
-		color = vec3_interp(interp_linear, color, (VEC3){0, 0, 0}, CLAMP(1 - ret->mtl.metalness, 0.2, 1));
-		//color = vec3_interp(interp_linear, color, (VEC3){0, 0, 0}, 1 - ret->mtl.alpha);
-		color = vec3_mult(color, ret->mtl.reflection_color);
+		get_ret_mtl(&cr);
+		c = vec3_add(c, compute_reflection(e, &cr, &ray));
+		c = vec3_add(c, compute_refraction(e, &cr, &ray, 1.f));
+		e->refr_iteration = 0;
+		c = vec3_add(c, compute_lighting(e, &cr));
+		c = vec3_interp(interp_linear, c, (VEC3){0, 0, 0}, re->mtl.roughness);
+		c = vec3_interp(interp_linear, c, (VEC3){0, 0, 0}, CLAMP(1 - re->mtl.metalness, 0.2, 1));
+		c = vec3_mult(c, re->mtl.reflection_color);
 	}
-	return (color);
+	return (c);
 }
