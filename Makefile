@@ -6,7 +6,7 @@
 #    By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/11/13 17:17:47 by gpinchon          #+#    #+#              #
-#    Updated: 2017/01/16 14:49:45 by gpinchon         ###   ########.fr        #
+#    Updated: 2017/01/17 19:52:59 by gpinchon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,7 +29,9 @@ SRC		=	./src/main.c					\
 			./src/clear.c					\
 			./src/put_pixel.c				\
 			./src/random.c					\
-			./src/uv.c
+			./src/uv.c						\
+			./src/blit.c					\
+			./src/post.c
 
 OBJ		=	$(SRC:.c=.o)
 CC		=	gcc

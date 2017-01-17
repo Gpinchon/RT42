@@ -6,58 +6,11 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:32:51 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/15 16:05:26 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/17 20:39:23 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <rt.h>
-
-void	blit_buffer_scaled(FRAMEBUFFER buffer, void *image)
-{
-	t_rgba		rgbacol;
-	UCHAR		*bufpixel;
-	VEC2		coord;
-	VEC2		imgcoord;
-	t_point2	imgsize;
-
-	imgsize = get_image_data(image).size;
-	coord = new_vec2(0, 0);
-	imgcoord = new_vec2(0, 0);
-	while (imgcoord.y < imgsize.y)
-	{
-		coord.x = 0;
-		imgcoord.x = 0;
-		while (imgcoord.x < imgsize.x)
-		{
-			bufpixel = get_buffer_value(buffer, (t_point2){coord.x, coord.y});
-			rgbacol = rgba(bufpixel[2], bufpixel[1], bufpixel[0], bufpixel[3]);
-			put_image_pixel(image, &rgbacol, (t_point2){imgcoord.x, imgcoord.y});
-			coord.x += (float)buffer.size.x / (float)imgsize.x;
-			imgcoord.x++;
-		}
-		coord.y += (float)buffer.size.y / (float)imgsize.y;
-		imgcoord.y++;
-	}
-}
-
-void	blit_buffer(FRAMEBUFFER buffer, void *image)
-{
-	UINT 		i;
-	IMGDATA		img;
-
-	i = 0;
-	img = get_image_data(image);
-	if (img.size.x == buffer.size.x
-	&& img.size.y == buffer.size.y
-	&& img.bpp == buffer.bpp)
-		while (i < buffer.array.length)
-		{
-			((UCHAR*)img.pixels)[i] = *((UCHAR*)ezarray_get_index(buffer.array, i));
-			i++;
-		}
-	else if (img.bpp == buffer.bpp)
-		blit_buffer_scaled(buffer, image);
-}
 
 MATERIAL	*mtl_light(ENGINE *engine, SCENE *scene)
 {
@@ -84,7 +37,7 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 
 	scene->active_camera = new_camera(scene, 90, 0.0001, 1000);
 	scene->active_camera->transform = new_rttransform(scene,
-		(VEC3){1.5, 0.5, 2.5}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
+		(VEC3){1.5, 1, 2.5}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
 	scene->active_camera->transform->target = new_rttransform(scene,
 		(VEC3){0, 0.5, 0}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
 	p = new_rtprim(scene);
@@ -93,16 +46,13 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 	p->prim = new_sphere(1);
 	p->transform = new_rttransform(scene,
 		(VEC3){0, 1, 0}, vec3_normalize((VEC3){1, 1, 0}), (VEC3){1, 1, 1});
-	//p->material = mtl_rock_waterworn(engine, scene);
-	p->material = mtl_rock_copper(engine, scene);
-	//p->material = mtl_scuffed_plastic_red(engine, scene);
-	//p->material = mtl_stained_glass(engine, scene);
+	p->material = mtl_aquamarine(engine, scene);
 
-	/*p = new_rtprim(scene);
+	p = new_rtprim(scene);
 	p->prim = new_plane();
 	p->transform = new_rttransform(scene,
-		(VEC3){0, 0.2, 0}, vec3_normalize((VEC3){0, 1, 0}), (VEC3){1, 1, 1});
-	p->material = mtl_water(engine, scene);*/
+		(VEC3){0, 0.5, 0}, vec3_normalize((VEC3){0, 1, 0}), (VEC3){1, 1, 1});
+	p->material = mtl_aquamarine(engine, scene);
 
 	p = new_rtprim(scene);
 	p->prim = new_plane();
@@ -112,33 +62,25 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 	//p->material = mtl_harshbricks(engine, scene);
 	p->material = mtl_rock_waterworn(engine, scene);
 
-	l = new_light(scene, DIRECTIONAL, (VEC3){200, 200, -200});
-	l->power = 0.5f;
+	/*l = new_light(scene, DIRECTIONAL, (VEC3){1, 1, 1});
+	l->power = 2.f;
 	l->color = (VEC3){1, 1, 1};
 	l->cast_shadow = true;
-	l->direction = (VEC3){0, -1, 0};
 	l->attenuation = 0.002;
 	l->falloff = 150;
 	l->spot_size = 80;
+	l->ambient_coef = 0.2f;*/
 	//l = new_light(scene, POINT, (VEC3){1.5, 1.5, 1.5});
-	l = new_light(scene, POINT, (VEC3){1.5, 1.5, 1.5});
+	l = new_light(scene, POINT, (VEC3){1.f, 2.5f, 1.f});
 	//l->color = (VEC3){1, 207.f / 255.f, 197.f / 255.f};
 	l->color = (VEC3){1, 1, 1};
 	l->cast_shadow = true;
 	l->direction = (VEC3){0, -1, 0};
 	l->power = 2.f;
 	l->attenuation = 0.002;
-	l->falloff = 5;
+	l->falloff = 50;
 	l->spot_size = 80;
 	l->ambient_coef = 0.2f;
-	l = new_light(scene, DIRECTIONAL, (VEC3){0, 250, 100});
-	l->color = (VEC3){1, 207.f / 255.f, 197.f / 255.f};
-	l->cast_shadow = false;
-	l->direction = (VEC3){0, -1, 0};
-	l->power = 1.f;
-	l->attenuation = 0.002;
-	l->falloff = 500;
-	l->spot_size = 80;
 	/*scene->active_camera->transform->target = new_rttransform(scene,
 		(VEC3){-200, 200, 200}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});*/
 }
@@ -304,94 +246,6 @@ void	print_progress(ENGINE *engine, float progress)
 	}
 }
 
-VEC4		blur_sample(ENGINE *engine, t_point2 coord, float intensity)
-{
-	UCHAR		*color;
-	VEC4		vcolor;
-	UINT		i;
-	VEC2		uv;
-	t_point2	size;
-
-	i = 0;
-	size = engine->framebuffer.size;
-	uv = new_vec2(coord.x / (float)size.x, coord.y / (float)size.y);
-	vcolor = new_vec4(0, 0, 0, 0);
-	while (i < 32)
-	{
-		coord = (t_point2){(uv.x + (engine->poisson_disc[i].x * 2 - 1) * intensity) * size.x, (uv.y + (engine->poisson_disc[i].y * 2 - 1) * intensity) * size.y};
-		coord = (t_point2){CLAMP(coord.x, 0, size.x - 1), CLAMP(coord.y, 0, size.y - 1)};
-		color = get_buffer_value(engine->framebuffer, coord);
-		vcolor = vec4_add(vcolor, new_vec4(color[2] / 255.f, color[1] / 255.f, color[0] / 255.f, color[3] / 255.f));
-		i++;
-	}
-	return (vec4_fdiv(vcolor, 32.f));
-}
-
-void		gamma_correction(ENGINE *engine, t_point2 coord)
-{
-	UCHAR		*color;
-	VEC4		vcolor;
-	float		gamma;
-
-	gamma = 1 / 0.65f;
-	color = get_buffer_value(engine->framebuffer, coord);
-	vcolor = new_vec4(pow(color[2] / 255.f, gamma), pow(color[1] / 255.f, gamma), pow(color[0] / 255.f, gamma), color[3] / 255.f);
-	put_pixel_to_buffer(engine->finalbuffer, coord, vcolor);
-}
-
-void		depth_of_field(ENGINE *engine, t_point2 coord)
-{
-	VEC4		vcolor;
-	float		distance;
-	float		center_distance;
-
-	distance = *((float*)get_buffer_value(engine->depthbuffer, coord));
-	center_distance = *((float*)get_buffer_value(engine->depthbuffer, (t_point2){engine->depthbuffer.size.x / 2, engine->depthbuffer.size.y / 2}));
-	vcolor = blur_sample(engine, coord, CLAMP((fabs(distance - center_distance) - center_distance) / 100.f, 0, 0.0025));
-	put_pixel_to_buffer(engine->finalbuffer, coord, vcolor);
-}
-
-int		do_post_treatment(ENGINE *engine, t_callback *callback)
-{
-	t_point2			coord[2];
-
-	coord[0].x = 0;
-	coord[1] = engine->framebuffer.size;
-	if (!callback || !callback->function)
-		return (false);
-	while (coord[0].x < coord[1].x)
-	{
-		coord[0].y = 0;
-		while (coord[0].y < coord[1].y)
-		{
-			callback->function(callback->arg, coord[0]);
-			coord[0].y++;
-		}
-		coord[0].x++;
-	}
-	return (true);
-}
-
-void		blit_framebuffer(FRAMEBUFFER f1, FRAMEBUFFER f2)
-{
-	t_point2	coord[2];
-	UCHAR		*color;
-
-	coord[0].x = 0;
-	coord[1] = f1.size;
-	while (coord[0].x < coord[1].x)
-	{
-		coord[0].y = 0;
-		while (coord[0].y < coord[1].y)
-		{
-			color = get_buffer_value(f1, coord[0]);
-			put_pixel_to_buffer(f2, coord[0], new_vec4(color[2] / 255.f, color[1] / 255.f, color[0] / 255.f, color[3] / 255.f));
-			coord[0].y++;
-		}
-		coord[0].x++;
-	}
-}
-
 int		main(int argc, char *argv[])
 {
 	ENGINE			engine;
@@ -399,8 +253,9 @@ int		main(int argc, char *argv[])
 	t_callback		callback;
 
 	options.window_size = options.internal_size = (t_point2){1024, 1024};
-	options.max_refr = options.max_refl = 3;
-	options.area_sampling = 32;
+	options.max_refr = MAX_REFR;
+	options.max_refl = MAX_REFL;
+	options.area_sampling = MAX_AREA;
 	engine = new_engine(options);
 	callback = new_callback(depth_of_field, &engine);
 	ezarray_push(&engine.post_treatments, &callback);
@@ -417,7 +272,7 @@ int		main(int argc, char *argv[])
 			blit_framebuffer(engine.finalbuffer, engine.framebuffer);
 			i++;
 		}
-		blit_buffer(engine.finalbuffer, engine.image);
+		display_framebuffer(engine.finalbuffer, engine.image);
 		refresh_window(engine.window);
 		framework_loop(engine.framework);
 	}

@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:06:34 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/16 14:52:40 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/17 20:15:51 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@
 # define SPOT			0x1
 # define POINT			0x2
 # define DIFFUSE		oren_nayar_diffuse
-# define SPECULAR		trowbridge_reitz_specular
+# define SPECULAR		ggx_specular
 # define RENDER_NORMALS	false
 
 typedef struct	s_rttransform
@@ -186,18 +186,25 @@ void			put_value_to_buffer(FRAMEBUFFER buffer,
 				t_point2 coord, float value);
 void			*get_buffer_value(FRAMEBUFFER buffer,
 				t_point2 coord);
+void			display_framebuffer(FRAMEBUFFER buffer, void *image);
+void			blit_framebuffer(FRAMEBUFFER f1, FRAMEBUFFER f2);
 void			generate_poisson_disc(VEC2 *disc, UINT disc_size, float min_dist, VEC2 limits);
 float			frand_a_b(float a, float b);
 
-t_point2		map_uv(void *image, VEC2 uv);
-float			color_to_factor(VEC3 color);
+/*
+** Post treatment functions
+*/
+void			gamma_correction(ENGINE *engine, t_point2 coord);
+void			depth_of_field(ENGINE *engine, t_point2 coord);
+BOOL			do_post_treatment(ENGINE *engine, t_callback *callback);
+
 VEC2			sphere_uv(u_obj sphere, INTERSECT inter, TRANSFORM *transform);
 VEC2			cylinder_uv(u_obj cylinder, INTERSECT inter, TRANSFORM *transform);
 VEC2			plane_uv(u_obj plane, INTERSECT inter, TRANSFORM *transform);
 VEC3			sample_texture(void *image, VEC2 uv);
 VEC3			sample_texture_filtered(void *image, VEC2 uv);
-VEC2			sample_height_map(void	*height_map, VEC2 uv, CAST_RETURN *ret, RAY ray);
-VEC3			sample_normal_map(void *normal_map, VEC2 uv, MAT3 tbn);
+VEC2			sample_height_map(void *height_map, CAST_RETURN *ret);
+VEC3			sample_normal_map(void *normal_map, CAST_RETURN *ret);
 
 
 CAST_RETURN		cast_ray(ENGINE *engine, SCENE *scene, RAY ray);
@@ -234,20 +241,27 @@ MATERIAL		*mtl_stained_glass(ENGINE *engine, SCENE *scene);
 MATERIAL		*mtl_rock_waterworn(ENGINE *engine, SCENE *scene);
 MATERIAL		*mtl_metal_floor(ENGINE *engine, SCENE *scene);
 MATERIAL		*mtl_skin(ENGINE *engine, SCENE *scene);
+MATERIAL		*mtl_mirror(ENGINE *e, SCENE *s);
 
 void			clear_renderer(ENGINE *engine);
 void			clear_buffers(ENGINE *engine);
 void			clear_uchar_bits(void *pixel);
 void			clear_float_bits(void *pixel);
 
+/*
+** Light calculation functions
+*/
+
+float			ggx_specular(VEC3 normal, VEC3 eye,
+				VEC3 lightdir, MATERIAL *mtl);
 float			trowbridge_reitz_specular(VEC3 normal, VEC3 eye,
-				VEC3 lightdir, MATERIAL mtl);
+				VEC3 lightdir, MATERIAL *mtl);
 float			blinn_phong_specular(VEC3 normal, VEC3 eye,
-				VEC3 lightdir, t_mtl mtl);
+				VEC3 lightdir, t_mtl *mtl);
 float			oren_nayar_diffuse(VEC3 normal, VEC3 eye,
-				VEC3 lightdir, t_mtl mtl);
+				VEC3 lightdir, t_mtl *mtl);
 float			lambert_diffuse(VEC3 normal, VEC3 eye,
-				VEC3 lightdir, t_mtl mtl);
+				VEC3 lightdir, t_mtl *mtl);
 VEC3			compute_lightdir(t_light l, VEC3 position);
 VEC3			compute_point_color(LIGHT l, MATERIAL mtl,
 				INTERSECT inter, RAY ray);

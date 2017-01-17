@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/16 14:17:06 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/16 14:19:32 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/17 18:57:27 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ MATERIAL	*mtl_skin(ENGINE *e, SCENE *s)
 	m->height_map = load_image_file(f, "res/skin/skin_height.bmp");
 	m->uv_scale = (VEC2){5, 5};
 	m->refraction = 1.33f;
-	m->roughness = 0.5f;
+	m->roughness = 0.4f;
 	m->parallax = 0.1;
 	return (m);
 }
@@ -108,7 +108,7 @@ MATERIAL	*mtl_rock_copper(ENGINE *e, SCENE *s)
 	m->ao_map = load_image_file(f, "res/rock_copper/rock_copper_ao.bmp");
 	m->height_map = load_image_file(f, "res/rock_copper/rock_copper_height.bmp");
 	m->uv_scale = (VEC2){1, 1};
-	m->refraction = 1.1f;
+	m->refraction = 1.5f;
 	m->parallax = 0.1;
 	return (m);
 }

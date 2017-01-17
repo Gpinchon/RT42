@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/16 14:11:48 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/16 14:15:23 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/17 19:21:13 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ MATERIAL	*mtl_water(ENGINE *m, SCENE *s)
 	mtl->reflection_color = (VEC3){1, 1, 1};
 	mtl->normal_map = load_image_file(m->framework, "res/water/water_normal.bmp");
 	mtl->height_map = load_image_file(m->framework, "res/water/water_height.bmp");
-	mtl->uv_scale = (VEC2){2, 2};
+	mtl->uv_scale = (VEC2){4, 4};
 	mtl->roughness = 0.05;
 	mtl->metalness = 0.5;
 	mtl->alpha = 0.05;
