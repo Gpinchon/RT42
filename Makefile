@@ -6,17 +6,20 @@
 #    By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/11/13 17:17:47 by gpinchon          #+#    #+#              #
-#    Updated: 2017/01/17 19:52:59 by gpinchon         ###   ########.fr        #
+#    Updated: 2017/01/18 19:17:38 by gpinchon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	=	RT
 SRC		=	./src/main.c					\
-			./src/light_computation.c		\
 			./src/cast_ray.c				\
+			./src/light_formulas.c			\
+			./src/light_formulas1.c			\
 			./src/compute_lighting.c		\
+			./src/compute_point_color.c		\
 			./src/refraction_reflection.c	\
 			./src/texture_mapping.c			\
+			./src/texture_mapping1.c		\
 			./src/transform.c				\
 			./src/materials.c				\
 			./src/mtllib.c					\
@@ -38,7 +41,7 @@ CC		=	gcc
 INCLUDE	=	$(addprefix -I, $(wildcard ./libs/*/include/)) -I./include/
 LIBDIR	=	$(wildcard ./libs/*)
 
-CFLAGS	=	-Ofast -Wall -Wextra -Werror $(INCLUDE)
+CFLAGS	=	-O3 -ffast-math -Wall -Wextra -Werror $(INCLUDE)
 
 ifeq ($(OS), Windows_NT)
 LIBS	=	$(addprefix -L , $(LIBDIR)) -lezmem -lvml -lmingw32 -lSDLframework -lSDL2main -lSDL2  -lopengl32 -lm

@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:32:51 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/17 20:39:23 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/18 19:20:28 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,50 +37,50 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 
 	scene->active_camera = new_camera(scene, 90, 0.0001, 1000);
 	scene->active_camera->transform = new_rttransform(scene,
-		(VEC3){1.5, 1, 2.5}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
+		(VEC3){1.5, 0.5, 2.5}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
 	scene->active_camera->transform->target = new_rttransform(scene,
 		(VEC3){0, 0.5, 0}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
 	p = new_rtprim(scene);
-	//p->prim = new_cone(0.5, 2);
-	//p->prim = new_cylinder(1, 1);
-	p->prim = new_sphere(1);
+	//p->prim = new_cone(0.5, 1);
+	p->prim = new_cylinder(1, 5);
+	//p->prim = new_sphere(1);
 	p->transform = new_rttransform(scene,
-		(VEC3){0, 1, 0}, vec3_normalize((VEC3){1, 1, 0}), (VEC3){1, 1, 1});
-	p->material = mtl_aquamarine(engine, scene);
+		(VEC3){0, 1, 0}, vec3_normalize((VEC3){-0.5, 1, 0}), (VEC3){1, 1, 1});
+	p->material = mtl_harshbricks(engine, scene);
 
 	p = new_rtprim(scene);
 	p->prim = new_plane();
 	p->transform = new_rttransform(scene,
-		(VEC3){0, 0.5, 0}, vec3_normalize((VEC3){0, 1, 0}), (VEC3){1, 1, 1});
-	p->material = mtl_aquamarine(engine, scene);
+		(VEC3){0, 0.2, 0}, vec3_normalize((VEC3){0, 1, 0}), (VEC3){1, 1, 1});
+	p->material = mtl_water(engine, scene);
 
 	p = new_rtprim(scene);
 	p->prim = new_plane();
 	p->transform = new_rttransform(scene,
 		(VEC3){0, 0, 0}, vec3_normalize((VEC3){0, 1, 0}), (VEC3){1, 1, 1});
 	//p->material = mtl_rock_sliced(engine, scene);
-	//p->material = mtl_harshbricks(engine, scene);
+	//p->material = mtl_octostone(engine, scene);
 	p->material = mtl_rock_waterworn(engine, scene);
 
-	/*l = new_light(scene, DIRECTIONAL, (VEC3){1, 1, 1});
+	l = new_light(scene, DIRECTIONAL, (VEC3){1, 1, 1});
 	l->power = 2.f;
-	l->color = (VEC3){1, 1, 1};
+	l->color = (VEC3){1, 207.f / 255.f, 197.f / 255.f};
 	l->cast_shadow = true;
 	l->attenuation = 0.002;
 	l->falloff = 150;
 	l->spot_size = 80;
-	l->ambient_coef = 0.2f;*/
+	l->ambient_coef = 0.2f;
 	//l = new_light(scene, POINT, (VEC3){1.5, 1.5, 1.5});
-	l = new_light(scene, POINT, (VEC3){1.f, 2.5f, 1.f});
-	//l->color = (VEC3){1, 207.f / 255.f, 197.f / 255.f};
-	l->color = (VEC3){1, 1, 1};
+	/*l = new_light(scene, POINT, (VEC3){1.5, 1, 1.5});
+	l->color = (VEC3){1, 207.f / 255.f, 197.f / 255.f};
+	//l->color = (VEC3){1, 1, 1};
 	l->cast_shadow = true;
 	l->direction = (VEC3){0, -1, 0};
 	l->power = 2.f;
 	l->attenuation = 0.002;
 	l->falloff = 50;
 	l->spot_size = 80;
-	l->ambient_coef = 0.2f;
+	l->ambient_coef = 0.2f;*/
 	/*scene->active_camera->transform->target = new_rttransform(scene,
 		(VEC3){-200, 200, 200}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});*/
 }
@@ -269,7 +269,7 @@ int		main(int argc, char *argv[])
 		while (i < engine.post_treatments.length)
 		{
 			do_post_treatment(&engine, ezarray_get_index(engine.post_treatments, i));
-			blit_framebuffer(engine.finalbuffer, engine.framebuffer);
+			copy_framebuffer(engine.finalbuffer, engine.framebuffer);
 			i++;
 		}
 		display_framebuffer(engine.finalbuffer, engine.image);

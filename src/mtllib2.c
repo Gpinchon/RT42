@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/16 14:17:06 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/17 18:57:27 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/18 19:10:25 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,15 +21,21 @@ MATERIAL	*mtl_octostone(ENGINE *e, SCENE *s)
 	if ((m = get_mtl_by_name(s, "octostone")))
 		return (m);
 	m = new_material(s, "octostone");
-	m->base_map = load_image_file(f, "res/octostone/octostone_base.bmp");
-	m->metal_map = load_image_file(f, "res/octostone/octostone_metal.bmp");
-	m->normal_map = load_image_file(f, "res/octostone/octostone_normal.bmp");
-	m->rough_map = load_image_file(f, "res/octostone/octostone_rough.bmp");
-	m->ao_map = load_image_file(f, "res/octostone/octostone_ao.bmp");
-	m->height_map = load_image_file(f, "res/octostone/octostone_height.bmp");
+	m->base_map = load_image_file(f,
+		"res/octostone/octostone_base.bmp");
+	m->metal_map = load_image_file(f,
+		"res/octostone/octostone_metal.bmp");
+	m->normal_map = load_image_file(f,
+		"res/octostone/octostone_normal.bmp");
+	m->rough_map = load_image_file(f,
+		"res/octostone/octostone_rough.bmp");
+	m->ao_map = load_image_file(f,
+		"res/octostone/octostone_ao.bmp");
+	m->height_map = load_image_file(f,
+		"res/octostone/octostone_height.bmp");
 	m->uv_scale = (VEC2){5, 5};
 	m->refraction = 1.33f;
-	m->parallax = 0.1;
+	m->parallax = 0.05;
 	return (m);
 }
 
@@ -42,15 +48,20 @@ MATERIAL	*mtl_skin(ENGINE *e, SCENE *s)
 	if ((m = get_mtl_by_name(s, "skin")))
 		return (m);
 	m = new_material(s, "skin");
-	m->base_map = load_image_file(f, "res/skin/skin_base.bmp");
-	m->normal_map = load_image_file(f, "res/skin/skin_normal.bmp");
-	m->rough_map = load_image_file(f, "res/skin/skin_rough.bmp");
-	m->ao_map = load_image_file(f, "res/skin/skin_ao.bmp");
-	m->height_map = load_image_file(f, "res/skin/skin_height.bmp");
+	m->base_map = load_image_file(f,
+		"res/skin/skin_base.bmp");
+	m->normal_map = load_image_file(f,
+		"res/skin/skin_normal.bmp");
+	m->rough_map = load_image_file(f,
+		"res/skin/skin_rough.bmp");
+	m->ao_map = load_image_file(f,
+		"res/skin/skin_ao.bmp");
+	m->height_map = load_image_file(f,
+		"res/skin/skin_height.bmp");
 	m->uv_scale = (VEC2){5, 5};
 	m->refraction = 1.33f;
 	m->roughness = 0.4f;
-	m->parallax = 0.1;
+	m->parallax = 0.05;
 	return (m);
 }
 
@@ -80,15 +91,21 @@ MATERIAL	*mtl_harshbricks(ENGINE *e, SCENE *s)
 	if ((m = get_mtl_by_name(s, "harshbricks")))
 		return (m);
 	m = new_material(s, "harshbricks");
-	m->base_map = load_image_file(f, "res/harshbricks/harshbricks_base.bmp");
-	m->metal_map = load_image_file(f, "res/harshbricks/harshbricks_metal.bmp");
-	m->normal_map = load_image_file(f, "res/harshbricks/harshbricks_normal.bmp");
-	m->rough_map = load_image_file(f, "res/harshbricks/harshbricks_rough.bmp");
-	m->ao_map = load_image_file(f, "res/harshbricks/harshbricks_ao.bmp");
-	m->height_map = load_image_file(f, "res/harshbricks/harshbricks_height.bmp");
-	m->uv_scale = (VEC2){5, 5};
-	m->refraction = 1.1f;
-	m->parallax = 0.1;
+	m->base_map = load_image_file(f,
+		"res/harshbricks/harshbricks_base.bmp");
+	m->metal_map = load_image_file(f,
+		"res/harshbricks/harshbricks_metal.bmp");
+	m->normal_map = load_image_file(f,
+		"res/harshbricks/harshbricks_normal.bmp");
+	m->rough_map = load_image_file(f,
+		"res/harshbricks/harshbricks_rough.bmp");
+	m->ao_map = load_image_file(f,
+		"res/harshbricks/harshbricks_ao.bmp");
+	m->height_map = load_image_file(f,
+		"res/harshbricks/harshbricks_height.bmp");
+	m->uv_scale = (VEC2){2.5, 2.5};
+	m->refraction = 1.0f;
+	m->parallax = 0.08;
 	return (m);
 }
 
@@ -101,12 +118,18 @@ MATERIAL	*mtl_rock_copper(ENGINE *e, SCENE *s)
 	if ((m = get_mtl_by_name(s, "rock_copper")))
 		return (m);
 	m = new_material(s, "rock_copper");
-	m->base_map = load_image_file(f, "res/rock_copper/rock_copper_base.bmp");
-	m->metal_map = load_image_file(f, "res/rock_copper/rock_copper_metal.bmp");
-	m->normal_map = load_image_file(f, "res/rock_copper/rock_copper_normal.bmp");
-	m->rough_map = load_image_file(f, "res/rock_copper/rock_copper_rough.bmp");
-	m->ao_map = load_image_file(f, "res/rock_copper/rock_copper_ao.bmp");
-	m->height_map = load_image_file(f, "res/rock_copper/rock_copper_height.bmp");
+	m->base_map = load_image_file(f,
+		"res/rock_copper/rock_copper_base.bmp");
+	m->metal_map = load_image_file(f,
+		"res/rock_copper/rock_copper_metal.bmp");
+	m->normal_map = load_image_file(f,
+		"res/rock_copper/rock_copper_normal.bmp");
+	m->rough_map = load_image_file(f,
+		"res/rock_copper/rock_copper_rough.bmp");
+	m->ao_map = load_image_file(f,
+		"res/rock_copper/rock_copper_ao.bmp");
+	m->height_map = load_image_file(f,
+		"res/rock_copper/rock_copper_height.bmp");
 	m->uv_scale = (VEC2){1, 1};
 	m->refraction = 1.5f;
 	m->parallax = 0.1;

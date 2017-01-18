@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:06:34 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/17 20:15:51 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/18 18:56:53 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,7 +187,7 @@ void			put_value_to_buffer(FRAMEBUFFER buffer,
 void			*get_buffer_value(FRAMEBUFFER buffer,
 				t_point2 coord);
 void			display_framebuffer(FRAMEBUFFER buffer, void *image);
-void			blit_framebuffer(FRAMEBUFFER f1, FRAMEBUFFER f2);
+void			copy_framebuffer(FRAMEBUFFER f1, FRAMEBUFFER f2);
 void			generate_poisson_disc(VEC2 *disc, UINT disc_size, float min_dist, VEC2 limits);
 float			frand_a_b(float a, float b);
 

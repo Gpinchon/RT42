@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/16 14:46:46 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/16 14:47:47 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/18 15:41:51 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,18 +66,21 @@ VEC2	plane_uv(u_obj plane, INTERSECT inter, TRANSFORM *tr)
 	VEC2	uv;
 	VEC3	t;
 	VEC3	dir;
+	VEC3	b;
+	VEC3	npos;
 	float	alpha;
 	float 	d;
 
+	uv = new_vec2(0, 0);
 	t = vec3_cross(vec3_negate(inter.normal), new_vec3(0.0, 1.0, 0.0));
 	if (!vec3_length(t))
 		t = vec3_cross(inter.normal, new_vec3(0.0, 0.0, 1.0));
 	t = vec3_normalize(t);
-	VEC3	b = vec3_cross(t, inter.normal);
+	b = vec3_cross(t, inter.normal);
 	d = vec3_distance(inter.position, tr->position);
 	dir = vec3_normalize(vec3_sub(tr->position, inter.position));
 	alpha = vec3_dot(t, dir);
-	VEC3	npos = tr->position;
+	npos = tr->position;
 	while (alpha < 0)
 	{
 		npos = vec3_add(npos, vec3_scale(t, 10.f));
@@ -92,8 +95,12 @@ VEC2	plane_uv(u_obj plane, INTERSECT inter, TRANSFORM *tr)
 		dir = vec3_normalize(vec3_sub(npos, inter.position));
 		alpha = vec3_dot(t, dir);
 	}
-	uv.x = cos(acosf(alpha)) * d / 5.f + 1;
-	uv.y = sin(acosf(alpha)) * d / 5.f + 1;
+	
+	if (alpha < 1)
+	{
+		uv.x = cos(acosf(alpha)) * d / 5.f + 1;
+		uv.y = sin(acosf(alpha)) * d / 5.f + 1;
+	}
 	return (uv);
 	(void)plane;
 }
