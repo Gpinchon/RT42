@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/05 22:09:17 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/18 15:52:33 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/20 15:35:55 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,12 +48,12 @@ MATERIAL	*new_material(SCENE *s, char *n)
 		ezlink_append(s->materials, nl);
 	}
 	mtl = ezlink_get_data(nl);
-	mtl->name = strcpy(malloc(sizeof(char) * strlen(n)), n);
+	mtl->name = strcpy(ezmemalloc(sizeof(char) * (strlen(n) + 1)), n);
 	mtl->uv_scale = (VEC2){1, 1};
 	mtl->refraction = 1.f;
 	mtl->alpha = 1;
 	mtl->parallax = 0.05;
-	return (ezlink_get_data(nl));
+	return (mtl);
 }
 
 void		get_ret_mtl(CAST_RETURN *ret)

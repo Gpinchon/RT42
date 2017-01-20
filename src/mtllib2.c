@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/16 14:17:06 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/18 19:10:25 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/20 15:28:49 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,9 +68,7 @@ MATERIAL	*mtl_skin(ENGINE *e, SCENE *s)
 MATERIAL	*mtl_mirror(ENGINE *e, SCENE *s)
 {
 	MATERIAL	*m;
-	void		*f;
 
-	f = e->framework;
 	m = new_material(s, "mirror");
 	m->base_color = (VEC3){0.1, 0.1, 0.1};
 	m->reflection_color = (VEC3){1, 1, 1};
