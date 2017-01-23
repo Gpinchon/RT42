@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/02 22:52:19 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/18 16:53:10 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/23 17:36:33 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ MAT3		plane_tbn_matrix(VEC3 n)
 {
 	VEC3	t;
 
-	t = vec3_cross(n, new_vec3(0.0, 1.0, 0.0));
+	t = vec3_cross(vec3_negate(n), new_vec3(0.0, 1.0, 0.0));
 	if (!vec3_length(t))
 		t = vec3_cross(n, new_vec3(0.0, 0.0, 1.0));
 	t = vec3_normalize(t);

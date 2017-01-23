@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/16 14:17:06 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/20 15:28:49 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/23 17:29:04 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ MATERIAL	*mtl_octostone(ENGINE *e, SCENE *s)
 		"res/octostone/octostone_height.bmp");
 	m->uv_scale = (VEC2){5, 5};
 	m->refraction = 1.33f;
-	m->parallax = 0.05;
+	m->parallax = 0.1;
 	return (m);
 }
 

@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/16 14:46:46 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/18 15:41:51 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/23 17:35:01 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,11 +95,12 @@ VEC2	plane_uv(u_obj plane, INTERSECT inter, TRANSFORM *tr)
 		dir = vec3_normalize(vec3_sub(npos, inter.position));
 		alpha = vec3_dot(t, dir);
 	}
-	
 	if (alpha < 1)
 	{
-		uv.x = cos(acosf(alpha)) * d / 5.f + 1;
-		uv.y = sin(acosf(alpha)) * d / 5.f + 1;
+		//uv = new_vec2(cos(acosf(alpha)) * d / 5.f + 1,
+		//sin(acosf(alpha)) * d / 5.f + 1);
+		uv = new_vec2(fmod(cos(acosf(alpha)) * d / 5.f + 1, 1),
+		fmod(sin(acosf(alpha)) * d / 5.f + 1, 1));
 	}
 	return (uv);
 	(void)plane;

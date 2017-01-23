@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:32:51 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/18 19:20:28 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/23 17:42:17 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,16 +42,23 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 		(VEC3){0, 0.5, 0}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
 	p = new_rtprim(scene);
 	//p->prim = new_cone(0.5, 1);
-	p->prim = new_cylinder(1, 5);
-	//p->prim = new_sphere(1);
+	//p->prim = new_cylinder(1, 5);
+	p->prim = new_sphere(1);
 	p->transform = new_rttransform(scene,
 		(VEC3){0, 1, 0}, vec3_normalize((VEC3){-0.5, 1, 0}), (VEC3){1, 1, 1});
-	p->material = mtl_harshbricks(engine, scene);
+	p->material = mtl_stained_glass(engine, scene);
+
+	p = new_rtprim(scene);
+	p->prim = new_sphere(0.2);
+	p->transform = new_rttransform(scene,
+		(VEC3){0, 1, 0}, vec3_normalize((VEC3){-0.5, 1, 0}), (VEC3){1, 1, 1});
+	p->material = mtl_aquamarine(engine, scene);
 
 	p = new_rtprim(scene);
 	p->prim = new_plane();
 	p->transform = new_rttransform(scene,
-		(VEC3){0, 0.2, 0}, vec3_normalize((VEC3){0, 1, 0}), (VEC3){1, 1, 1});
+		(VEC3){0, 0.25, 0}, vec3_normalize((VEC3){0, 1, 0}), (VEC3){1, 1, 1});
+	//p->material = mtl_harshbricks(engine, scene);
 	p->material = mtl_water(engine, scene);
 
 	p = new_rtprim(scene);
@@ -60,27 +67,19 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 		(VEC3){0, 0, 0}, vec3_normalize((VEC3){0, 1, 0}), (VEC3){1, 1, 1});
 	//p->material = mtl_rock_sliced(engine, scene);
 	//p->material = mtl_octostone(engine, scene);
-	p->material = mtl_rock_waterworn(engine, scene);
+	p->material = mtl_brick(engine, scene);
 
-	l = new_light(scene, DIRECTIONAL, (VEC3){1, 1, 1});
-	l->power = 2.f;
-	l->color = (VEC3){1, 207.f / 255.f, 197.f / 255.f};
-	l->cast_shadow = true;
-	l->attenuation = 0.002;
-	l->falloff = 150;
-	l->spot_size = 80;
-	l->ambient_coef = 0.2f;
 	//l = new_light(scene, POINT, (VEC3){1.5, 1.5, 1.5});
-	/*l = new_light(scene, POINT, (VEC3){1.5, 1, 1.5});
+	l = new_light(scene, POINT, (VEC3){1.5, 1.5, 1.5});
 	l->color = (VEC3){1, 207.f / 255.f, 197.f / 255.f};
 	//l->color = (VEC3){1, 1, 1};
 	l->cast_shadow = true;
 	l->direction = (VEC3){0, -1, 0};
 	l->power = 2.f;
-	l->attenuation = 0.002;
+	l->attenuation = 0.02;
 	l->falloff = 50;
 	l->spot_size = 80;
-	l->ambient_coef = 0.2f;*/
+	l->ambient_coef = 0.2f;
 	/*scene->active_camera->transform->target = new_rttransform(scene,
 		(VEC3){-200, 200, 200}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});*/
 }
@@ -216,34 +215,6 @@ BOOL	render_scene(ENGINE *e, SCENE *scene)
 		scoord.y++;
 	}
 	return (true);
-}
-
-void	print_progress(ENGINE *engine, float progress)
-{
-	t_rgba		color;
-	t_point2	img_size;
-	int			i;
-	int			heigth;
-
-	if ((engine->stop_rendering = framework_is_done(engine->framework)))
-		return ;
-	color = rgba(255, 0, 0, 255);
-	get_image_size(engine->loading_screen, &img_size.x, &img_size.y);
-	heigth = (5.f / 100.f * img_size.y);
-	i = img_size.y / 2 - heigth;
-	while (i < (img_size.y / 2) + heigth)
-	{
-		put_image_pixel(engine->loading_screen, &color,
-			(t_point2){img_size.x * progress / 100.f, i});
-		i++;
-	}
-	if (SDL_GetTicks() - engine->last_time >= 100)
-	{
-		clear_window(engine->window);
-		put_image_stretched(engine->window, engine->loading_screen);
-		engine->last_time = SDL_GetTicks();
-		framework_loop_once(engine->framework);
-	}
 }
 
 int		main(int argc, char *argv[])

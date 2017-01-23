@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/16 14:11:48 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/18 15:23:01 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/23 17:43:40 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ MATERIAL	*mtl_water(ENGINE *m, SCENE *s)
 	mtl->roughness = 0.05;
 	mtl->metalness = 0.5;
 	mtl->alpha = 0.05;
+	mtl->parallax = 0.1;
 	return (mtl);
 }
 
