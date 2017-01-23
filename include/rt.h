@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:06:34 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/18 18:56:53 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/23 15:09:38 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -247,6 +247,7 @@ void			clear_renderer(ENGINE *engine);
 void			clear_buffers(ENGINE *engine);
 void			clear_uchar_bits(void *pixel);
 void			clear_float_bits(void *pixel);
+void			print_progress(ENGINE *engine, float progress);
 
 /*
 ** Light calculation functions
