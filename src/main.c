@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:32:51 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/23 17:42:17 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/23 18:48:37 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,18 +48,18 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 		(VEC3){0, 1, 0}, vec3_normalize((VEC3){-0.5, 1, 0}), (VEC3){1, 1, 1});
 	p->material = mtl_stained_glass(engine, scene);
 
-	p = new_rtprim(scene);
+	/*p = new_rtprim(scene);
 	p->prim = new_sphere(0.2);
 	p->transform = new_rttransform(scene,
 		(VEC3){0, 1, 0}, vec3_normalize((VEC3){-0.5, 1, 0}), (VEC3){1, 1, 1});
-	p->material = mtl_aquamarine(engine, scene);
+	p->material = mtl_aquamarine(engine, scene);*/
 
-	p = new_rtprim(scene);
+	/*p = new_rtprim(scene);
 	p->prim = new_plane();
 	p->transform = new_rttransform(scene,
 		(VEC3){0, 0.25, 0}, vec3_normalize((VEC3){0, 1, 0}), (VEC3){1, 1, 1});
 	//p->material = mtl_harshbricks(engine, scene);
-	p->material = mtl_water(engine, scene);
+	p->material = mtl_water(engine, scene);*/
 
 	p = new_rtprim(scene);
 	p->prim = new_plane();
@@ -67,10 +67,11 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 		(VEC3){0, 0, 0}, vec3_normalize((VEC3){0, 1, 0}), (VEC3){1, 1, 1});
 	//p->material = mtl_rock_sliced(engine, scene);
 	//p->material = mtl_octostone(engine, scene);
+	//p->material = mtl_harshbricks(engine, scene);
 	p->material = mtl_brick(engine, scene);
 
 	//l = new_light(scene, POINT, (VEC3){1.5, 1.5, 1.5});
-	l = new_light(scene, POINT, (VEC3){1.5, 1.5, 1.5});
+	l = new_light(scene, POINT, (VEC3){-1.5, 1.5, 1.5});
 	l->color = (VEC3){1, 207.f / 255.f, 197.f / 255.f};
 	//l->color = (VEC3){1, 1, 1};
 	l->cast_shadow = true;
@@ -169,47 +170,49 @@ BOOL	scene_contains_area_light(SCENE *scene)
 BOOL	render_scene(ENGINE *e, SCENE *scene)
 {
 	t_point2	scoord;
-	CAMERA		*cam;
+	CAMERA		cam;
+	RTTRANSFORM	trans;
 	VEC2		nscoord;
 	CAST_RETURN	r;
 	VEC3		col;
 	BOOL		area_lights;
 	FRAMEBUFFER	f;
 
-	if (!(cam = scene->active_camera) || !cam->transform)
+	if (!scene->active_camera || !cam.transform)
 		return (false);
+	cam = *scene->active_camera;
 	e->active_scene = scene;
-	update_rttransform(cam->transform);
+	update_rttransform(cam.transform);
+	trans = *cam.transform;
 	scoord = (t_point2){0, 0};
 	f = e->framebuffer;
-	cam->m4_view = mat4_mult_mat4(cam->transform->current.transform,
-			mat4_perspective(cam->fov, f.size.y / (float)f.size.x, cam->znear, cam->zfar));
+	cam.m4_view = mat4_mult_mat4(trans.current.transform,
+			mat4_perspective(cam.fov, f.size.y / (float)f.size.x, cam.znear, cam.zfar));
 	area_lights = scene_contains_area_light(scene);
 	while (scoord.y < f.size.y)
 	{
 		scoord.x = 0;
 		while (scoord.x < f.size.x)
 		{
-			if (e->stop_rendering)
-				return (false);
 			nscoord = normalize_screen_coord(scoord, f.size);
-			cam->ray = new_ray(cam->transform->current.position,
-				mat4_mult_vec3(cam->m4_view, vec3_normalize((VEC3){nscoord.x, nscoord.y, -1})));
+			cam.ray = new_ray(trans.current.position,
+				mat4_mult_vec3(cam.m4_view, vec3_normalize((VEC3){nscoord.x, nscoord.y, -1})));
 			col = new_vec3(0, 0, 0);
 			vml_memset(&r, 0, sizeof(CAST_RETURN));
-			if ((r = cast_ray(e, scene, cam->ray)).intersect.intersects)
+			if ((r = cast_ray(e, scene, cam.ray)).intersect.intersects)
 			{
 				get_ret_mtl(&r);
 				if (area_lights && r.mtl.alpha > 0.0001)
 					col = vec3_add(col, compute_area_lighting(e, &r));
 				col = vec3_add(col, compute_lighting(e, &r));
-				col = vec3_add(col, compute_reflection(e, &r, &cam->ray));
-				col = vec3_add(col, compute_refraction(e, &r, &cam->ray, 1.f));
+				col = vec3_add(col, compute_reflection(e, &r, &cam.ray));
+				col = vec3_add(col, compute_refraction(e, &r, &cam.ray, 1.f));
 			}
 			put_pixel_to_buffer(f, scoord, vec3_to_vec4(col, 1));
 			fill_buffers(e, scoord, &r);
-			if (e->progress_callback)
-				e->progress_callback(e, (scoord.x + 1 + (scoord.y + 1) * f.size.y) * 100 / (float)(f.size.y * f.size.y + f.size.x));
+			e->progress_callback(e, (scoord.x + 1 + (scoord.y + 1) * f.size.y) * 100 / (float)(f.size.y * f.size.y + f.size.x));
+			if (e->stop_rendering)
+				return (false);
 			scoord.x++;
 		}
 		scoord.y++;
