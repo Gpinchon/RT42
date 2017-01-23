@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:32:51 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/23 18:48:37 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/23 19:28:51 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 	scene->active_camera->transform = new_rttransform(scene,
 		(VEC3){1.5, 0.5, 2.5}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
 	scene->active_camera->transform->target = new_rttransform(scene,
-		(VEC3){0, 0.5, 0}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
+		(VEC3){0, 1, 0}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
 	p = new_rtprim(scene);
 	//p->prim = new_cone(0.5, 1);
 	//p->prim = new_cylinder(1, 5);
@@ -196,7 +196,7 @@ BOOL	render_scene(ENGINE *e, SCENE *scene)
 		{
 			nscoord = normalize_screen_coord(scoord, f.size);
 			cam.ray = new_ray(trans.current.position,
-				mat4_mult_vec3(cam.m4_view, vec3_normalize((VEC3){nscoord.x, nscoord.y, -1})));
+				mat4_mult_vec3(cam.m4_view, vec3_normalize((VEC3){nscoord.x, nscoord.y, -2})));
 			col = new_vec3(0, 0, 0);
 			vml_memset(&r, 0, sizeof(CAST_RETURN));
 			if ((r = cast_ray(e, scene, cam.ray)).intersect.intersects)
