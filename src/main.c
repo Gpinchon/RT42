@@ -6,29 +6,44 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:32:51 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/24 14:02:33 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/24 18:07:34 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <rt.h>
 
-MATERIAL	*mtl_light(ENGINE *engine, SCENE *scene)
+MATERIAL	*mtl_cube(ENGINE *e, SCENE *s)
 {
-	MATERIAL	*mtl;
+	MATERIAL	*m;
+	void		*f;
 
-	if ((mtl = get_mtl_by_name(scene, "light")))
-		return (mtl);
-	mtl = new_material(scene, "light");
-	mtl->refraction = 1.f;
-	mtl->emitting.power = 1.f;
-	mtl->emitting.attenuation = 0.002f;
-	mtl->emitting.falloff = 5.f;
-	mtl->emitting.color = new_vec3(1, 1, 1);
-	mtl->emitting.type = POINT;
-	return (mtl);
-	(void)engine;
+	f = e->framework;
+	if ((m = get_mtl_by_name(s, "cube")))
+		return (m);
+	m = new_material(s, "cube");
+	m->base_map = load_image_file(f,
+		"res/cube/cube_base.bmp");
+	m->ao_map = load_image_file(f,
+		"res/cube/cube_ao.bmp");
+	m->rough_map = load_image_file(f,
+		"res/cube/cube_rough.bmp");
+	m->metal_map = load_image_file(f,
+		"res/cube/cube_metal.bmp");
+	m->normal_map = load_image_file(f,
+		"res/cube/cube_normal.bmp");
+	m->height_map = load_image_file(f,
+		"res/cube/cube_height.bmp");
+	m->alpha_map = load_image_file(f,
+		"res/cube/cube_alpha.bmp");
+	m->parallax = 0.5;
+	m->refraction = 1.52f;
+	m->refraction_color = (VEC3){1, 1, 1};
+	m->uv_scale = (VEC2){1, 1};
+	m->roughness = 0.03;
+	m->metalness = 0.5;
+	m->alpha = 1;
+	return (m);
 }
-
 
 void	default_scene(ENGINE *engine, SCENE *scene)
 {
@@ -40,38 +55,29 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 		(VEC3){1.5, 0.5, 2.5}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
 	scene->active_camera->transform->target = new_rttransform(scene,
 		(VEC3){0, 1, 0}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
+	
 	p = new_rtprim(scene);
-	//p->prim = new_cone(0.5, 1);
-	//p->prim = new_cylinder(1, 5);
 	p->prim = new_sphere(1);
 	p->transform = new_rttransform(scene,
 		(VEC3){0, 1, 0}, vec3_normalize((VEC3){-0.5, 1, 0}), (VEC3){1, 1, 1});
 	p->material = mtl_stained_glass(engine, scene);
-
-	/*p = new_rtprim(scene);
-	p->prim = new_sphere(0.2);
-	p->transform = new_rttransform(scene,
-		(VEC3){0, 1, 0}, vec3_normalize((VEC3){-0.5, 1, 0}), (VEC3){1, 1, 1});
-	p->material = mtl_aquamarine(engine, scene);*/
-
-	/*p = new_rtprim(scene);
-	p->prim = new_plane();
-	p->transform = new_rttransform(scene,
-		(VEC3){0, 0.25, 0}, vec3_normalize((VEC3){0, 1, 0}), (VEC3){1, 1, 1});
-	//p->material = mtl_harshbricks(engine, scene);
-	p->material = mtl_water(engine, scene);*/
-
 	p = new_rtprim(scene);
 	p->prim = new_plane();
 	p->transform = new_rttransform(scene,
 		(VEC3){0, 0, 0}, vec3_normalize((VEC3){0, 1, 0}), (VEC3){1, 1, 1});
 	//p->material = mtl_rock_sliced(engine, scene);
-	//p->material = mtl_octostone(engine, scene);
+	p->material = mtl_octostone(engine, scene);
 	//p->material = mtl_harshbricks(engine, scene);
-	p->material = mtl_brick(engine, scene);
+	//p->material = mtl_cube(engine, scene);
 
+	p = new_rtprim(scene);
+	p->prim = new_plane();
+	p->transform = new_rttransform(scene,
+		(VEC3){0, 0, -1.5}, vec3_normalize((VEC3){0, 0, 1}), (VEC3){1, 1, 1});
+	//p->material = mtl_harshbricks(engine, scene);
+	p->material = mtl_cube(engine, scene);
 	//l = new_light(scene, POINT, (VEC3){1.5, 1.5, 1.5});
-	l = new_light(scene, POINT, (VEC3){-1.5, 1.5, 1.5});
+	l = new_light(scene, POINT, (VEC3){1.5, 1.5, 1.5});
 	l->color = (VEC3){1, 207.f / 255.f, 197.f / 255.f};
 	//l->color = (VEC3){1, 1, 1};
 	l->cast_shadow = true;
@@ -167,55 +173,61 @@ BOOL	scene_contains_area_light(SCENE *scene)
 	return (false);
 }
 
+static inline VEC4	pixel_color(ENGINE *e, CAST_RETURN *r, BOOL area_lights)
+{
+	VEC3		col;
+
+	get_ret_mtl(r);
+	col = compute_lighting(e, r);
+	col = vec3_add(col, compute_reflection(e, r, &r->ray));
+	col = vec3_add(col, compute_refraction(e, r, &r->ray, 1.f));
+	if (area_lights && r->mtl.alpha > 0.0001)
+		col = vec3_add(col, compute_area_lighting(e, r));
+	return (vec3_to_vec4(col, 1));
+}
+
 BOOL	render_scene(ENGINE *e, SCENE *scene)
 {
 	t_point2	scoord;
 	CAMERA		cam;
 	RTTRANSFORM	trans;
-	VEC2		nscoord;
-	CAST_RETURN	r;
-	VEC3		col;
 	BOOL		area_lights;
 	FRAMEBUFFER	f;
 
-	if (!scene->active_camera || !cam.transform)
+	if (!scene->active_camera || !scene->active_camera->transform)
 		return (false);
 	cam = *scene->active_camera;
 	e->active_scene = scene;
 	update_rttransform(cam.transform);
 	trans = *cam.transform;
-	scoord = (t_point2){0, 0};
+	scoord = (t_point2){-1, -1};
 	f = e->framebuffer;
 	cam.m4_view = mat4_mult_mat4(trans.current.transform,
 			mat4_perspective(cam.fov, f.size.y / (float)f.size.x, cam.znear, cam.zfar));
 	area_lights = scene_contains_area_light(scene);
-	while (scoord.y < f.size.y)
+	while (scoord.y++ < f.size.y - 1)
 	{
-		scoord.x = 0;
-		while (scoord.x < f.size.x)
+		scoord.x = -1;
+		while (scoord.x++ < f.size.x - 1)
 		{
+			VEC2		nscoord;
+
 			nscoord = normalize_screen_coord(scoord, f.size);
 			cam.ray = new_ray(trans.current.position,
-				mat4_mult_vec3(cam.m4_view, vec3_normalize((VEC3){nscoord.x, nscoord.y, -2})));
-			col = new_vec3(0, 0, 0);
-			vml_memset(&r, 0, sizeof(CAST_RETURN));
+				mat4_mult_vec3(cam.m4_view, vec3_normalize((VEC3){nscoord.x, nscoord.y, -1})));
+			CAST_RETURN	r;
+
 			if ((r = cast_ray(e, scene, cam.ray)).intersect.intersects)
 			{
-				get_ret_mtl(&r);
-				if (area_lights && r.mtl.alpha > 0.0001)
-					col = vec3_add(col, compute_area_lighting(e, &r));
-				col = vec3_add(col, compute_lighting(e, &r));
-				col = vec3_add(col, compute_reflection(e, &r, &cam.ray));
-				col = vec3_add(col, compute_refraction(e, &r, &cam.ray, 1.f));
+				put_pixel_to_buffer(f, scoord, pixel_color(e, &r, area_lights));
+				fill_buffers(e, scoord, &r);
 			}
-			put_pixel_to_buffer(f, scoord, vec3_to_vec4(col, 1));
-			fill_buffers(e, scoord, &r);
+			else
+				put_pixel_to_buffer(f, scoord, new_vec4(0, 0, 0, 1));
 			e->progress_callback(e, (scoord.x + 1 + (scoord.y + 1) * f.size.y) / (float)(f.size.y * f.size.y + f.size.x));
 			if (e->stop_rendering)
 				return (false);
-			scoord.x++;
 		}
-		scoord.y++;
 	}
 	return (true);
 }
@@ -235,6 +247,8 @@ int		main(int argc, char *argv[])
 	ezarray_push(&engine.post_treatments, &callback);
 	callback = new_callback(gamma_correction, &engine);
 	ezarray_push(&engine.post_treatments, &callback);
+	callback = new_callback(bloom, &engine);
+	ezarray_push(&engine.post_treatments, &callback);
 	default_scene(&engine, &engine.scene);
 	clear_renderer(&engine);
 	if (render_scene(&engine, &engine.scene))
@@ -243,8 +257,8 @@ int		main(int argc, char *argv[])
 		while (i < engine.post_treatments.length)
 		{
 			do_post_treatment(&engine, ezarray_get_index(engine.post_treatments, i));
-			copy_framebuffer(engine.finalbuffer, engine.framebuffer);
-			i++;
+			if (i++ < engine.post_treatments.length)
+				copy_framebuffer(engine.finalbuffer, engine.framebuffer);
 		}
 		display_framebuffer(engine.finalbuffer, engine.image);
 		refresh_window(engine.window);

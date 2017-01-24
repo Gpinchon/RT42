@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:06:34 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/23 15:09:38 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/24 17:52:26 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,6 +196,7 @@ float			frand_a_b(float a, float b);
 */
 void			gamma_correction(ENGINE *engine, t_point2 coord);
 void			depth_of_field(ENGINE *engine, t_point2 coord);
+void			bloom(ENGINE *engine, t_point2 coord);
 BOOL			do_post_treatment(ENGINE *engine, t_callback *callback);
 
 VEC2			sphere_uv(u_obj sphere, INTERSECT inter, TRANSFORM *transform);

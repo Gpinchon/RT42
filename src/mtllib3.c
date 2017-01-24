@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/16 14:20:02 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/18 15:22:05 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/24 15:50:08 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,4 +59,21 @@ MATERIAL	*mtl_granite(ENGINE *e, SCENE *s)
 	mtl->uv_scale = (VEC2){1, 1};
 	mtl->refraction = 1.5f;
 	return (mtl);
+}
+
+MATERIAL	*mtl_light(ENGINE *engine, SCENE *scene)
+{
+	MATERIAL	*mtl;
+
+	if ((mtl = get_mtl_by_name(scene, "light")))
+		return (mtl);
+	mtl = new_material(scene, "light");
+	mtl->refraction = 1.f;
+	mtl->emitting.power = 1.f;
+	mtl->emitting.attenuation = 0.002f;
+	mtl->emitting.falloff = 5.f;
+	mtl->emitting.color = new_vec3(1, 1, 1);
+	mtl->emitting.type = POINT;
+	return (mtl);
+	(void)engine;
 }
