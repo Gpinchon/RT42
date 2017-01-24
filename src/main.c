@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:32:51 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/24 19:00:02 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/24 20:10:50 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 
 	scene->active_camera = new_camera(scene, 90, 0.0001, 1000);
 	scene->active_camera->transform = new_rttransform(scene,
-		(VEC3){1.5, 0.5, 2.5}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
+		(VEC3){-1.5, 0.5, 2.5}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
 	scene->active_camera->transform->target = new_rttransform(scene,
 		(VEC3){0, 1, 0}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
 	scene->bloom_threshold = 0.6;
@@ -246,9 +246,11 @@ int		main(int argc, char *argv[])
 	options.max_refl = MAX_REFL;
 	options.area_sampling = MAX_AREA;
 	engine = new_engine(options);
-	callback = new_callback(depth_of_field, &engine);
-	ezarray_push(&engine.post_treatments, &callback);
 	callback = new_callback(gamma_correction, &engine);
+	ezarray_push(&engine.post_treatments, &callback);
+	callback = new_callback(ssao, &engine);
+	ezarray_push(&engine.post_treatments, &callback);
+	callback = new_callback(depth_of_field, &engine);
 	ezarray_push(&engine.post_treatments, &callback);
 	callback = new_callback(bloom, &engine);
 	ezarray_push(&engine.post_treatments, &callback);
