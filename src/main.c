@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:32:51 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/23 19:28:51 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/24 14:02:33 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,7 +210,7 @@ BOOL	render_scene(ENGINE *e, SCENE *scene)
 			}
 			put_pixel_to_buffer(f, scoord, vec3_to_vec4(col, 1));
 			fill_buffers(e, scoord, &r);
-			e->progress_callback(e, (scoord.x + 1 + (scoord.y + 1) * f.size.y) * 100 / (float)(f.size.y * f.size.y + f.size.x));
+			e->progress_callback(e, (scoord.x + 1 + (scoord.y + 1) * f.size.y) / (float)(f.size.y * f.size.y + f.size.x));
 			if (e->stop_rendering)
 				return (false);
 			scoord.x++;
