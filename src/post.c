@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/17 18:00:44 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/24 18:05:41 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/24 18:59:09 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,10 +110,11 @@ void		bloom(ENGINE *engine, t_point2 coord)
 	dist = *((float*)get_buffer_value(engine->depthbuffer, coord));
 	cdist = *((float*)get_buffer_value(engine->depthbuffer,
 (t_point2){engine->depthbuffer.size.x / 2, engine->depthbuffer.size.y / 2}));
-	vcolor = blur_sample_with_threshold(engine, coord, 0.025, 0.8);
+	vcolor = blur_sample_with_threshold(engine, coord, engine->active_scene->bloom_radius, engine->active_scene->bloom_threshold);
 	col = get_buffer_value(engine->framebuffer, coord);
 	vcolor = vec4_add(new_vec4(col[2] / 255.f,
-			col[1] / 255.f, col[0] / 255.f, col[3] / 255.f), vec4_scale(vcolor, 0.8));
+			col[1] / 255.f, col[0] / 255.f, col[3] / 255.f),
+		vec4_scale(vcolor, engine->active_scene->bloom_intensity));
 	put_pixel_to_buffer(engine->finalbuffer, coord, vcolor);
 }
 

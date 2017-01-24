@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:32:51 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/24 18:07:34 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/24 19:00:02 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,9 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 		(VEC3){1.5, 0.5, 2.5}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
 	scene->active_camera->transform->target = new_rttransform(scene,
 		(VEC3){0, 1, 0}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
+	scene->bloom_threshold = 0.6;
+	scene->bloom_intensity = 0.8;
+	scene->bloom_radius = 0.05;
 	
 	p = new_rtprim(scene);
 	p->prim = new_sphere(1);

@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:06:34 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/24 17:52:26 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/24 18:59:00 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,9 +107,12 @@ typedef struct	s_camera
 
 typedef struct	s_scene
 {
-	CAMERA		*active_camera;
+	float		bloom_intensity;
+	float		bloom_radius;
+	float		bloom_threshold;
 	ARRAY		primitives;
 	ARRAY		lights;
+	CAMERA		*active_camera;
 	LINK		*cameras;
 	LINK		*transforms;
 	LINK		*materials;
