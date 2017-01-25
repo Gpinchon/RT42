@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/05 22:09:17 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/20 16:01:32 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/25 19:44:08 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,4 +82,11 @@ void		get_ret_mtl(CAST_RETURN *ret)
 	if (ret->mtl.ao_map)
 		ret->mtl.base_color = vec3_mult(ret->mtl.base_color,
 			sample_texture_filtered(ret->mtl.ao_map, uv));
+	if (ret->mtl.alpha == 1)
+	{
+		ret->intersect.position = vec3_add(ret->intersect.position,
+			vec3_scale(ret->intersect.normal,
+				sample_texture_filtered(ret->mtl.height_map, uv).x * ret->mtl.parallax));
+		ret->intersect.distance[0] = vec3_distance(ret->ray.origin, ret->intersect.position);
+	}
 }
