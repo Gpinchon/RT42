@@ -6,7 +6,7 @@
 #    By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/11/13 17:17:47 by gpinchon          #+#    #+#              #
-#    Updated: 2017/01/23 16:49:43 by gpinchon         ###   ########.fr        #
+#    Updated: 2017/01/25 18:45:08 by gpinchon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,7 +35,8 @@ SRC		=	./src/main.c					\
 			./src/uv.c						\
 			./src/blit.c					\
 			./src/print_progress.c			\
-			./src/post.c
+			./src/post.c					\
+			./src/render.c
 
 OBJ		=	$(SRC:.c=.o)
 CC		=	gcc

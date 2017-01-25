@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/02 22:50:09 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/23 17:12:44 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/25 18:44:25 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ VEC3	compute_reflection(ENGINE *e, CAST_RETURN *re, RAY *r)
 	c = (VEC3){0, 0, 0};
 	ray = new_ray(vec3_add(re->intersect.position, vec3_scale(re->intersect.normal, 0.0001)),
 		vec3_normalize(vec3_fadd(vec3_reflect(r->direction, re->intersect.normal),
-		(e->poisson_disc[(int)(re->mtl.roughness * 62.f)].x * 2 - 1) * re->mtl.roughness)));
+		(e->poisson_disc[(int)(re->mtl.roughness * 63.f)].x * 2 - 1) * re->mtl.roughness)));
 	if ((cr = cast_ray(e, e->active_scene, ray)).intersect.intersects && re->mtl.roughness < 1)
 	{
 		get_ret_mtl(&cr);

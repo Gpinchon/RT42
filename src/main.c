@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:32:51 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/24 20:10:50 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/25 19:18:45 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,26 +52,30 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 
 	scene->active_camera = new_camera(scene, 90, 0.0001, 1000);
 	scene->active_camera->transform = new_rttransform(scene,
-		(VEC3){-1.5, 0.5, 2.5}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
+		(VEC3){1.5, .5, 2.5}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
 	scene->active_camera->transform->target = new_rttransform(scene,
 		(VEC3){0, 1, 0}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
 	scene->bloom_threshold = 0.6;
 	scene->bloom_intensity = 0.8;
 	scene->bloom_radius = 0.05;
 	
-	p = new_rtprim(scene);
+	/*p = new_rtprim(scene);
 	p->prim = new_sphere(1);
 	p->transform = new_rttransform(scene,
 		(VEC3){0, 1, 0}, vec3_normalize((VEC3){-0.5, 1, 0}), (VEC3){1, 1, 1});
-	p->material = mtl_stained_glass(engine, scene);
+	p->material = mtl_stained_glass(engine, scene);*/
+
 	p = new_rtprim(scene);
 	p->prim = new_plane();
 	p->transform = new_rttransform(scene,
 		(VEC3){0, 0, 0}, vec3_normalize((VEC3){0, 1, 0}), (VEC3){1, 1, 1});
-	//p->material = mtl_rock_sliced(engine, scene);
 	p->material = mtl_octostone(engine, scene);
-	//p->material = mtl_harshbricks(engine, scene);
-	//p->material = mtl_cube(engine, scene);
+
+	p = new_rtprim(scene);
+	p->prim = new_plane();
+	p->transform = new_rttransform(scene,
+		(VEC3){0, 0.25, 0}, vec3_normalize((VEC3){0, 1, 0}), (VEC3){1, 1, 1});
+	p->material = mtl_water(engine, scene);
 
 	p = new_rtprim(scene);
 	p->prim = new_plane();
@@ -94,7 +98,7 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 		(VEC3){-200, 200, 200}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});*/
 }
 
-VEC2	normalize_screen_coord(t_point2 screen_coord, t_point2 resolution)
+inline VEC2	normalize_screen_coord(t_point2 screen_coord, t_point2 resolution)
 {
 	return ((VEC2){
 		(2 * ((float)(screen_coord.x + 0.5) / (float)resolution.x) - 1),
@@ -107,8 +111,6 @@ void	fill_buffers(ENGINE *engine, t_point2 screen_coord, CAST_RETURN *ret)
 
 	if (ret->intersect.intersects)
 	{
-		bufferptr = get_buffer_value(engine->mtlbuffer, screen_coord);
-		*((MATERIAL *)bufferptr) = ret->mtl;
 		bufferptr = get_buffer_value(engine->positionbuffer, screen_coord);
 		*((VEC3 *)bufferptr) = ret->intersect.position;
 		bufferptr = get_buffer_value(engine->normalbuffer, screen_coord);
@@ -176,7 +178,7 @@ BOOL	scene_contains_area_light(SCENE *scene)
 	return (false);
 }
 
-static inline VEC4	pixel_color(ENGINE *e, CAST_RETURN *r, BOOL area_lights)
+/*static inline VEC4	pixel_color(ENGINE *e, CAST_RETURN *r, BOOL area_lights)
 {
 	VEC3		col;
 
@@ -233,7 +235,7 @@ BOOL	render_scene(ENGINE *e, SCENE *scene)
 		}
 	}
 	return (true);
-}
+}*/
 
 int		main(int argc, char *argv[])
 {
@@ -248,8 +250,8 @@ int		main(int argc, char *argv[])
 	engine = new_engine(options);
 	callback = new_callback(gamma_correction, &engine);
 	ezarray_push(&engine.post_treatments, &callback);
-	callback = new_callback(ssao, &engine);
-	ezarray_push(&engine.post_treatments, &callback);
+	/*callback = new_callback(ssao, &engine);
+	ezarray_push(&engine.post_treatments, &callback);*/
 	callback = new_callback(depth_of_field, &engine);
 	ezarray_push(&engine.post_treatments, &callback);
 	callback = new_callback(bloom, &engine);

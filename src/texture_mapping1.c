@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/18 15:18:23 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/24 17:49:21 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/25 18:45:40 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,17 +24,17 @@ VEC2	sample_height_map(void *h, CAST_RETURN *ret)
 	c[1] = vec2_fdiv(vec2_scale(vec3_to_vec2(vdir), ret->mtl.parallax), d[1]);
 	d[1] = 0.0;
 	c[0] = ret->uv;
-	d[2] = 1 - sample_texture_filtered(h, c[0]).x;
+	d[2] = 1 - sample_texture(h, c[0]).x;
 	while (d[1] < d[2])
 	{
 		c[0] = vec2_sub(c[0], c[1]);
-		d[2] = 1 - sample_texture_filtered(h, c[0]).x;
+		d[2] = 1 - sample_texture(h, c[0]).x;
 		d[1] += d[0];
 	}
 	c[1] = vec2_add(c[0], c[1]);
 	d[2] = d[2] - d[1];
 	d[2] = d[2] /
-	(d[2] - 1 - sample_texture_filtered(h, c[1]).x - d[1] + d[0]);
+	(d[2] - 1 - sample_texture(h, c[1]).x - d[1] + d[0]);
 	return (vec2_add(vec2_scale(c[1], d[2]), vec2_scale(c[0], (1.0 - d[2]))));
 }
 

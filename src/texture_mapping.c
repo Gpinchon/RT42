@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/02 22:57:17 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/24 16:21:30 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/25 18:47:54 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,8 @@ VEC3					sample_texture_filtered(void *image, VEC2 uv)
 		return ((VEC3){0, 0, 0});
 	color = (VEC3){0, 0, 0};
 	img = get_image_data(image);
-	uv.x = fabs(uv.x) * img.size.x;
-	uv.y = fabs(uv.y) * img.size.y;
+	uv.x = fmod(fabs(uv.x) * img.size.x, img.size.x);
+	uv.y = fmod(fabs(uv.y) * img.size.y, img.size.y);
 	p[0] = (t_point2){(int)uv.x % img.size.x, (int)uv.y % img.size.y};
 	p[3] = (t_point2){(p[0].x + 1) % img.size.x, (p[0].y + 1) % img.size.y};
 	p[1] = (t_point2){p[3].x, p[0].y};

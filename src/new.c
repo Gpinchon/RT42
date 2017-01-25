@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/15 10:44:45 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/11 00:48:02 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/25 18:31:21 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void		create_framebuffers(ENGINE *engine, t_engine_opt options)
 	engine->positionbuffer = new_framebuffer(FLOAT, options.internal_size, 3);
 	engine->normalbuffer = new_framebuffer(FLOAT, options.internal_size, 3);
 	engine->depthbuffer = new_framebuffer(FLOAT, options.internal_size, 1);
-	engine->mtlbuffer = new_framebuffer(FLOAT, options.internal_size, sizeof(t_mtl) / sizeof(float));
+	//engine->mtlbuffer = new_framebuffer(FLOAT, options.internal_size, sizeof(t_mtl) / sizeof(float));
 }
 
 void		assign_functions(ENGINE *engine)

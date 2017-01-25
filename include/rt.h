@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:06:34 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/24 19:36:22 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/25 18:59:37 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@
 # define DIFFUSE		oren_nayar_diffuse
 # define SPECULAR		ggx_specular
 # define RENDER_NORMALS	false
+# define NUM_THREADS	16
+# define DIV_THREADS	4
 
 typedef struct	s_rttransform
 {
@@ -173,11 +175,19 @@ typedef struct	s_engine
 	FRAMEBUFFER	finalbuffer;
 	FRAMEBUFFER	positionbuffer;
 	FRAMEBUFFER	normalbuffer;
-	FRAMEBUFFER	mtlbuffer;
 	FRAMEBUFFER	depthbuffer;
 	SCENE		scene;
 	VEC2		poisson_disc[64];
 }				t_engine;
+
+typedef struct	s_pth_args
+{
+	ENGINE		*engine;
+	SCENE		*scene;
+	BOOL		area_lights;
+	t_point2	scoord;
+	t_point2	limit;
+}				t_pth_args;
 
 FRAMEBUFFER		new_framebuffer(TYPE type, t_point2 size, Uint8 depth);
 SCENE			new_scene(void);
@@ -247,6 +257,12 @@ MATERIAL		*mtl_rock_waterworn(ENGINE *engine, SCENE *scene);
 MATERIAL		*mtl_metal_floor(ENGINE *engine, SCENE *scene);
 MATERIAL		*mtl_skin(ENGINE *engine, SCENE *scene);
 MATERIAL		*mtl_mirror(ENGINE *e, SCENE *s);
+
+BOOL			render_scene(ENGINE *e, SCENE *scene);
+void			fill_buffers(ENGINE *engine, t_point2 screen_coord, CAST_RETURN *ret);
+VEC3			compute_area_lighting(ENGINE *engine, CAST_RETURN *ret);
+VEC2			normalize_screen_coord(t_point2 screen_coord, t_point2 resolution);
+BOOL			scene_contains_area_light(SCENE *scene);
 
 void			clear_renderer(ENGINE *engine);
 void			clear_buffers(ENGINE *engine);

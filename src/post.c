@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/17 18:00:44 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/24 20:09:29 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/25 19:13:56 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,9 +120,9 @@ float		poisson_ssao(ENGINE *engine, t_point2 p,
 	float intensity)
 {
 	VEC3		norm;
-	//VEC3		pos;
+	float		depth;
 	VEC3		vnorm;
-	//VEC3		vpos;
+	float		vdepth;
 	UINT		i;
 	VEC2		uv;
 	t_point2	size;
@@ -132,7 +132,7 @@ float		poisson_ssao(ENGINE *engine, t_point2 p,
 	amount = 0;
 	size = engine->normalbuffer.size;
 	norm = *((VEC3*)get_buffer_value(engine->normalbuffer, p));
-	//pos = *((VEC3*)get_buffer_value(engine->positionbuffer, p));
+	depth = *((float*)get_buffer_value(engine->depthbuffer, p));
 	uv = new_vec2(p.x / (float)size.x, p.y / (float)size.y);
 	while (i < 64)
 	{
@@ -141,10 +141,11 @@ float		poisson_ssao(ENGINE *engine, t_point2 p,
 			* intensity) * size.y};
 		p = (t_point2){CLAMP(p.x, 0, size.x - 1), CLAMP(p.y, 0, size.y - 1)};
 		vnorm = *((VEC3*)get_buffer_value(engine->normalbuffer, p));
-		//vpos = *((VEC3*)get_buffer_value(engine->positionbuffer, p));
+		vdepth = *((float*)get_buffer_value(engine->depthbuffer, p));
 		//amount += vec3_dot(norm, vnorm);
 		//vpos = vec3_sub(pos, vpos);
-		amount += (vec3_dot(norm, vnorm));
+		if (vdepth > depth ? 1.f : 0.f)
+			amount += fabs(vec3_dot(norm, vnorm));
 		i++;
 	}
 	return (CLAMP((float)amount / 64.f, 0, 1));
@@ -155,12 +156,13 @@ void		ssao(ENGINE *engine, t_point2 coord)
 	VEC4		vcolor;
 	UCHAR		*col;
 
+	//printf("%p, %p\n", engine, engine->active_scene);
 	vcolor = blur_sample_with_threshold(engine, coord,
 		engine->active_scene->bloom_radius,
 		engine->active_scene->bloom_threshold);
 	col = get_buffer_value(engine->framebuffer, coord);
 	vcolor = vec4_scale(new_vec4(col[2] / 255.f, col[1] / 255.f, col[0] / 255.f, col[3] / 255.f),
-		poisson_ssao(engine, coord, 0.05));
+		poisson_ssao(engine, coord, 0.025));
 	vcolor.w = 1;
 	put_pixel_to_buffer(engine->finalbuffer, coord, vcolor);
 }
