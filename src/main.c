@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:32:51 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/25 19:49:53 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/26 01:44:07 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,17 +59,23 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 	scene->bloom_intensity = 0.8;
 	scene->bloom_radius = 0.05;
 	
-	/*p = new_rtprim(scene);
+	p = new_rtprim(scene);
 	p->prim = new_sphere(1);
 	p->transform = new_rttransform(scene,
 		(VEC3){0, 1, 0}, vec3_normalize((VEC3){-0.5, 1, 0}), (VEC3){1, 1, 1});
-	p->material = mtl_stained_glass(engine, scene);*/
+	p->material = mtl_stained_glass(engine, scene);
 
 	/*p = new_rtprim(scene);
+	p->prim = new_cylinder(0.5, 5);
+	p->transform = new_rttransform(scene,
+		(VEC3){0, 2.5, 0}, vec3_normalize((VEC3){1, 0, 0}), (VEC3){1, 1, 1});
+	p->material = mtl_light(engine, scene);*/
+
+	p = new_rtprim(scene);
 	p->prim = new_plane();
 	p->transform = new_rttransform(scene,
 		(VEC3){0, 0, 0}, vec3_normalize((VEC3){0, 1, 0}), (VEC3){1, 1, 1});
-	p->material = mtl_octostone(engine, scene);*/
+	p->material = mtl_harshbricks(engine, scene);
 
 	/*p = new_rtprim(scene);
 	p->prim = new_plane();
@@ -80,8 +86,8 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 	p = new_rtprim(scene);
 	p->prim = new_plane();
 	p->transform = new_rttransform(scene,
-		(VEC3){0, 0, -1.5}, vec3_normalize((VEC3){0, 0, 1}), (VEC3){1, 1, 1});
-	p->material = mtl_cube(engine, scene);
+		(VEC3){0, 0, -1.5}, vec3_normalize((VEC3){0, 0, -1}), (VEC3){1, 1, 1});
+	p->material = mtl_harshbricks(engine, scene);
 
 	l = new_light(scene, POINT, (VEC3){2, 2, 2});
 	l->color = (VEC3){1, 207.f / 255.f, 197.f / 255.f};
@@ -245,15 +251,15 @@ int		main(int argc, char *argv[])
 	options.window_size = options.internal_size = (t_point2){1024, 1024};
 	options.max_refr = MAX_REFR;
 	options.max_refl = MAX_REFL;
-	options.area_sampling = MAX_AREA;
+	options.area_sampling = 256;
 	engine = new_engine(options);
-	callback = new_callback(gamma_correction, &engine);
+	callback = new_callback(ssao, &engine);
 	ezarray_push(&engine.post_treatments, &callback);
-	/*callback = new_callback(ssao, &engine);
-	ezarray_push(&engine.post_treatments, &callback);*/
 	callback = new_callback(depth_of_field, &engine);
 	ezarray_push(&engine.post_treatments, &callback);
 	callback = new_callback(bloom, &engine);
+	ezarray_push(&engine.post_treatments, &callback);
+	callback = new_callback(gamma_correction, &engine);
 	ezarray_push(&engine.post_treatments, &callback);
 	default_scene(&engine, &engine.scene);
 	clear_renderer(&engine);

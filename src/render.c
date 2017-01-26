@@ -6,12 +6,25 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/25 17:49:13 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/25 19:02:34 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/25 23:54:26 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <rt.h>
 #include <pthread.h>
+
+static inline VEC4	pixel_color(ENGINE *e, CAST_RETURN *r, BOOL area_lights)
+{
+	VEC3		col;
+
+	get_ret_mtl(r);
+	col = compute_lighting(e, r);
+	col = vec3_add(col, compute_reflection(e, r, &r->ray));
+	col = vec3_add(col, compute_refraction(e, r, &r->ray, 1.f));
+	if (area_lights && r->mtl.alpha > 0.0001)
+		col = vec3_add(col, compute_area_lighting(e, r));
+	return (vec3_to_vec4(col, 1));
+}
 
 void	*render_part(void *pth_args)
 {
@@ -20,7 +33,6 @@ void	*render_part(void *pth_args)
 	RTTRANSFORM	trans;
 	VEC2		nscoord;
 	CAST_RETURN	r;
-	VEC3		col;
 	FRAMEBUFFER	f;
 	t_pth_args	args;
 
@@ -42,24 +54,19 @@ void	*render_part(void *pth_args)
 			nscoord = normalize_screen_coord(scoord, f.size);
 			cam.ray = new_ray(trans.current.position,
 				mat4_mult_vec3(cam.m4_view, vec3_normalize((VEC3){nscoord.x, nscoord.y, -2})));
-			col = new_vec3(0, 0, 0);
-			vml_memset(&r, 0, sizeof(CAST_RETURN));
 			if ((r = cast_ray(args.engine, args.scene, cam.ray)).intersect.intersects)
 			{
-				get_ret_mtl(&r);
-				if (args.area_lights && r.mtl.alpha > 0.0001)
-					col = vec3_add(col, compute_area_lighting(args.engine, &r));
-				col = vec3_add(col, compute_lighting(args.engine, &r));
-				col = vec3_add(col, compute_reflection(args.engine, &r, &cam.ray));
-				col = vec3_add(col, compute_refraction(args.engine, &r, &cam.ray, 1.f));
+				put_pixel_to_buffer(f, scoord, pixel_color(args.engine, &r, args.area_lights));
+				fill_buffers(args.engine, scoord, &r);
 			}
-			put_pixel_to_buffer(f, scoord, vec3_to_vec4(col, 1));
-			fill_buffers(args.engine, scoord, &r);
+			else
+				put_pixel_to_buffer(f, scoord, new_vec4(0, 0, 0, 1));
 			scoord.x++;
 		}
 		scoord.y++;
 	}
 	pthread_exit(NULL);
+	return (NULL);
 }
 
 t_point2	*get_scoords(t_point2 size)
@@ -114,36 +121,36 @@ t_point2	*get_limits(t_point2 size)
 	return (limits);
 }
 
-BOOL	join_threads(pthread_t *threads)
+BOOL	join_threads(pthread_t *threads, ENGINE *e)
 {
 	int			t;
-	int			rc;
 	void		*status;
 
 	t = 0;
 	while (t < NUM_THREADS)
 	{
-		rc = pthread_join(threads[t], &status);
-		if (rc)
+		e->progress_callback(e, t / (float)NUM_THREADS);
+		if (e->stop_rendering)
+			return (false);
+		if (pthread_join(threads[t], &status))
 			return (false);
 		t++;
 	}
 	return (true);
 }
 
-BOOL	render_multithread(pthread_t *threads, ENGINE *e, SCENE *scene)
+BOOL	render_multithread(pthread_t *threads, ENGINE *e, SCENE *scene,
+	BOOL area_lights)
 {
 	int			t;
 	t_pth_args	*args;
 	t_point2	*scoords;
 	t_point2	*limits;
-	BOOL		area_lights;
 
 	t = 0;
 	args = (t_pth_args *)malloc(NUM_THREADS * sizeof(t_pth_args));
 	scoords = get_scoords(e->framebuffer.size);
 	limits = get_limits(e->framebuffer.size);
-	area_lights = scene_contains_area_light(scene);
 	while (t < NUM_THREADS)
 	{
 		args[t].engine = memcpy(malloc(sizeof(ENGINE)), e, sizeof(ENGINE));
@@ -157,22 +164,22 @@ BOOL	render_multithread(pthread_t *threads, ENGINE *e, SCENE *scene)
 	}
 	free(scoords);
 	free(limits);
-	free(args);
+	//free(args);
 	return (true);
 }
 
-BOOL	render_scene(ENGINE *e, SCENE *scene)
+BOOL	render_scene(ENGINE *e, SCENE *s)
 {
 	pthread_t	*threads;
 
 	threads = (pthread_t *)malloc(NUM_THREADS * sizeof(pthread_t));
-	e->active_scene = scene;
-	if (!render_multithread(threads, e, scene))
+	e->active_scene = s;
+	if (!render_multithread(threads, e, s, scene_contains_area_light(s)))
 	{
 		free(threads);
 		return (false);
 	}
-	if (!join_threads(threads))
+	if (!join_threads(threads, e))
 	{
 		free(threads);
 		return (false);
