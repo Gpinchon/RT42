@@ -46,12 +46,12 @@ LIBDIR	=	$(wildcard ./libs/*)
 CFLAGS	=	-O3 -ffast-math -Wall -Wextra -Werror $(INCLUDE)
 
 ifeq ($(OS), Windows_NT)
-LIBS	=	$(addprefix -L , $(LIBDIR)) -lezmem -lvml -lmingw32 -lSDLframework -lSDL2main -lSDL2  -lopengl32 -lm
+LIBS	=	$(addprefix -L , $(LIBDIR)) -lezmem -lvml -ljson -lmingw32 -lSDLframework -lSDL2main -lSDL2  -lopengl32 -lm
 else ifeq ($(shell uname -s), Darwin)
-LIBS	=	$(addprefix -L , $(LIBDIR)) -lezmem -lvml -L ~/.brew/lib -lSDLframework -lSDL2 -lm
+LIBS	=	$(addprefix -L , $(LIBDIR)) -lezmem -lvml -ljson -L ~/.brew/lib -lSDLframework -lSDL2 -lm
 INCLUDE	=	-I ~/.brew/include $(addprefix -I, $(wildcard ./libs/*/include/)) -I./include/
 else
-LIBS	=	$(addprefix -L , $(LIBDIR)) -lezmem -lvml -lSDLframework -lSDL2main -lSDL2 -lGL -lm
+LIBS	=	$(addprefix -L , $(LIBDIR)) -lezmem -lvml -ljson -lSDLframework -lSDL2main -lSDL2 -lGL -lm
 endif
 
 $(NAME): $(OBJ)
