@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:32:51 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/26 01:44:07 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/27 22:13:41 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 
 	scene->active_camera = new_camera(scene, 90, 0.0001, 1000);
 	scene->active_camera->transform = new_rttransform(scene,
-		(VEC3){2.5, 1.5, 1.5}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
+		(VEC3){2.5, 1.5, 2.5}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
 	scene->active_camera->transform->target = new_rttransform(scene,
 		(VEC3){0, 1, 0}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
 	scene->bloom_threshold = 0.6;
@@ -63,7 +63,7 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 	p->prim = new_sphere(1);
 	p->transform = new_rttransform(scene,
 		(VEC3){0, 1, 0}, vec3_normalize((VEC3){-0.5, 1, 0}), (VEC3){1, 1, 1});
-	p->material = mtl_stained_glass(engine, scene);
+	p->material = mtl_cube(engine, scene);
 
 	/*p = new_rtprim(scene);
 	p->prim = new_cylinder(0.5, 5);
@@ -75,7 +75,7 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 	p->prim = new_plane();
 	p->transform = new_rttransform(scene,
 		(VEC3){0, 0, 0}, vec3_normalize((VEC3){0, 1, 0}), (VEC3){1, 1, 1});
-	p->material = mtl_harshbricks(engine, scene);
+	p->material = mtl_octostone(engine, scene);
 
 	/*p = new_rtprim(scene);
 	p->prim = new_plane();
@@ -87,7 +87,7 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 	p->prim = new_plane();
 	p->transform = new_rttransform(scene,
 		(VEC3){0, 0, -1.5}, vec3_normalize((VEC3){0, 0, -1}), (VEC3){1, 1, 1});
-	p->material = mtl_harshbricks(engine, scene);
+	p->material = mtl_brick(engine, scene);
 
 	l = new_light(scene, POINT, (VEC3){2, 2, 2});
 	l->color = (VEC3){1, 207.f / 255.f, 197.f / 255.f};
@@ -182,65 +182,6 @@ BOOL	scene_contains_area_light(SCENE *scene)
 	}
 	return (false);
 }
-
-/*static inline VEC4	pixel_color(ENGINE *e, CAST_RETURN *r, BOOL area_lights)
-{
-	VEC3		col;
-
-	get_ret_mtl(r);
-	col = compute_lighting(e, r);
-	col = vec3_add(col, compute_reflection(e, r, &r->ray));
-	col = vec3_add(col, compute_refraction(e, r, &r->ray, 1.f));
-	if (area_lights && r->mtl.alpha > 0.0001)
-		col = vec3_add(col, compute_area_lighting(e, r));
-	return (vec3_to_vec4(col, 1));
-}
-
-BOOL	render_scene(ENGINE *e, SCENE *scene)
-{
-	t_point2	scoord;
-	CAMERA		cam;
-	RTTRANSFORM	trans;
-	BOOL		area_lights;
-	FRAMEBUFFER	f;
-
-	if (!scene->active_camera || !scene->active_camera->transform)
-		return (false);
-	cam = *scene->active_camera;
-	e->active_scene = scene;
-	update_rttransform(cam.transform);
-	trans = *cam.transform;
-	scoord = (t_point2){-1, -1};
-	f = e->framebuffer;
-	cam.m4_view = mat4_mult_mat4(trans.current.transform,
-			mat4_perspective(cam.fov, f.size.y / (float)f.size.x, cam.znear, cam.zfar));
-	area_lights = scene_contains_area_light(scene);
-	while (scoord.y++ < f.size.y - 1)
-	{
-		scoord.x = -1;
-		while (scoord.x++ < f.size.x - 1)
-		{
-			VEC2		nscoord;
-
-			nscoord = normalize_screen_coord(scoord, f.size);
-			cam.ray = new_ray(trans.current.position,
-				mat4_mult_vec3(cam.m4_view, vec3_normalize((VEC3){nscoord.x, nscoord.y, -1})));
-			CAST_RETURN	r;
-
-			if ((r = cast_ray(e, scene, cam.ray)).intersect.intersects)
-			{
-				put_pixel_to_buffer(f, scoord, pixel_color(e, &r, area_lights));
-				fill_buffers(e, scoord, &r);
-			}
-			else
-				put_pixel_to_buffer(f, scoord, new_vec4(0, 0, 0, 1));
-			e->progress_callback(e, (scoord.x + 1 + (scoord.y + 1) * f.size.y) / (float)(f.size.y * f.size.y + f.size.x));
-			if (e->stop_rendering)
-				return (false);
-		}
-	}
-	return (true);
-}*/
 
 int		main(int argc, char *argv[])
 {
