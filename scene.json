@@ -16,11 +16,43 @@
 			"fov" : 45,
 			"znear" : 0.001,
 			"zfar" : 1000,
+            "transform" : {
+               "position" : {
+                 "x" : 2.5,
+                 "y" : 1.5,
+                 "z" : 1.5
+		       },
+               "rotation" : {
+                 "x" : 0,
+                 "y" : 0,
+                 "z" : 0
+		       },
+               "scaling" : {
+                 "x" : 1,
+                 "y" : 1,
+                 "z" : 1
+		       }
+           },
 			"target" : {
-				"x" : 0,
-				"y" : 1,
-				"z" : 0
-			}
+               "position" : {
+                 "x" : 0,
+                 "y" : 1,
+                 "z" : 0
+		       },
+               "rotation" : {
+                 "x" : 0,
+                 "y" : 0,
+                 "z" : 0
+		       },
+               "scaling" : {
+                 "x" : 1,
+                 "y" : 1,
+                 "z" : 1
+		       }
+			},
+            "bloom_threshold" : 0.6,
+            "bloom_intensity" : 0.8,
+            "bloom_radius" : 0.05
 		},
 		"materials" :
 		[
@@ -51,14 +83,24 @@
 		[
 			{
 				"type" : "SPHERE",
-                data : {
-                  "   radius" : 1,
-                  "   position" : {
-                        "x" : 0,
-                        "y" : 1,
-                        "z" : 0
-                  },
-				},
+                "radius" : 1,
+                "transform" : {
+                  "position" : {
+                    "x" : 0,
+                    "y" : 1,
+                    "z" : 0
+				  },
+                  "rotation" : {
+                    "x" : 0,
+                    "y" : 1,
+                    "z" : 0
+				  },
+                  "scaling" : {
+                    "x" : 0,
+                    "y" : 1,
+                    "z" : 0
+				  }
+                },
 				"material" : "stained_glass"
 			},
 			{

@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:32:51 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/26 01:44:07 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/27 10:40:16 by mbarbari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 	scene->bloom_threshold = 0.6;
 	scene->bloom_intensity = 0.8;
 	scene->bloom_radius = 0.05;
-	
+
 	p = new_rtprim(scene);
 	p->prim = new_sphere(1);
 	p->transform = new_rttransform(scene,
