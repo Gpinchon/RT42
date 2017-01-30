@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/16 14:46:46 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/25 18:15:24 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/30 15:35:57 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,13 +51,16 @@ VEC2		cylinder_uv(u_obj o, INTERSECT inter, TRANSFORM *t)
 		vn = UPVEC;
 	else
 		vn = t->rotation;
-	cp = vec3_sub(t->position, vec3_scale(t->rotation, o.cylinder.size ? o.cylinder.size : 10.f));
+	cp = vec3_sub(t->position, vec3_scale(t->rotation, o.cylinder.size ?
+		o.cylinder.size : 10.f));
 	ve = vec3_cross(vn, (VEC3){0, 0, 1});
 	vp = vec3_normalize(vec3_sub(inter.position, cp));
-	uv.x = acosf(CLAMP(vec3_dot(vp, ve) / sin(acosf(-vec3_dot(vn, vp))), -1, 1)) / (2.f * M_PI) + 1;
+	uv.x = acosf(CLAMP(vec3_dot(vp, ve) /
+		sin(acosf(-vec3_dot(vn, vp))), -1, 1)) / (2.f * M_PI) + 1;
 	if (vec3_dot(vec3_cross(vn, ve), vp) <= 0)
 		uv.x = 1 - uv.x + 1;
-	uv.y = sqrt(pow(vec3_distance(cp, inter.position), 2) - o.cylinder.radius2) / 10.f + 1;
+	uv.y = sqrt(pow(vec3_distance(cp, inter.position), 2) -
+		o.cylinder.radius2) / 10.f + 1;
 	return (uv);
 }
 
@@ -81,12 +84,11 @@ VEC2	plane_uv(u_obj plane, INTERSECT inter, TRANSFORM *tr)
 	dir = vec3_normalize(vec3_sub(tr->position, inter.position));
 	alpha = vec3_dot(t, dir);
 	npos = tr->position;
-	while (alpha < 0)
+	while ((alpha = vec3_dot(t, dir)) < 0)
 	{
 		npos = vec3_add(npos, vec3_scale(t, 10.f));
 		d = vec3_distance(inter.position, npos);
 		dir = vec3_normalize(vec3_sub(npos, inter.position));
-		alpha = vec3_dot(t, dir);
 	}
 	while (vec3_dot(b, dir) < 0)
 	{
@@ -96,12 +98,8 @@ VEC2	plane_uv(u_obj plane, INTERSECT inter, TRANSFORM *tr)
 		alpha = vec3_dot(t, dir);
 	}
 	if (alpha < 1)
-	{
-		uv = new_vec2(cos(acosf(alpha)) * d / 5.f + 1,
-		sin(acosf(alpha)) * d / 5.f + 1);
-		//uv = new_vec2(fmod(cos(acosf(alpha)) * d / 5.f + 1, 1),
-		//fmod(sin(acosf(alpha)) * d / 5.f + 1, 1));
-	}
+		uv = new_vec2(fract(cos(acosf(alpha)) * d / 5.f + 1),
+		fract(sin(acosf(alpha)) * d / 5.f + 1));
 	return (uv);
 	(void)plane;
 }

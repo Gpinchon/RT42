@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/23 15:03:14 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/25 23:28:32 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/30 15:08:51 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,11 +40,11 @@ void	print_progress(ENGINE *engine, float progress)
 	i = (t_point2){coord.x - size.x, coord.y - size.y};
 	i.x = i.x > 0 ? i.x : 0;
 	coord = (t_point2){coord.x += size.x, coord.y += size.y};
-	coord.x = coord.x < coord.x / progress ? coord.x : coord.x / progress;
-	while (i.y++ < coord.y)
+	coord.x = coord.x < (coord.x / progress) ? coord.x : (coord.x / progress);
+	while (++i.y < coord.y)
 	{
 		i.x = coord.x - size.x;
-		while (i.x++ < coord.x)
+		while (++i.x < coord.x)
 			put_image_pixel(img, &color,
 				(t_point2){i.x, i.y});
 	}

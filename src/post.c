@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/17 18:00:44 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/27 22:02:45 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/30 15:18:16 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ VEC4		blur_sample(ENGINE *engine, t_point2 c, float intensity)
 	size = engine->framebuffer.size;
 	uv = new_vec2(c.x / (float)size.x, c.y / (float)size.y);
 	vcolor = new_vec4(0, 0, 0, 0);
-	while (i < 32)
+	while (i < 64)
 	{
 		c = (t_point2){(uv.x + (engine->poisson_disc[i].x * 2 - 1) *
 			intensity) * size.x, (uv.y + (engine->poisson_disc[i].y * 2 - 1)
@@ -35,7 +35,7 @@ VEC4		blur_sample(ENGINE *engine, t_point2 c, float intensity)
 			color[0] / 255.f, color[3] / 255.f));
 		i++;
 	}
-	return (vec4_fdiv(vcolor, 32.f));
+	return (vec4_fdiv(vcolor, 64.f));
 }
 
 static inline float		color_to_factor(UCHAR *c)
@@ -115,8 +115,6 @@ void		bloom(ENGINE *engine, t_point2 coord)
 		vec4_scale(vcolor, engine->active_scene->bloom_intensity));
 	put_pixel_to_buffer(engine->finalbuffer, coord, vcolor);
 }
-
-#include <stdio.h>
 
 float		poisson_ssao(ENGINE *engine, t_point2 p)
 {

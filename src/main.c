@@ -6,44 +6,11 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:32:51 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/27 22:13:41 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/30 15:39:31 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <rt.h>
-
-MATERIAL	*mtl_cube(ENGINE *e, SCENE *s)
-{
-	MATERIAL	*m;
-	void		*f;
-
-	f = e->framework;
-	if ((m = get_mtl_by_name(s, "cube")))
-		return (m);
-	m = new_material(s, "cube");
-	m->base_map = load_image_file(f,
-		"res/cube/cube_base.bmp");
-	m->ao_map = load_image_file(f,
-		"res/cube/cube_ao.bmp");
-	m->rough_map = load_image_file(f,
-		"res/cube/cube_rough.bmp");
-	m->metal_map = load_image_file(f,
-		"res/cube/cube_metal.bmp");
-	m->normal_map = load_image_file(f,
-		"res/cube/cube_normal.bmp");
-	m->height_map = load_image_file(f,
-		"res/cube/cube_height.bmp");
-	m->alpha_map = load_image_file(f,
-		"res/cube/cube_alpha.bmp");
-	m->parallax = 0.5;
-	m->refraction = 1.52f;
-	m->refraction_color = (VEC3){1, 1, 1};
-	m->uv_scale = (VEC2){1, 1};
-	m->roughness = 0.03;
-	m->metalness = 0.5;
-	m->alpha = 1;
-	return (m);
-}
 
 void	default_scene(ENGINE *engine, SCENE *scene)
 {
@@ -62,14 +29,8 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 	p = new_rtprim(scene);
 	p->prim = new_sphere(1);
 	p->transform = new_rttransform(scene,
-		(VEC3){0, 1, 0}, vec3_normalize((VEC3){-0.5, 1, 0}), (VEC3){1, 1, 1});
+		(VEC3){0, 1, 0}, vec3_normalize((VEC3){0, -1, 0}), (VEC3){1, 1, 1});
 	p->material = mtl_cube(engine, scene);
-
-	/*p = new_rtprim(scene);
-	p->prim = new_cylinder(0.5, 5);
-	p->transform = new_rttransform(scene,
-		(VEC3){0, 2.5, 0}, vec3_normalize((VEC3){1, 0, 0}), (VEC3){1, 1, 1});
-	p->material = mtl_light(engine, scene);*/
 
 	p = new_rtprim(scene);
 	p->prim = new_plane();
@@ -80,16 +41,16 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 	/*p = new_rtprim(scene);
 	p->prim = new_plane();
 	p->transform = new_rttransform(scene,
-		(VEC3){0, 0.25, 0}, vec3_normalize((VEC3){0, 1, 0}), (VEC3){1, 1, 1});
+		(VEC3){0, .5f, 0}, vec3_normalize((VEC3){0, 1, 0}), (VEC3){1, 1, 1});
 	p->material = mtl_water(engine, scene);*/
 
 	p = new_rtprim(scene);
 	p->prim = new_plane();
 	p->transform = new_rttransform(scene,
 		(VEC3){0, 0, -1.5}, vec3_normalize((VEC3){0, 0, -1}), (VEC3){1, 1, 1});
-	p->material = mtl_brick(engine, scene);
+	p->material = mtl_cube(engine, scene);
 
-	l = new_light(scene, POINT, (VEC3){2, 2, 2});
+	l = new_light(scene, POINT, (VEC3){2.5, 2.5, 2.5});
 	l->color = (VEC3){1, 207.f / 255.f, 197.f / 255.f};
 	//l->color = (VEC3){1, 1, 1};
 	l->cast_shadow = true;

@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:06:34 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/25 23:36:55 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/30 15:12:31 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -258,8 +258,10 @@ MATERIAL		*mtl_metal_floor(ENGINE *engine, SCENE *scene);
 MATERIAL		*mtl_skin(ENGINE *engine, SCENE *scene);
 MATERIAL		*mtl_mirror(ENGINE *e, SCENE *s);
 MATERIAL		*mtl_light(ENGINE *engine, SCENE *scene);
+MATERIAL		*mtl_cube(ENGINE *e, SCENE *s);
 
 BOOL			render_scene(ENGINE *e, SCENE *scene);
+void			*render_part(void *pth_args);
 void			fill_buffers(ENGINE *engine, t_point2 screen_coord, CAST_RETURN *ret);
 VEC3			compute_area_lighting(ENGINE *engine, CAST_RETURN *ret);
 VEC2			normalize_screen_coord(t_point2 screen_coord, t_point2 resolution);
