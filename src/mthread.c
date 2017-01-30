@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/30 15:05:05 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/30 15:37:51 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/30 17:05:37 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ BOOL	render_multithread(pthread_t *threads, ENGINE *e, SCENE *scene,
 	}
 	free(scoords);
 	free(limits);
-	free(args);
+	//free(args);
 	return (true);
 }
 

@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:32:51 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/30 15:39:31 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/30 17:44:16 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,10 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 	scene->bloom_radius = 0.05;
 	
 	p = new_rtprim(scene);
-	p->prim = new_sphere(1);
+	p->prim = new_cylinder(0.5, 1);
 	p->transform = new_rttransform(scene,
-		(VEC3){0, 1, 0}, vec3_normalize((VEC3){0, -1, 0}), (VEC3){1, 1, 1});
-	p->material = mtl_cube(engine, scene);
+		(VEC3){0, 0.5, 0}, vec3_normalize((VEC3){0, 1, 0}), (VEC3){1, 1, 1});
+	p->material = mtl_brick(engine, scene);
 
 	p = new_rtprim(scene);
 	p->prim = new_plane();
@@ -48,14 +48,14 @@ void	default_scene(ENGINE *engine, SCENE *scene)
 	p->prim = new_plane();
 	p->transform = new_rttransform(scene,
 		(VEC3){0, 0, -1.5}, vec3_normalize((VEC3){0, 0, -1}), (VEC3){1, 1, 1});
-	p->material = mtl_cube(engine, scene);
+	p->material = mtl_brick(engine, scene);
 
-	l = new_light(scene, POINT, (VEC3){2.5, 2.5, 2.5});
+	l = new_light(scene, POINT, (VEC3){0, 1.5, 2.5});
 	l->color = (VEC3){1, 207.f / 255.f, 197.f / 255.f};
 	//l->color = (VEC3){1, 1, 1};
 	l->cast_shadow = true;
 	l->direction = (VEC3){0, -1, 0};
-	l->power = 2.f;
+	l->power = 3.f;
 	l->attenuation = 0.02;
 	l->falloff = 10;
 	l->spot_size = 80;

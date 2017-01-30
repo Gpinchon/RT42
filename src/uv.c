@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/16 14:46:46 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/30 15:35:57 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/30 17:42:31 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,14 +53,16 @@ VEC2		cylinder_uv(u_obj o, INTERSECT inter, TRANSFORM *t)
 		vn = t->rotation;
 	cp = vec3_sub(t->position, vec3_scale(t->rotation, o.cylinder.size ?
 		o.cylinder.size : 10.f));
-	ve = vec3_cross(vn, (VEC3){0, 0, 1});
+	if (!vec3_length(ve = vec3_cross(vn, (VEC3){0, 0, 1})))
+		ve = vec3_cross(vn, (VEC3){0, 1, 0});
 	vp = vec3_normalize(vec3_sub(inter.position, cp));
 	uv.x = acosf(CLAMP(vec3_dot(vp, ve) /
 		sin(acosf(-vec3_dot(vn, vp))), -1, 1)) / (2.f * M_PI) + 1;
 	if (vec3_dot(vec3_cross(vn, ve), vp) <= 0)
 		uv.x = 1 - uv.x + 1;
-	uv.y = sqrt(pow(vec3_distance(cp, inter.position), 2) -
-		o.cylinder.radius2) / 10.f + 1;
+	uv.y = sqrt(fabs(pow(vec3_distance(cp, inter.position), 2) -
+			o.cylinder.radius2)) / (10 * o.cylinder.radius) + 1;
+	uv = new_vec2(fract(uv.x), fract(uv.y));
 	return (uv);
 }
 
