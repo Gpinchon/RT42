@@ -36,12 +36,30 @@ SRC		=	./src/main.c					\
 			./src/blit.c					\
 			./src/print_progress.c			\
 			./src/post.c					\
-			./src/render.c
+			./src/render.c					\
+			./src/create_scene.c			\
+			./src/fill_scene.c
 
 OBJ		=	$(SRC:.c=.o)
 CC		=	gcc
-INCLUDE	=	$(addprefix -I, $(wildcard ./libs/*/include/)) -I./include/
-LIBDIR	=	$(wildcard ./libs/*)
+
+INCLUDE_REP = 	./include \
+				./libs/json/include \
+				./libs/ezmem/include \
+				./libs/sdl_framework/include \
+				./libs/vml/include
+
+INCLUDE	=	$(addprefix -I, $(INCLUDE)) -I./include/
+
+LIBDIR	=	./libs/json/ \
+			./libs/ezmem/ \
+			./libs/sdl_framework/ \
+			./libs/vml/
+
+LIBFILE	=	./libs/json/libjson.a \
+			./libs/ezmem/libezmem.a \
+			./libs/sdl_framework/libSDLframework.a \
+			./libs/vml/libvml.a
 
 CFLAGS	=	-O3 -ffast-math -Wall -Wextra -Werror $(INCLUDE)
 
@@ -49,16 +67,27 @@ ifeq ($(OS), Windows_NT)
 LIBS	=	$(addprefix -L , $(LIBDIR)) -lezmem -lvml -ljson -lmingw32 -lSDLframework -lSDL2main -lSDL2  -lopengl32 -lm
 else ifeq ($(shell uname -s), Darwin)
 LIBS	=	$(addprefix -L , $(LIBDIR)) -lezmem -lvml -ljson -L ~/.brew/lib -lSDLframework -lSDL2 -lm
-INCLUDE	=	-I ~/.brew/include $(addprefix -I, $(wildcard ./libs/*/include/)) -I./include/
+INCLUDE	=	-I ~/.brew/include $(addprefix -I, $(INCLUDE_REP)) -I./include/
 else
 LIBS	=	$(addprefix -L , $(LIBDIR)) -lezmem -lvml -ljson -lSDLframework -lSDL2main -lSDL2 -lGL -lm
 endif
 
 print-% : ; $(info $* is $(flavor $*) variable set to [$($*)]) @true
 
-$(NAME): $(OBJ)
-	$(foreach dir, $(LIBDIR), $(MAKE) -C $(dir) && ) true
+$(NAME): $(LIBFILE) $(OBJ)
 	$(CC) $(CFLAGS) $(OBJ) $(LIBS) -o $(NAME)
+
+./libs/json/libjson.a:
+	$(MAKE) -C ./libs/json/
+
+./libs/ezmem/libezmem.a:
+	$(MAKE) -C ./libs/ezmem/
+
+./libs/sdl_framework/libSDLframework.a:
+	$(MAKE) -C ./libs/sdl_framework/
+
+./libs/vml/libvml.a:
+	$(MAKE) -C ./libs/vml/
 
 all: $(NAME)
 

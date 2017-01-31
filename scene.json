@@ -7,13 +7,13 @@
 		"window height" : 1024,
 		"window width" : 768,
 		"internal height" : 1024,
-		"internal width" : 768,
+		"internal width" : 768
 	},
 	"scene" :
 	{
 		"camera" :
 		{
-			"fov" : 45,
+			"fov" : 45.0,
 			"znear" : 0.001,
 			"zfar" : 1000,
             "transform" : {

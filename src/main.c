@@ -6,11 +6,12 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:32:51 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/27 10:40:16 by mbarbari         ###   ########.fr       */
+/*   Updated: 2017/01/31 15:49:34 by mbarbari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <rt.h>
+#include "scene.h"
 
 MATERIAL	*mtl_cube(ENGINE *e, SCENE *s)
 {
@@ -45,51 +46,17 @@ MATERIAL	*mtl_cube(ENGINE *e, SCENE *s)
 	return (m);
 }
 
-void	default_scene(ENGINE *engine, SCENE *scene)
+void	default_scene(char *file, ENGINE *engine)
 {
-	RTPRIMITIVE	*p;
 	LIGHT		*l;
 
-	scene->active_camera = new_camera(scene, 90, 0.0001, 1000);
-	scene->active_camera->transform = new_rttransform(scene,
-		(VEC3){2.5, 1.5, 1.5}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
-	scene->active_camera->transform->target = new_rttransform(scene,
-		(VEC3){0, 1, 0}, (VEC3){0, 0, 0}, (VEC3){1, 1, 1});
-	scene->bloom_threshold = 0.6;
-	scene->bloom_intensity = 0.8;
-	scene->bloom_radius = 0.05;
-
-	p = new_rtprim(scene);
-	p->prim = new_sphere(1);
-	p->transform = new_rttransform(scene,
-		(VEC3){0, 1, 0}, vec3_normalize((VEC3){-0.5, 1, 0}), (VEC3){1, 1, 1});
-	p->material = mtl_stained_glass(engine, scene);
-
-	/*p = new_rtprim(scene);
-	p->prim = new_cylinder(0.5, 5);
-	p->transform = new_rttransform(scene,
-		(VEC3){0, 2.5, 0}, vec3_normalize((VEC3){1, 0, 0}), (VEC3){1, 1, 1});
-	p->material = mtl_light(engine, scene);*/
-
-	p = new_rtprim(scene);
-	p->prim = new_plane();
-	p->transform = new_rttransform(scene,
-		(VEC3){0, 0, 0}, vec3_normalize((VEC3){0, 1, 0}), (VEC3){1, 1, 1});
-	p->material = mtl_harshbricks(engine, scene);
-
-	/*p = new_rtprim(scene);
-	p->prim = new_plane();
-	p->transform = new_rttransform(scene,
-		(VEC3){0, 0.25, 0}, vec3_normalize((VEC3){0, 1, 0}), (VEC3){1, 1, 1});
-	p->material = mtl_water(engine, scene);*/
-
-	p = new_rtprim(scene);
-	p->prim = new_plane();
-	p->transform = new_rttransform(scene,
-		(VEC3){0, 0, -1.5}, vec3_normalize((VEC3){0, 0, -1}), (VEC3){1, 1, 1});
-	p->material = mtl_harshbricks(engine, scene);
-
-	l = new_light(scene, POINT, (VEC3){2, 2, 2});
+	if (access(file, 0 | F_OK | R_OK) != 0)
+	{
+		write(1, "Cannot find file !", 19); //TODO la aussi stp change avec un truc plus propre !
+		exit(0);
+	}
+	create_scene(parser(file), engine);
+	l = new_light(&engine->scene, POINT, (VEC3){2, 2, 2});
 	l->color = (VEC3){1, 207.f / 255.f, 197.f / 255.f};
 	//l->color = (VEC3){1, 1, 1};
 	l->cast_shadow = true;
@@ -261,7 +228,7 @@ int		main(int argc, char *argv[])
 	ezarray_push(&engine.post_treatments, &callback);
 	callback = new_callback(gamma_correction, &engine);
 	ezarray_push(&engine.post_treatments, &callback);
-	default_scene(&engine, &engine.scene);
+	default_scene(argv[1], &engine);
 	clear_renderer(&engine);
 	if (render_scene(&engine, &engine.scene))
 	{
