@@ -6,7 +6,7 @@
 #    By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/11/13 17:17:47 by gpinchon          #+#    #+#              #
-#    Updated: 2017/01/25 18:45:08 by gpinchon         ###   ########.fr        #
+#    Updated: 2017/01/31 09:27:22 by mbarbari         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -53,6 +53,8 @@ INCLUDE	=	-I ~/.brew/include $(addprefix -I, $(wildcard ./libs/*/include/)) -I./
 else
 LIBS	=	$(addprefix -L , $(LIBDIR)) -lezmem -lvml -ljson -lSDLframework -lSDL2main -lSDL2 -lGL -lm
 endif
+
+print-% : ; $(info $* is $(flavor $*) variable set to [$($*)]) @true
 
 $(NAME): $(OBJ)
 	$(foreach dir, $(LIBDIR), $(MAKE) -C $(dir) && ) true
