@@ -28,7 +28,7 @@ void		fill_camera(t_value val, void *obj)
 	json = json_get(json, "transform").data.obj;
 	scene->active_camera->transform = new_rttransform(scene,
 				get_vec3_json(json_get(json, "position")),
-				vec3_normalize(get_vec3_json(json_get(json, "rotation"))),
+				get_vec3_json(json_get(json, "rotation")),
 				get_vec3_json(json_get(json, "scaling")));
 	json = json_get(val.data.obj, "target").data.obj;
 	scene->active_camera->transform->target = new_rttransform(scene,
@@ -63,6 +63,9 @@ void		fill_materials(t_value val, int id, void *engine)
 
 	(void)id;
 	obj = val.data.obj;
+	if ((get_mtl_by_name((SCENE *)&((ENGINE*)engine)->scene,
+					json_get(obj, "name").data.s)))
+		return ;
 	m = new_material((SCENE *)&((ENGINE*)engine)->scene,
 			json_get(obj, "name").data.s);
 	fill_map(val, (ENGINE *)engine, m);
