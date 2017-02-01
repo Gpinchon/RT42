@@ -13,35 +13,36 @@
 #include <rt.h>
 #include "scene.h"
 #include "parser.h"
+#include <sys/stat.h>
 
-int		file_is_modified(const char *path, time_t *oldtime, int i)
-{
-	int			testing;
-	struct stat	file_stat;
-	int			err;
-	int			ismodified;
-
-	testing = -1;
-	while ((err = stat(path, &file_stat)) < 0)
-	{
-		sleep(1);
-		if (++testing == 10)
-			exit(0);
-		if ((err = stat(path, &file_stat)) < 0)
-			ft_printf("[FILE KO] : %s\n", path);
-		else
-			break ;
-	}
-	if (i == 1)
-		*oldtime = file_stat.st_mtime;
-	else
-	{
-		ismodified = file_stat.st_mtime > *oldtime;
-		*oldtime = file_stat.st_mtime;
-		return (ismodified);
-	}
-	return (0);
-}
+//int		file_is_modified(const char *path, time_t *oldtime, int i)
+//{
+//	int			testing;
+//	struct stat	file_stat;
+//	int			err;
+//	int			ismodified;
+//
+//	testing = -1;
+//	while ((err = stat(path, &file_stat)) < 0)
+//	{
+//		sleep(1);
+//		if (++testing == 10)
+//			exit(0);
+//		if ((err = stat(path, &file_stat)) < 0)
+//			dprintf("[FILE KO] : %s\n", path); //TODO: pas de printf
+//		else
+//			break ;
+//	}
+//	if (i == 1)
+//		*oldtime = file_stat.st_mtime;
+//	else
+//	{
+//		ismodified = file_stat.st_mtime > *oldtime;
+//		*oldtime = file_stat.st_mtime;
+//		return (ismodified);
+//	}
+//	return (0);
+//}
 
 unsigned long		djb2(const char *str)
 {
@@ -65,17 +66,19 @@ ENGINE		set_engine(t_value val)
 {
 	t_json			*json;
 	t_engine_opt	options;
+	//t_point2		pt;
 
 	json = json_get(val.data.obj, "engine").data.obj;
 	options.max_refr = json_get(json, "max_refr").data.number;
 	options.max_refl = json_get(json, "max_refl").data.number;
 	options.area_sampling = json_get(json, "area_sampling").data.number;
-	//TODO: d'ou sa sort mon chou?
+	//pt.x = json_get(json, "window height").data.number;
+	//pt.y = json_get(json, "window width").data.number;
+	//options.window_size = (options.internal_size = pt);
+	//pt.x = json_get(json, "internal height").data.number;
+	//pt.y = json_get(json, "internal width").data.number;
+	//options.internal_size = pt;
 	options.window_size = options.internal_size = (t_point2){1024, 1024};
-	//options.window_height = json_get(json, "window height").data.number;
-	//options.window_width = json_get(json, "window width").data.number;
-	//options.internal_height = json_get(json, "internal height").data.number;
-	//options.internal_width = json_get(json, "internal width").data.number;
 	return (new_engine(options));
 }
 

@@ -192,7 +192,7 @@ int		main(int argc, char *argv[])
 
 	if (argc == 2 && access(argv[1], 0 | F_OK | R_OK) != 0)
 	{
-		write(1, "Cannot find file !", 19); //Tu peut me changer le write en quelque chose de plus beau?
+		write(1, "Cannot find file !", 19); //TODO :Tu peut me changer le write en quelque chose de plus beau?
 		exit(0);
 	}
 	engine = create_scene(parser(argv[1]));
