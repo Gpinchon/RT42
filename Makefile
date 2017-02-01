@@ -40,7 +40,8 @@ SRC		=	./src/main.c					\
 			./src/create_scene.c			\
 			./src/fill_scene.c				\
 			./src/json_to_math.c			\
-			./src/json_to_prim.c			
+			./src/json_to_prim.c			\
+			./src/mthread.c
 
 OBJ		=	$(SRC:.c=.o)
 CC		=	gcc

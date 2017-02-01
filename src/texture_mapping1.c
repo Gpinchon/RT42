@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/18 15:18:23 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/25 18:45:40 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/30 12:25:10 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,19 +17,22 @@ VEC2	sample_height_map(void *h, CAST_RETURN *ret)
 	VEC3	vdir;
 	float	d[3];
 	VEC2	c[2];
+	UINT	tries;
 
 	vdir = mat3_mult_vec3(mat3_inverse(ret->tbn), ret->ray.direction);
 	d[1] = interp_linear(64, 128, fabs(vdir.z));
+	tries = d[1];
 	d[0] = 1.0 / d[1];
 	c[1] = vec2_fdiv(vec2_scale(vec3_to_vec2(vdir), ret->mtl.parallax), d[1]);
 	d[1] = 0.0;
 	c[0] = ret->uv;
 	d[2] = 1 - sample_texture(h, c[0]).x;
-	while (d[1] < d[2])
+	while (tries && d[1] < d[2])
 	{
 		c[0] = vec2_sub(c[0], c[1]);
 		d[2] = 1 - sample_texture(h, c[0]).x;
 		d[1] += d[0];
+		tries--;
 	}
 	c[1] = vec2_add(c[0], c[1]);
 	d[2] = d[2] - d[1];

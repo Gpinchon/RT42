@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/16 14:20:02 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/24 15:50:08 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/01/30 12:16:04 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,11 +69,40 @@ MATERIAL	*mtl_light(ENGINE *engine, SCENE *scene)
 		return (mtl);
 	mtl = new_material(scene, "light");
 	mtl->refraction = 1.f;
-	mtl->emitting.power = 1.f;
-	mtl->emitting.attenuation = 0.002f;
-	mtl->emitting.falloff = 5.f;
+	mtl->emitting.power = 2.f;
+	mtl->emitting.attenuation = 0.02f;
+	mtl->emitting.falloff = 10.f;
 	mtl->emitting.color = new_vec3(1, 1, 1);
 	mtl->emitting.type = POINT;
 	return (mtl);
 	(void)engine;
+}
+
+MATERIAL	*mtl_cube(ENGINE *e, SCENE *s)
+{
+	MATERIAL	*m;
+	void		*f;
+
+	f = e->framework;
+	if ((m = get_mtl_by_name(s, "cube")))
+		return (m);
+	m = new_material(s, "cube");
+	m->base_map = load_image_file(f,
+		"res/cube/cube_base.bmp");
+	m->ao_map = load_image_file(f,
+		"res/cube/cube_ao.bmp");
+	m->rough_map = load_image_file(f,
+		"res/cube/cube_rough.bmp");
+	m->metal_map = load_image_file(f,
+		"res/cube/cube_metal.bmp");
+	m->normal_map = load_image_file(f,
+		"res/cube/cube_normal.bmp");
+	m->height_map = load_image_file(f,
+		"res/cube/cube_height.bmp");
+	m->alpha_map = load_image_file(f,
+		"res/cube/cube_alpha.bmp");
+	m->parallax = 0.5;
+	m->refraction = 1.52f;
+	m->alpha = 1;
+	return (m);
 }

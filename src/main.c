@@ -13,39 +13,6 @@
 #include <rt.h>
 #include "scene.h"
 
-MATERIAL	*mtl_cube(ENGINE *e, SCENE *s)
-{
-	MATERIAL	*m;
-	void		*f;
-
-	f = e->framework;
-	if ((m = get_mtl_by_name(s, "cube")))
-		return (m);
-	m = new_material(s, "cube");
-	m->base_map = load_image_file(f,
-		"res/cube/cube_base.bmp");
-	m->ao_map = load_image_file(f,
-		"res/cube/cube_ao.bmp");
-	m->rough_map = load_image_file(f,
-		"res/cube/cube_rough.bmp");
-	m->metal_map = load_image_file(f,
-		"res/cube/cube_metal.bmp");
-	m->normal_map = load_image_file(f,
-		"res/cube/cube_normal.bmp");
-	m->height_map = load_image_file(f,
-		"res/cube/cube_height.bmp");
-	m->alpha_map = load_image_file(f,
-		"res/cube/cube_alpha.bmp");
-	m->parallax = 0.5;
-	m->refraction = 1.52f;
-	m->refraction_color = (VEC3){1, 1, 1};
-	m->uv_scale = (VEC2){1, 1};
-	m->roughness = 0.03;
-	m->metalness = 0.5;
-	m->alpha = 1;
-	return (m);
-}
-
 inline VEC2	normalize_screen_coord(t_point2 screen_coord, t_point2 resolution)
 {
 	return ((VEC2){
@@ -125,65 +92,6 @@ BOOL	scene_contains_area_light(SCENE *scene)
 	}
 	return (false);
 }
-
-/*static inline VEC4	pixel_color(ENGINE *e, CAST_RETURN *r, BOOL area_lights)
-{
-	VEC3		col;
-
-	get_ret_mtl(r);
-	col = compute_lighting(e, r);
-	col = vec3_add(col, compute_reflection(e, r, &r->ray));
-	col = vec3_add(col, compute_refraction(e, r, &r->ray, 1.f));
-	if (area_lights && r->mtl.alpha > 0.0001)
-		col = vec3_add(col, compute_area_lighting(e, r));
-	return (vec3_to_vec4(col, 1));
-}
-
-BOOL	render_scene(ENGINE *e, SCENE *scene)
-{
-	t_point2	scoord;
-	CAMERA		cam;
-	RTTRANSFORM	trans;
-	BOOL		area_lights;
-	FRAMEBUFFER	f;
-
-	if (!scene->active_camera || !scene->active_camera->transform)
-		return (false);
-	cam = *scene->active_camera;
-	e->active_scene = scene;
-	update_rttransform(cam.transform);
-	trans = *cam.transform;
-	scoord = (t_point2){-1, -1};
-	f = e->framebuffer;
-	cam.m4_view = mat4_mult_mat4(trans.current.transform,
-			mat4_perspective(cam.fov, f.size.y / (float)f.size.x, cam.znear, cam.zfar));
-	area_lights = scene_contains_area_light(scene);
-	while (scoord.y++ < f.size.y - 1)
-	{
-		scoord.x = -1;
-		while (scoord.x++ < f.size.x - 1)
-		{
-			VEC2		nscoord;
-
-			nscoord = normalize_screen_coord(scoord, f.size);
-			cam.ray = new_ray(trans.current.position,
-				mat4_mult_vec3(cam.m4_view, vec3_normalize((VEC3){nscoord.x, nscoord.y, -1})));
-			CAST_RETURN	r;
-
-			if ((r = cast_ray(e, scene, cam.ray)).intersect.intersects)
-			{
-				put_pixel_to_buffer(f, scoord, pixel_color(e, &r, area_lights));
-				fill_buffers(e, scoord, &r);
-			}
-			else
-				put_pixel_to_buffer(f, scoord, new_vec4(0, 0, 0, 1));
-			e->progress_callback(e, (scoord.x + 1 + (scoord.y + 1) * f.size.y) / (float)(f.size.y * f.size.y + f.size.x));
-			if (e->stop_rendering)
-				return (false);
-		}
-	}
-	return (true);
-}*/
 
 int		main(int argc, char *argv[])
 {
