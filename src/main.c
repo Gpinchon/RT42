@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:32:51 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/31 15:49:34 by mbarbari         ###   ########.fr       */
+/*   Updated: 2017/02/01 22:52:11 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,9 +98,9 @@ int		main(int argc, char *argv[])
 	ENGINE			engine;
 	t_callback		callback;
 
-	if (argc == 2 && access(argv[1], 0 | F_OK | R_OK) != 0)
+	if (argc < 2 || (argc == 2 && access(argv[1], 0 | F_OK | R_OK) != 0))
 	{
-		write(1, "Cannot find file !", 19); //Tu peut me changer le write en quelque chose de plus beau?
+		write(1, "Cannot find file !\n", 20); //Tu peut me changer le write en quelque chose de plus beau?
 		exit(0);
 	}
 	engine = create_scene(parser(argv[1]));

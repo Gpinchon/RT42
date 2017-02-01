@@ -6,7 +6,7 @@
 #    By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/11/13 17:17:47 by gpinchon          #+#    #+#              #
-#    Updated: 2017/01/31 11:38:48 by mbarbari         ###   ########.fr        #
+#    Updated: 2017/02/01 22:49:39 by gpinchon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -52,7 +52,7 @@ INCLUDE_REP = 	./include \
 				./libs/sdl_framework/include \
 				./libs/vml/include
 
-INCLUDE	=	$(addprefix -I, $(INCLUDE)) -I./include/
+INCLUDE	=	$(addprefix -I, $(INCLUDE_REP)) -I./include/
 
 LIBDIR	=	./libs/json/ \
 			./libs/ezmem/ \
@@ -69,10 +69,11 @@ CFLAGS	=	-O3 -ffast-math -Wall -Wextra -Werror $(INCLUDE)
 ifeq ($(OS), Windows_NT)
 LIBS	=	$(addprefix -L , $(LIBDIR)) -lezmem -lvml -ljson -lmingw32 -lSDLframework -lSDL2main -lSDL2  -lopengl32 -lm
 else ifeq ($(shell uname -s), Darwin)
-LIBS	=	$(addprefix -L , $(LIBDIR)) -lezmem -lvml -ljson -L ~/.brew/lib -lSDLframework -lSDL2 -lm
+LIBS	=	$(addprefix -L , $(LIBDIR)) -lezmem -lvml -ljson -L ~/.brew/lib -lSDLframework -lSDL2 -lm -lpthread
 INCLUDE	=	-I ~/.brew/include $(addprefix -I, $(INCLUDE_REP)) -I./include/
 else
-LIBS	=	$(addprefix -L , $(LIBDIR)) -lezmem -lvml -ljson -lSDLframework -lSDL2main -lSDL2 -lGL -lm
+LIBS	=	$(addprefix -L , $(LIBDIR)) -lezmem -lvml -ljson -lSDLframework -lSDL2main -lSDL2 -lGL -lm -lpthread
+INCLUDE	=	$(addprefix -I, $(INCLUDE_REP)) -I./include/
 endif
 
 print-% : ; $(info $* is $(flavor $*) variable set to [$($*)]) @true
