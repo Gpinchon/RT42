@@ -14,6 +14,35 @@
 #include "scene.h"
 #include "parser.h"
 
+int		file_is_modified(const char *path, time_t *oldtime, int i)
+{
+	int			testing;
+	struct stat	file_stat;
+	int			err;
+	int			ismodified;
+
+	testing = -1;
+	while ((err = stat(path, &file_stat)) < 0)
+	{
+		sleep(1);
+		if (++testing == 10)
+			exit(0);
+		if ((err = stat(path, &file_stat)) < 0)
+			ft_printf("[FILE KO] : %s\n", path);
+		else
+			break ;
+	}
+	if (i == 1)
+		*oldtime = file_stat.st_mtime;
+	else
+	{
+		ismodified = file_stat.st_mtime > *oldtime;
+		*oldtime = file_stat.st_mtime;
+		return (ismodified);
+	}
+	return (0);
+}
+
 unsigned long		djb2(const char *str)
 {
 	unsigned long	hash;
