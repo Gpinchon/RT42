@@ -46,30 +46,6 @@ MATERIAL	*mtl_cube(ENGINE *e, SCENE *s)
 	return (m);
 }
 
-void	default_scene(char *file, ENGINE *engine)
-{
-	LIGHT		*l;
-
-	if (access(file, 0 | F_OK | R_OK) != 0)
-	{
-		write(1, "Cannot find file !", 19); //TODO la aussi stp change avec un truc plus propre !
-		exit(0);
-	}
-	create_scene(parser(file), engine);
-	l = new_light(&engine->scene, POINT, (VEC3){2, 2, 2});
-	l->color = (VEC3){1, 207.f / 255.f, 197.f / 255.f};
-	//l->color = (VEC3){1, 1, 1};
-	l->cast_shadow = true;
-	l->direction = (VEC3){0, -1, 0};
-	l->power = 2.f;
-	l->attenuation = 0.02;
-	l->falloff = 10;
-	l->spot_size = 80;
-	l->ambient_coef = 0.2f;
-	/*scene->active_camera->transform->target = new_rttransform(scene,
-		(VEC3){-200, 200, 200}, (VEC3){0, 1, 0}, (VEC3){1, 1, 1});*/
-}
-
 inline VEC2	normalize_screen_coord(t_point2 screen_coord, t_point2 resolution)
 {
 	return ((VEC2){
@@ -212,14 +188,14 @@ BOOL	render_scene(ENGINE *e, SCENE *scene)
 int		main(int argc, char *argv[])
 {
 	ENGINE			engine;
-	t_engine_opt	options;
 	t_callback		callback;
 
-	options.window_size = options.internal_size = (t_point2){1024, 1024};
-	options.max_refr = MAX_REFR;
-	options.max_refl = MAX_REFL;
-	options.area_sampling = 256;
-	engine = new_engine(options);
+	if (argc == 2 && access(argv[1], 0 | F_OK | R_OK) != 0)
+	{
+		write(1, "Cannot find file !", 19); //Tu peut me changer le write en quelque chose de plus beau?
+		exit(0);
+	}
+	engine = create_scene(parser(argv[1]));
 	callback = new_callback(ssao, &engine);
 	ezarray_push(&engine.post_treatments, &callback);
 	callback = new_callback(depth_of_field, &engine);
@@ -228,7 +204,6 @@ int		main(int argc, char *argv[])
 	ezarray_push(&engine.post_treatments, &callback);
 	callback = new_callback(gamma_correction, &engine);
 	ezarray_push(&engine.post_treatments, &callback);
-	default_scene(argv[1], &engine);
 	clear_renderer(&engine);
 	if (render_scene(&engine, &engine.scene))
 	{

@@ -14,25 +14,6 @@
 #include "scene.h"
 #include "parser.h"
 
-//TODO: MON CHERI TU METTRA CA AILLEUR bise :)
-VEC3		get_vec3_json(t_value val)
-{
-	if (val.error == TYPE_ERROR)
-		return (new_vec3(0.0, 0.0, 0.0));
-	return (new_vec3(	json_get(val.data.obj, "x").data.number,
-						json_get(val.data.obj, "y").data.number,
-						json_get(val.data.obj, "z").data.number));
-}
-
-VEC2		get_vec2_json(t_value val)
-{
-	if (val.error == TYPE_ERROR)
-		return (new_vec2(0.0, 0.0));
-	return (new_vec2(	json_get(val.data.obj, "x").data.number,
-						json_get(val.data.obj, "y").data.number));
-}
-//END TODO
-
 void		fill_camera(t_value val, void *obj)
 {
 	t_scene		*scene;
@@ -40,7 +21,6 @@ void		fill_camera(t_value val, void *obj)
 
 	json = val.data.obj;
 	scene = (SCENE*)obj;
-	dprintf(1, "lecture tant bien que mal de la fov : %f\n", json_get(json, "fov").data.number);
 	scene->active_camera = new_camera(scene,
 			json_get(json, "fov").data.number,
 			json_get(json, "znear").data.number,
@@ -83,7 +63,6 @@ void		fill_materials(t_value val, int id, void *engine)
 
 	(void)id;
 	obj = val.data.obj;
-	dprintf(1, "Creation d'un materials : %s\n", json_get(obj, "name").data.s);
 	m = new_material((SCENE *)&((ENGINE*)engine)->scene,
 			json_get(obj, "name").data.s);
 	fill_map(val, (ENGINE *)engine, m);
@@ -103,9 +82,25 @@ void		fill_materials(t_value val, int id, void *engine)
 	m->emitting.color = get_vec3_json(json_get(obj, "emitting_color"));
 }
 
-void		fill_lights(t_value val, void *obj)
+void		fill_lights(t_value val, int i, void *obj)
 {
-	(void)val, (void)obj;
+	ENGINE	*engine;
+	LIGHT	*l;
+	t_json	*json;
+
+	(void)i;
+	engine = (ENGINE *)obj;
+	json = val.data.obj;
+	l = new_light(&engine->scene, POINT,
+			get_vec3_json(json_get(json, "position")));
+	l->color = get_vec3_json(json_get(json, "color"));
+	l->cast_shadow = json_get(json, "cast_shadow").data.boolean;
+	l->direction = get_vec3_json(json_get(json, "color"));
+	l->power = json_get(json, "power").data.number;
+	l->attenuation = json_get(json, "attenuation").data.number;
+	l->falloff = (int)json_get(json, "falloff").data.number;
+	l->spot_size = (int)json_get(json, "spot_size").data.number;
+	l->ambient_coef = (int)json_get(json, "ambient_coef").data.number;
 }
 
 void		fill_primitive(t_value val, int i, void *obj)

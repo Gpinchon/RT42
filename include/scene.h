@@ -39,18 +39,16 @@ struct			s_objprim
 };
 
 
-//TODO: MON CHERI TU METTRA CA AILLEUR bise :)
 VEC3			get_vec3_json(t_value val);
 VEC2			get_vec2_json(t_value val);
-//FIN TODO
 
 void			fill_camera(t_value val, void *engine);
 void			fill_materials(t_value val, int id, void *obj);
-void			fill_lights(t_value val, void *obj);
+void			fill_lights(t_value val, int i, void *obj);
 void			fill_primitive(t_value val, int i, void *obj);
 void			fill_map(t_value val, ENGINE *engine, MATERIAL *mtl);
 
-void			create_scene(t_value val, ENGINE *engine);
+ENGINE			create_scene(t_value val);
 t_objprim		get_fct_primitive(int id);
 int				key_primitive(unsigned long id);
 int				get_idfct(unsigned long *key, unsigned long val);
