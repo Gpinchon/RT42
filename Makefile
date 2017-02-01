@@ -6,7 +6,7 @@
 #    By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/11/13 17:17:47 by gpinchon          #+#    #+#              #
-#    Updated: 2017/01/31 09:27:22 by mbarbari         ###   ########.fr        #
+#    Updated: 2017/01/31 11:38:48 by mbarbari         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,7 +38,9 @@ SRC		=	./src/main.c					\
 			./src/post.c					\
 			./src/render.c					\
 			./src/create_scene.c			\
-			./src/fill_scene.c
+			./src/fill_scene.c				\
+			./src/json_to_math.c			\
+			./src/json_to_prim.c			
 
 OBJ		=	$(SRC:.c=.o)
 CC		=	gcc
