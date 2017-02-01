@@ -19,7 +19,7 @@
             "transform" : {
                "position" : {
                  "x" : 2.5,
-                 "y" : 1.5,
+                 "y" : 4.5,
                  "z" : 2.5
 		       },
                "rotation" : {
@@ -51,8 +51,8 @@
 		       }
 			},
             "bloom_threshold" : 0.6,
-            "bloom_intensity" : 0.8,
-            "bloom_radius" : 0.05
+            "bloom_intensity" : 0.5,
+            "bloom_radius" : 0.025
 		},
 		"materials" :
 		[
@@ -79,13 +79,15 @@
 				"alpha" : 0.05
 			},
 			{
-				"name" : "toto",
-				"base_map" : "res/stained_glass/stained_glass_base.bmp",
-				"metal_map" : "res/stained_glass/stained_glass_metal.bmp",
-				"normal_map" : "res/stained_glass/stained_glass_normal.bmp",
-				"height_map" : "res/stained_glass/stained_glass_height.bmp",
-				"alpha_map" : "res/stained_glass/stained_glass_alpha.bmp",
-				"parallax" : 0.01,
+				"name" : "octostone",
+				"base_map" : "res/octostone/octostone_base.bmp",
+				"metal_map" : "res/octostone/octostone_metal.bmp",
+				"rough_map" : "res/octostone/octostone_rough.bmp",
+				"metal_map" : "res/octostone/octostone_metal.bmp",
+				"normal_map" : "res/octostone/octostone_normal.bmp",
+				"height_map" : "res/octostone/octostone_height.bmp",
+				"alpha_map" : "res/octostone/octostone_alpha.bmp",
+				"parallax" : 0.0,
 				"refraction" : 1.52,
 				"refraction_color" : {
 					"x" : 1,
@@ -93,28 +95,21 @@
 					"z" : 1
 				},
 				"uv_scale" : {
-					"x" : 1,
-					"y" : 1
+					"x" : 4,
+					"y" : 4
 				},
-                "base_color" : {
-                    "x" : 1,
-                    "y" : 1,
-                    "z" : 1
-                },
-				"roughness" : 0.03,
-				"metalness" : 0.5,
-				"alpha" : 1.
+				"alpha" : 1
 			}
 		],
 		"primitives" :
 		[
 			{
 				"type" : "SPHERE",
-                "radius" : 1,
+                "radius" : 0.5,
                 "transform" : {
                   "position" : {
                     "x" : 0,
-                    "y" : 1,
+                    "y" : 0.5,
                     "z" : 0
 				  },
                   "rotation" : {
@@ -142,7 +137,7 @@
 					"y" : 1,
 					"z" : 0
 				},
-				"material" : "toto"
+				"material" : "octostone"
 			}
 		],
 		"lights" :
@@ -151,7 +146,7 @@
 				"type" : "POINT",
 				"position" : {
 					"x" : 0,
-					"y" : 1,
+					"y" : 0.5,
 					"z" : 0
 				},
 				"color" : {
