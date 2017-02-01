@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fill_scene.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbarbari <mbarbari@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/31 11:14:10 by mbarbari          #+#    #+#             */
-/*   Updated: 2017/01/31 18:39:21 by mbarbari         ###   ########.fr       */
+/*   Updated: 2017/02/01 18:17:41 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,11 +94,11 @@ void		fill_lights(t_value val, int i, void *obj)
 	(void)i;
 	engine = (ENGINE *)obj;
 	json = val.data.obj;
-	l = new_light(&engine->scene, POINT,
+	l = new_light(&engine->scene, json_get(json, "type").data.number,
 			get_vec3_json(json_get(json, "position")));
 	l->color = get_vec3_json(json_get(json, "color"));
 	l->cast_shadow = json_get(json, "cast_shadow").data.boolean;
-	l->direction = get_vec3_json(json_get(json, "color"));
+	l->direction = get_vec3_json(json_get(json, "direction"));
 	l->power = json_get(json, "power").data.number;
 	l->attenuation = json_get(json, "attenuation").data.number;
 	l->falloff = (int)json_get(json, "falloff").data.number;

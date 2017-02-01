@@ -3,7 +3,7 @@
 	{
 		"max_refr" : 4,
 		"max_refl" : 4,
-		"area_sampling" : 4,
+		"area_sampling" : 512,
 		"window height" : 1024,
 		"window width" : 768,
 		"internal height" : 1024,
@@ -18,8 +18,8 @@
 			"zfar" : 1000,
             "transform" : {
                "position" : {
-                 "x" : 2.5,
-                 "y" : 4.5,
+                 "x" : -2.5,
+                 "y" : 1.5,
                  "z" : 2.5
 		       },
                "rotation" : {
@@ -105,11 +105,11 @@
 		[
 			{
 				"type" : "SPHERE",
-                "radius" : 0.5,
+                "radius" : 1,
                 "transform" : {
                   "position" : {
                     "x" : 0,
-                    "y" : 0.5,
+                    "y" : 1,
                     "z" : 0
 				  },
                   "rotation" : {
@@ -143,10 +143,15 @@
 		"lights" :
 		[
 			{
-				"type" : "POINT",
+				"type" : 1,
 				"position" : {
 					"x" : 0,
-					"y" : 0.5,
+					"y" : 3,
+					"z" : 0
+				},
+				"direction" : {
+					"x" : 0,
+					"y" : -1,
 					"z" : 0
 				},
 				"color" : {
