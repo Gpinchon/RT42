@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/31 11:14:10 by mbarbari          #+#    #+#             */
-/*   Updated: 2017/02/01 18:17:41 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/02/02 21:10:12 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,15 +45,22 @@ void		fill_map(t_value val, ENGINE *engine, MATERIAL *mtl)
 {
 	t_json					*json;
 	void					*fmk;
+	t_value					v;
 
 	json = val.data.obj;
 	fmk = engine->framework;
-	mtl->normal_map = load_image_file(fmk, json_get(json, "normal_map").data.s);
-	mtl->height_map = load_image_file(fmk, json_get(json, "height_map").data.s);
-	mtl->base_map = load_image_file(fmk, json_get(json, "base_map").data.s);
-	mtl->metal_map = load_image_file(fmk, json_get(json, "metal_map").data.s);
-	mtl->rough_map = load_image_file(fmk, json_get(json, "rough_map").data.s);
-	mtl->ao_map = load_image_file(fmk, json_get(json, "ao_map").data.s);
+	v = json_get(json, "normal_map");
+	mtl->normal_map = load_image_file(fmk, v.error == TYPE_ERROR ? NULL : v.data.s);
+	v = json_get(json, "height_map");
+	mtl->height_map = load_image_file(fmk, v.error == TYPE_ERROR ? NULL : v.data.s);
+	v = json_get(json, "base_map");
+	mtl->base_map = load_image_file(fmk, v.error == TYPE_ERROR ? NULL : v.data.s);
+	v = json_get(json, "metal_map");
+	mtl->metal_map = load_image_file(fmk, v.error == TYPE_ERROR ? NULL : v.data.s);
+	v = json_get(json, "rough_map");
+	mtl->rough_map = load_image_file(fmk, v.error == TYPE_ERROR ? NULL : v.data.s);
+	v = json_get(json, "ao_map");
+	mtl->ao_map = load_image_file(fmk, v.error == TYPE_ERROR ? NULL : v.data.s);
 }
 
 void		fill_materials(t_value val, int id, void *engine)
