@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/16 11:24:55 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/18 18:55:21 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/02/03 18:26:29 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static char	point_is_too_close(VEC2 p, VEC2 *d, UINT dsize, float mdist, int *gr
 
 inline float	frand_a_b(float a, float b)
 {
-	return ((rand() / (float)RAND_MAX) * (b - a) + a);
+	return ((arc4random() / (float)UINT32_MAX) * (b - a) + a);
 }
 
 static VEC2	new_point_around(float mdist, VEC2 p, VEC2 limits)
@@ -54,7 +54,6 @@ void		generate_poisson_disc(VEC2 *d, UINT dsize, float mdist, VEC2 limits)
 
 	i = 1;
 	memset(grid, -1, dsize * sizeof(int));
-	srand(time(NULL));
 	p.x = frand_a_b(limits.x, limits.y);
 	p.y = frand_a_b(limits.x, limits.y);
 	d[0] = p;

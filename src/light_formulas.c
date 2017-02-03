@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/14 18:14:04 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/18 16:19:33 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/02/03 15:42:51 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ float	oren_nayar_diffuse(VEC3 normal, VEC3 viewdir, VEC3 ldir, t_mtl *mtl)
 
 float	lambert_diffuse(VEC3 normal, VEC3 viewdir, VEC3 ldir, t_mtl *mtl)
 {
-	return (CLAMP(vec3_dot(normal, ldir) + mtl->roughness, 0, 1));
+	return (CLAMP(vec3_dot(normal, ldir), 0, 1));
+	(void)mtl;
 	(void)viewdir;
 }

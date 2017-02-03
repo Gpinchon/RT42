@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   json_to_prim.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbarbari <mbarbari@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/31 11:16:20 by mbarbari          #+#    #+#             */
-/*   Updated: 2017/01/31 18:23:45 by mbarbari         ###   ########.fr       */
+/*   Updated: 2017/02/03 15:04:06 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ PRIMITIVE			create_primitive(t_value val, t_objprim prim)
 		return (((cb_2)prim.fct)(json_get(val.data.obj, "radius").data.number,
 					json_get(val.data.obj, "size").data.number));
 	else if (prim.args == args4)
-		return (((cb_3)prim.fct)(	get_vec3_json(json_get(val.data.obj, "a")),
+		return (((cb_3)prim.fct)(get_vec3_json(json_get(val.data.obj, "a")),
 							get_vec3_json(json_get(val.data.obj, "b")),
 							get_vec3_json(json_get(val.data.obj, "c"))));
 	return (((cb_0)prim.fct)());
@@ -53,7 +53,7 @@ int				key_primitive(unsigned long id)
 		key_primitive[4] = djb2("TRIANGLE");
 		key_primitive[5] = djb2("DISC");
 		key_primitive[6] = djb2("CAPPED_CYLINDER");
-		key_primitive[5] = 0;
+		key_primitive[7] = 0;
 		++isinit;
 	}
 	return (id == 0 ? -1 : get_idfct(key_primitive, id));
@@ -73,7 +73,7 @@ t_objprim			get_fct_primitive(int id)
 		fct_primitive[3] = (t_objprim) {&new_cone, args2};
 		fct_primitive[4] = (t_objprim) {&new_triangle, args4};
 		fct_primitive[5] = (t_objprim) {&new_disc, args1};
-		fct_primitive[6] = (t_objprim) {&new_cylinder, args1};
+		fct_primitive[6] = (t_objprim) {&new_cylinder, args2};
 		++isinit;
 	}
 	return (id < 0 ? fct_primitive[19] : fct_primitive[id]);

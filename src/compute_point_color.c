@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/18 16:15:09 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/18 18:17:10 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/02/03 16:06:21 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,8 @@ VEC3			compute_point_color(LIGHT l, MATERIAL mtl,
 		inter.normal = vec3_negate(inter.normal);
 	else
 		mtl.alpha = 1;
-	c = vec3_add(c, vec3_mult(l.color, vec3_scale(mtl.base_color,
-		CLAMP(DIFFUSE(inter.normal, vd, ld, &mtl), 0, mtl.alpha))));
-	return (vec3_saturate(vec3_scale(vec3_add(c, vec3_scale(l.color,
+	c = vec3_add(c, vec3_scale(vec3_add(l.color, mtl.base_color),
+		CLAMP(DIFFUSE(inter.normal, vd, ld, &mtl), 0, mtl.alpha)));
+	return (vec3_saturate(vec3_scale(vec3_add(c, vec3_scale(vec3_add(l.color, mtl.base_color),
 		CLAMP(SPECULAR(inter.normal, vd, ld, &mtl), 0, mtl.alpha))), a)));
 }

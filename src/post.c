@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/17 18:00:44 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/30 15:18:16 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/02/03 18:32:17 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,22 +132,28 @@ float		poisson_ssao(ENGINE *engine, t_point2 p)
 	amount = 0;
 	depth = *((float*)get_buffer_value(engine->depthbuffer, p));
 	radius = 1.f / depth * 0.04;
-	size = engine->normalbuffer.size;
+	size = engine->positionbuffer.size;
 	norm = *((VEC3*)get_buffer_value(engine->normalbuffer, p));
 	pos = *((VEC3*)get_buffer_value(engine->positionbuffer, p));
+	srand(1);
 	while (i < 64)
 	{
-		p = (t_point2){(p.x + (engine->poisson_disc[i].x * 2 - 1) * radius),
-			(p.y + (engine->poisson_disc[i].y * 2 - 1) * radius)};
+		/*printf("%f, %f\n", engine->poisson_disc[i].x, engine->poisson_disc[i].y);
+		if (i == 63)
+			exit(0);*/
+		p = (t_point2){(p.x + (engine->poisson_disc[i].x * 2.f - 1) * radius),
+			(p.y + (engine->poisson_disc[i].y * 2.f - 1) * radius)};
+		/*p = (t_point2){(p.x + (frand_a_b(-radius, radius))),
+			(p.y + (frand_a_b(-radius, radius)))};*/
 		p = (t_point2){CLAMP(p.x, 0, size.x - 1), CLAMP(p.y, 0, size.y - 1)};
 		vpos = *((VEC3*)get_buffer_value(engine->positionbuffer, p));
 		posdif = vec3_sub(vpos, pos);
-		float angle = vec3_dot(norm, vec3_normalize(posdif));
-		if (angle >= 0)
+		float angle = (vec3_dot(norm, vec3_normalize(posdif)));
+		if (angle > 0)
 			amount += (angle * (2.f / (1.f + vec3_length(posdif))));
 		i++;
 	}
-	return (CLAMP(1 - (float)amount / 64.f, 0, 1));
+	return (CLAMP(1 - amount / 64.f, 0, 1));
 }
 
 void		ssao(ENGINE *engine, t_point2 coord)

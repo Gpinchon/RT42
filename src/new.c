@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/15 10:44:45 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/30 15:17:29 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/02/03 16:05:33 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ void		assign_functions(ENGINE *engine)
 	engine->uv_functions[sphere] = sphere_uv;
 	engine->uv_functions[cylinder] = cylinder_uv;
 	engine->uv_functions[plane] = plane_uv;
+	engine->uv_functions[triangle] = plane_uv;
 	engine->uv_functions[disc] = plane_uv;
 }
 

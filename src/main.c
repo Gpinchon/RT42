@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:32:51 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/02/01 22:52:11 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/02/03 17:34:51 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ int		main(int argc, char *argv[])
 
 	if (argc < 2 || (argc == 2 && access(argv[1], 0 | F_OK | R_OK) != 0))
 	{
-		write(1, "Cannot find file !\n", 20); //Tu peut me changer le write en quelque chose de plus beau?
+		write(1, "Cannot find file !\n", 20);
 		exit(0);
 	}
 	engine = create_scene(parser(argv[1]));
@@ -119,7 +119,7 @@ int		main(int argc, char *argv[])
 		while (i < engine.post_treatments.length)
 		{
 			do_post_treatment(&engine, ezarray_get_index(engine.post_treatments, i));
-			if (i++ < engine.post_treatments.length)
+			if (++i < engine.post_treatments.length)
 				copy_framebuffer(engine.finalbuffer, engine.framebuffer);
 		}
 		display_framebuffer(engine.finalbuffer, engine.image);
