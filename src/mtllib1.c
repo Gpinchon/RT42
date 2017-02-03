@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/16 14:13:31 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/23 17:38:53 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/02/03 22:33:51 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,6 @@ MATERIAL	*mtl_stained_glass(ENGINE *e, SCENE *s)
 	m->refraction_color = (VEC3){1, 1, 1};
 	m->uv_scale = (VEC2){1, 1};
 	m->roughness = 0.03;
-	m->metalness = 0.5;
-	m->alpha = 0.05;
 	return (m);
 }
 

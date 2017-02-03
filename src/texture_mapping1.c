@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/18 15:18:23 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/02/03 15:47:14 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/02/03 22:55:14 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ VEC2	sample_height_map(void *h, CAST_RETURN *ret)
 
 	vdir = mat3_mult_vec3(mat3_inverse(ret->tbn), ret->ray.direction);
 	d[1] = interp_linear(64, 128, fabs(vdir.z));
-	tries = d[1];
+	tries = d[1] * 2;
 	d[0] = 1.0 / d[1];
 	c[1] = vec2_fdiv(vec2_scale(vec3_to_vec2(vdir), ret->mtl.parallax), d[1]);
 	d[1] = 0.0;

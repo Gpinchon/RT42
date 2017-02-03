@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/17 18:00:44 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/02/03 18:32:17 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/02/03 22:22:14 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,35 +121,28 @@ float		poisson_ssao(ENGINE *engine, t_point2 p)
 	VEC3		norm;
 	VEC3		pos;
 	VEC3		posdif;
-	VEC3		vpos;
 	UINT		i;
 	t_point2	size;
-	float		depth;
 	float		radius;
 	float		amount;
+	float		angle;
 
 	i = 0;
 	amount = 0;
-	depth = *((float*)get_buffer_value(engine->depthbuffer, p));
-	radius = 1.f / depth * 0.04;
+	radius = 1.f / *((float*)get_buffer_value(engine->depthbuffer, p)) * 0.04;
 	size = engine->positionbuffer.size;
 	norm = *((VEC3*)get_buffer_value(engine->normalbuffer, p));
 	pos = *((VEC3*)get_buffer_value(engine->positionbuffer, p));
-	srand(1);
+	VEC2 uv = new_vec2(p.x / (float)size.x, p.y / (float)size.y);
 	while (i < 64)
 	{
-		/*printf("%f, %f\n", engine->poisson_disc[i].x, engine->poisson_disc[i].y);
-		if (i == 63)
-			exit(0);*/
-		p = (t_point2){(p.x + (engine->poisson_disc[i].x * 2.f - 1) * radius),
-			(p.y + (engine->poisson_disc[i].y * 2.f - 1) * radius)};
-		/*p = (t_point2){(p.x + (frand_a_b(-radius, radius))),
-			(p.y + (frand_a_b(-radius, radius)))};*/
+		p = (t_point2){
+			(uv.x + (engine->poisson_disc[i].x * 2 - 1) * radius) * size.x,
+			(uv.y + (engine->poisson_disc[i].y * 2 - 1) * radius) * size.y};
 		p = (t_point2){CLAMP(p.x, 0, size.x - 1), CLAMP(p.y, 0, size.y - 1)};
-		vpos = *((VEC3*)get_buffer_value(engine->positionbuffer, p));
-		posdif = vec3_sub(vpos, pos);
-		float angle = (vec3_dot(norm, vec3_normalize(posdif)));
-		if (angle > 0)
+		posdif = vec3_sub(*((VEC3*)get_buffer_value(engine->positionbuffer, p)), pos);
+		angle = vec3_dot(norm, vec3_normalize(posdif));
+		if (angle >= 0)
 			amount += (angle * (2.f / (1.f + vec3_length(posdif))));
 		i++;
 	}
