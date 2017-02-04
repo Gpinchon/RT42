@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/30 15:05:05 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/30 17:05:37 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/02/04 15:34:53 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ BOOL	join_threads(pthread_t *threads, ENGINE *e)
 	t = 0;
 	while (t < NUM_THREADS)
 	{
+		e->progress_callback(e, t / (float)NUM_THREADS);
 		if (pthread_join(threads[t], &status))
 			return (false);
 		e->progress_callback(e, t / (float)NUM_THREADS);

@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:32:51 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/02/03 22:44:56 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/02/04 15:41:18 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ VEC3	compute_area_lighting(ENGINE *engine, CAST_RETURN *ret)
 
 	i = 0;
 	col = new_vec3(0, 0, 0);
-	r.origin = vec3_add(ret->intersect.position, vec3_scale(ret->intersect.normal, 0.005f));
+	r.origin = vec3_add(ret->intersect.position, vec3_scale(ret->intersect.normal, 0.0001f));
 	RAY		lray = new_ray(engine->active_scene->active_camera->transform->current.position, new_vec3(0, 1, 0));
 	VEC3	ndir = ret->intersect.normal;
 	UINT	hits = 0;

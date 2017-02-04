@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/25 17:49:13 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/30 15:09:48 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/02/04 16:43:23 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static inline VEC4	pixel_color(ENGINE *e, CAST_RETURN *r, BOOL area_lights)
 	col = vec3_add(col, compute_refraction(e, r, &r->ray, 1.f));
 	if (area_lights && r->mtl.alpha > 0.0001)
 		col = vec3_add(col, compute_area_lighting(e, r));
-	return (vec3_to_vec4(col, 1));
+	return (vec3_to_vec4(vec3_saturate(col), 1));
 }
 
 static inline void	render_pixel(t_pth_args args, CAMERA cam, FRAMEBUFFER f, t_point2 scoord)

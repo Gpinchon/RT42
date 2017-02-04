@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/02 22:54:03 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/02/03 15:41:10 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/02/04 17:05:07 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,16 +39,12 @@ VEC3	compute_lighting(ENGINE *engine, CAST_RETURN *ret)
 			if (lret.mtl.alpha < 1)
 			{
 				float	final_alpha;
-				//VEC3	ldir;
 
 				final_alpha = lret.mtl.alpha;
 				ray.origin = vec3_add(lret.intersect.position, vec3_scale(ray.direction, 0.0001));
-				//ldir = vec3_negate(compute_lightdir(l, ret->intersect.position));
-				//ldir = vec3_normalize(vec3_sub(ret->intersect.position, l.position));
 				while (final_alpha < 1
 				&& (lret = cast_ray(engine, engine->active_scene, ray)).intersect.intersects
-				&& vec3_dot(compute_lightdir(l, lret.intersect.position), ray.direction))
-				//&& vec3_dot(vec3_normalize(vec3_sub(lret.intersect.position, l.position)), ldir))
+				&& vec3_dot(compute_lightdir(l, lret.intersect.position), ray.direction) > 0)
 				{
 					get_ret_mtl(&lret);
 					lcolor = vec3_mult(lcolor, vec3_scale(lret.mtl.base_color, 1 - lret.mtl.alpha));
@@ -60,6 +56,7 @@ VEC3	compute_lighting(ENGINE *engine, CAST_RETURN *ret)
 		}
 		else
 			color = vec3_add(color, lcolor = compute_point_color(l, ret->mtl, ret->intersect, ray));
+		color = vec3_saturate(color);
 		i++;
 	}
 	return (vec3_saturate(color));

@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/02 22:50:09 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/25 18:44:25 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/02/04 17:01:05 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@ VEC3	compute_refraction(ENGINE *e, CAST_RETURN *re, RAY *r, float a)
 	e->refr_iteration++;
 	c = (VEC3){0, 0, 0};
 	d = vec3_refract(r->direction, re->intersect.normal, re->mtl.refraction, a);
-	ray = new_ray(vec3_sub(re->intersect.position,
-		vec3_scale(re->intersect.normal, 0.0001)), d);
+	ray = new_ray(vec3_add(re->intersect.position,
+		vec3_scale(d, 0.0001)), d);
 	if ((cr = cast_ray(e, e->active_scene, ray)).intersect.intersects)
 	{
 		get_ret_mtl(&cr);

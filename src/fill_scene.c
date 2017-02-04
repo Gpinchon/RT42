@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/31 11:14:10 by mbarbari          #+#    #+#             */
-/*   Updated: 2017/02/02 21:10:12 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/02/04 17:33:28 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ void		fill_map(t_value val, ENGINE *engine, MATERIAL *mtl)
 	fmk = engine->framework;
 	v = json_get(json, "normal_map");
 	mtl->normal_map = load_image_file(fmk, v.error == TYPE_ERROR ? NULL : v.data.s);
+	v = json_get(json, "alpha_map");
+	mtl->alpha_map = load_image_file(fmk, v.error == TYPE_ERROR ? NULL : v.data.s);
 	v = json_get(json, "height_map");
 	mtl->height_map = load_image_file(fmk, v.error == TYPE_ERROR ? NULL : v.data.s);
 	v = json_get(json, "base_map");
@@ -85,6 +87,7 @@ void		fill_materials(t_value val, int id, void *engine)
 	m->metalness = json_get(obj, "metalness").data.number;
 	m->alpha = json_get(obj, "alpha").data.number;
 	m->parallax = json_get(obj, "parallax").data.number;
+	m->emitting.type = POINT;
 	m->emitting.power = json_get(obj, "emitting_power").data.number;
 	m->emitting.attenuation =
 			json_get(obj, "emitting_attenuation").data.number;

@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/17 18:00:44 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/02/03 22:22:14 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/02/04 16:23:31 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,6 +157,7 @@ void		ssao(ENGINE *engine, t_point2 coord)
 	col = get_buffer_value(engine->framebuffer, coord);
 	vcolor = vec4_scale(new_vec4(col[2] / 255.f, col[1] / 255.f, col[0] / 255.f, col[3] / 255.f),
 		poisson_ssao(engine, coord));
+	//vcolor.x = vcolor.y = vcolor.z = poisson_ssao(engine, coord);
 	vcolor.w = 1;
 	put_pixel_to_buffer(engine->finalbuffer, coord, vcolor);
 }
