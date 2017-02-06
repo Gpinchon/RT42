@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/30 15:05:05 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/02/04 15:34:53 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/02/06 20:17:15 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ BOOL	join_threads(pthread_t *threads, ENGINE *e)
 	return (true);
 }
 
-BOOL	render_multithread(pthread_t *threads, ENGINE *e, SCENE *scene,
+void	*render_multithread(pthread_t *threads, ENGINE *e, SCENE *scene,
 	BOOL area_lights)
 {
 	int			t;
@@ -104,31 +104,36 @@ BOOL	render_multithread(pthread_t *threads, ENGINE *e, SCENE *scene,
 		args[t].limit = limits[t];
 		args[t].area_lights = area_lights;
 		if (pthread_create(&threads[t], NULL, render_part, (void *)&args[t]))
-			return (false);
+			return (NULL);
 		t++;
 	}
 	free(scoords);
 	free(limits);
-	//free(args);
-	return (true);
+	return (args);
 }
 
 BOOL	render_scene(ENGINE *e, SCENE *s)
 {
-	pthread_t	*threads;
+	pthread_t	*th;
+	t_pth_args	*arg;
+	BOOL		ret;
+	int			t;
 
-	threads = (pthread_t *)malloc(NUM_THREADS * sizeof(pthread_t));
+	th = (pthread_t *)malloc(NUM_THREADS * sizeof(pthread_t));
 	e->active_scene = s;
-	if (!render_multithread(threads, e, s, scene_contains_area_light(s)))
+	ret = true;
+	if (!(arg = render_multithread(th, e, s, scene_contains_area_light(s))))
+		ret = false;
+	if (!ret || !join_threads(th, e))
+		ret = false;
+	t = 0;
+	while(t < NUM_THREADS)
 	{
-		free(threads);
-		return (false);
+		free(arg[t].engine);
+		t++;
 	}
-	if (!join_threads(threads, e))
-	{
-		free(threads);
-		return (false);
-	}
-	free(threads);
-	return (true);
+	if (arg)
+		free(arg);
+	free(th);
+	return (ret);
 }

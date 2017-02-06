@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   create_scene.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbarbari <mbarbari@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/26 17:01:53 by mbarbari          #+#    #+#             */
-/*   Updated: 2017/01/31 18:23:31 by mbarbari         ###   ########.fr       */
+/*   Updated: 2017/02/06 20:39:00 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,11 @@ ENGINE		set_engine(t_value val)
 	options.max_refr = json_get(json, "max_refr").data.number;
 	options.max_refl = json_get(json, "max_refl").data.number;
 	options.area_sampling = json_get(json, "area_sampling").data.number;
-	//TODO: d'ou sa sort mon chou?
-	options.window_size = options.internal_size = (t_point2){1024, 1024};
-	//options.window_height = json_get(json, "window height").data.number;
-	//options.window_width = json_get(json, "window width").data.number;
-	//options.internal_height = json_get(json, "internal height").data.number;
-	//options.internal_width = json_get(json, "internal width").data.number;
+	options.window_size.x = json_get(json, "window height").data.number;
+	options.window_size.y = json_get(json, "window width").data.number;
+	options.internal_size.x = json_get(json, "internal height").data.number;
+	options.internal_size.y = json_get(json, "internal width").data.number;
+	free(json);
 	return (new_engine(options));
 }
 
@@ -67,5 +66,6 @@ ENGINE		create_scene(t_value val)
 	json_foreach_arr(materials.data.arr, &fill_materials, &engine);
 	json_foreach_arr(primitives.data.arr, &fill_primitive, &engine);
 	json_foreach_arr(lights.data.arr, &fill_lights, &engine);
+	free(val.data.obj);
 	return (engine);
 }

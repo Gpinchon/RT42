@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/31 11:16:20 by mbarbari          #+#    #+#             */
-/*   Updated: 2017/02/03 15:04:06 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/02/06 22:31:33 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ int					get_idfct(unsigned long *key, unsigned long val)
 
 PRIMITIVE			create_primitive(t_value val, t_objprim prim)
 {
+	printf("%f\n", json_get(val.data.obj, "radius").data.number);
 	if (prim.args == args1)
 		return (((cb_1)prim.fct)(json_get(val.data.obj, "radius").data.number));
 	else if (prim.args == args2)

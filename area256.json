@@ -1,0 +1,261 @@
+{
+	"engine" :
+	{
+		"max_refr" : 4,
+		"max_refl" : 4,
+		"area_sampling" : 256,
+		"window height" : 1024,
+		"window width" : 768,
+		"internal height" : 768,
+		"internal width" : 576
+	},
+	"scene" :
+	{
+		"camera" :
+		{
+			"fov" : 90.0,
+			"znear" : 0.001,
+			"zfar" : 1000,
+            "transform" : {
+               "position" : {
+                 "x" : -2.5,
+                 "y" : 2.5,
+                 "z" : 2.5
+		       },
+               "rotation" : {
+                 "x" : 0,
+                 "y" : 0,
+                 "z" : 0
+		       },
+               "scaling" : {
+                 "x" : 1,
+                 "y" : 1,
+                 "z" : 1
+		       }
+           },
+			"target" : {
+               "position" : {
+                 "x" : 0,
+                 "y" : 1,
+                 "z" : 0
+		       },
+               "rotation" : {
+                 "x" : 0,
+                 "y" : 0,
+                 "z" : 0
+		       },
+               "scaling" : {
+                 "x" : 1,
+                 "y" : 1,
+                 "z" : 1
+		       }
+			},
+            "bloom_threshold" : 0.6,
+            "bloom_intensity" : 0.5,
+            "bloom_radius" : 0.025
+		},
+		"materials" :
+		[
+			{
+				"name" : "stained_glass",
+				"base_map" : "res/stained_glass/stained_glass_base.bmp",
+				"ao_map" : "res/stained_glass/stained_glass_ao.bmp",
+				"metal_map" : "res/stained_glass/stained_glass_metal.bmp",
+				"normal_map" : "res/stained_glass/stained_glass_normal.bmp",
+				"height_map" : "res/stained_glass/stained_glass_height.bmp",
+				"alpha_map" : "res/stained_glass/stained_glass_alpha.bmp",
+				"parallax" : 0.01,
+				"alpha" : 1,
+				"refraction" : 1.52,
+				"reflection_color" : {
+					"x" : 1,
+					"y" : 1,
+					"z" : 1
+				},
+				"refraction_color" : {
+					"x" : 1,
+					"y" : 1,
+					"z" : 1
+				},
+				"uv_scale" : {
+					"x" : 1,
+					"y" : 1
+				},
+				"roughness" : 0.03
+			},
+			{
+				"name" : "octostone",
+				"base_map" : "res/octostone/octostone_base.bmp",
+				"ao_map" : "res/octostone/octostone_ao.bmp",
+				"rough_map" : "res/octostone/octostone_rough.bmp",
+				"metal_map" : "res/octostone/octostone_metal.bmp",
+				"normal_map" : "res/octostone/octostone_normal.bmp",
+				"height_map" : "res/octostone/octostone_height.bmp",
+				"parallax" : 0.1,
+				"refraction" : 1.52,
+				"reflection_color" : {
+					"x" : 1,
+					"y" : 1,
+					"z" : 1
+				},
+				"refraction_color" : {
+					"x" : 1,
+					"y" : 1,
+					"z" : 1
+				},
+				"base_color" : {
+					"x" : 1,
+					"y" : 1,
+					"z" : 1
+				},
+				"uv_scale" : {
+					"x" : 4,
+					"y" : 4
+				},
+				"alpha" : 1
+			},
+			{
+				"name" : "brick",
+				"base_map" : "res/brick/brick_base.bmp",
+				"ao_map" : "res/brick/brick_ao.bmp",
+				"rough_map" : "res/brick/brick_rough.bmp",
+				"metal_map" : "res/brick/brick_metal.bmp",
+				"normal_map" : "res/brick/brick_normal.bmp",
+				"height_map" : "res/brick/brick_height.bmp",
+				"parallax" : 0.1,
+				"refraction" : 1.52,
+				"reflection_color" : {
+					"x" : 1,
+					"y" : 1,
+					"z" : 1
+				},
+				"refraction_color" : {
+					"x" : 1,
+					"y" : 1,
+					"z" : 1
+				},
+				"uv_scale" : {
+					"x" : 4,
+					"y" : 4
+				},
+				"alpha" : 1
+			},
+			{
+				"name" : "light",
+				"refraction" : 1.52,
+				"emitting_power" : 2,
+				"emitting_attenuation" : 0.002,
+				"emitting_falloff" : 5,
+				"emitting_color" : {
+					"x" : 1,
+					"y" : 1,
+					"z" : 1
+				},
+				"base_color" : {
+					"x" : 1,
+					"y" : 1,
+					"z" : 1
+				},
+				"refraction_color" : {
+					"x" : 1,
+					"y" : 1,
+					"z" : 1
+				},
+				"uv_scale" : {
+					"x" : 4,
+					"y" : 4
+				},
+				"alpha" : 1
+			}
+		],
+		"primitives" :
+		[
+			{
+				"type" : "SPHERE",
+                "radius" : 1,
+                "transform" : {
+                  "position" : {
+                    "x" : 0,
+                    "y" : 1.1,
+                    "z" : 0
+				  },
+                  "rotation" : {
+                    "x" : 0,
+                    "y" : 1,
+                    "z" : 0
+				  },
+                  "scaling" : {
+                    "x" : 0,
+                    "y" : 1,
+                    "z" : 0
+				  }
+                },
+				"material" : "stained_glass"
+			},
+			{
+				"type" : "PLANE",
+				"position" : {
+					"x" : 0,
+					"y" : 0,
+					"z" : 0
+				},
+				"direction" : {
+					"x" : 0,
+					"y" : 1,
+					"z" : 0
+				},
+				"material" : "octostone"
+			},
+			{
+				"type" : "CYLINDER",
+				"radius" : 1,
+				"size" : 10,
+				"transform" : {
+                  "position" : {
+                    "x" : 0,
+                    "y" : 4,
+                    "z" : 0
+				  },
+                  "rotation" : {
+                    "x" : 1,
+                    "y" : 0,
+                    "z" : 0
+				  },
+                  "scaling" : {
+                    "x" : 1,
+                    "y" : 1,
+                    "z" : 1
+				  }
+                },
+				"material" : "light"
+			}
+		],
+		"lights" :
+		[
+			{
+				"type" : 2,
+				"position" : {
+					"x" : 0,
+					"y" : 1,
+					"z" : 0
+				},
+				"direction" : {
+					"x" : 0,
+					"y" : 1,
+					"z" : 0
+				},
+				"color" : {
+					"x" : 1,
+					"y" : 1,
+					"z" : 1
+				},
+				"cast_shadow" : true,
+				"power" : 1.0,
+				"attenuation" : 0.002,
+				"falloff" : 5,
+				"spot_size" : 80,
+				"ambient_coef" : 0.2
+			}
+		]
+	}
+}

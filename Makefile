@@ -6,7 +6,7 @@
 #    By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/11/13 17:17:47 by gpinchon          #+#    #+#              #
-#    Updated: 2017/02/01 22:49:39 by gpinchon         ###   ########.fr        #
+#    Updated: 2017/02/06 22:17:58 by gpinchon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -64,7 +64,7 @@ LIBFILE	=	./libs/json/libjson.a \
 			./libs/sdl_framework/libSDLframework.a \
 			./libs/vml/libvml.a
 
-CFLAGS	=	-O3 -ffast-math -Wall -Wextra -Werror $(INCLUDE)
+CFLAGS	=	-Ofast -ffast-math -Wall -Wextra -Werror $(INCLUDE)
 
 ifeq ($(OS), Windows_NT)
 LIBS	=	$(addprefix -L , $(LIBDIR)) -lezmem -lvml -ljson -lmingw32 -lSDLframework -lSDL2main -lSDL2  -lopengl32 -lm

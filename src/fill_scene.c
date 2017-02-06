@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/31 11:14:10 by mbarbari          #+#    #+#             */
-/*   Updated: 2017/02/04 17:33:28 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/02/06 23:23:37 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ void		fill_camera(t_value val, void *obj)
 	scene->bloom_threshold = json_get(json, "bloom_threshold").data.number;
 	scene->bloom_intensity = json_get(json, "bloom_intensity").data.number;
 	scene->bloom_radius = json_get(json, "bloom_radius").data.number;
+	free(val.data.obj);
 }
 
 void		fill_map(t_value val, ENGINE *engine, MATERIAL *mtl)
