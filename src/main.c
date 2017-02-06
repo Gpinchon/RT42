@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:32:51 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/02/04 15:41:18 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/02/06 18:30:55 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,7 @@ int		main(int argc, char *argv[])
 		exit(0);
 	}
 	engine = create_scene(parser(argv[1]));
+	set_onexit_hook(engine.framework, new_callback(destroy_engine, &engine));
 	callback = new_callback(ssao, &engine);
 	ezarray_push(&engine.post_treatments, &callback);
 	callback = new_callback(depth_of_field, &engine);
@@ -126,7 +127,5 @@ int		main(int argc, char *argv[])
 		refresh_window(engine.window);
 		framework_loop(engine.framework);
 	}
-	destroy_framework(engine.framework);
-	destroy_engine(&engine);
-	return (argv[argc - 1][0]);
+	return (0);
 }

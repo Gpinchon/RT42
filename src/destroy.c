@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/15 11:26:46 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/25 18:34:30 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/02/06 18:09:40 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void		destroy_engine(ENGINE *engine)
 	destroy_ezarray(&engine->framebuffer.array);
 	destroy_ezarray(&engine->positionbuffer.array);
 	destroy_ezarray(&engine->normalbuffer.array);
-	//destroy_ezarray(&engine->mtlbuffer.array);
+	destroy_ezarray(&engine->depthbuffer.array);
 	destroy_scene(&engine->scene);
+	destroy_framework(engine->framework);
 }
