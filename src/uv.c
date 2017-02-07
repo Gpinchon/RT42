@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/16 14:46:46 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/30 17:42:31 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/02/07 22:43:57 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ VEC2		cylinder_uv(u_obj o, INTERSECT inter, TRANSFORM *t)
 	return (uv);
 }
 
-VEC2	plane_uv(u_obj plane, INTERSECT inter, TRANSFORM *tr)
+VEC2	plane_uv(u_obj plane, INTERSECT i, TRANSFORM *tr)
 {
 	VEC2	uv;
 	VEC3	t;
@@ -77,26 +77,23 @@ VEC2	plane_uv(u_obj plane, INTERSECT inter, TRANSFORM *tr)
 	float 	d;
 
 	uv = new_vec2(0, 0);
-	t = vec3_cross(vec3_negate(inter.normal), new_vec3(0.0, 1.0, 0.0));
-	if (!vec3_length(t))
-		t = vec3_cross(inter.normal, new_vec3(0.0, 0.0, 1.0));
-	t = vec3_normalize(t);
-	b = vec3_cross(t, inter.normal);
-	d = vec3_distance(inter.position, tr->position);
-	dir = vec3_normalize(vec3_sub(tr->position, inter.position));
+	t = vec3_normalize(vec3_cross(i.normal, vec3_orthogonal(tr->rotation)));
+	b = vec3_normalize(vec3_negate(vec3_cross(t, i.normal)));
+	d = vec3_distance(i.position, tr->position);
+	dir = vec3_normalize(vec3_sub(tr->position, i.position));
 	alpha = vec3_dot(t, dir);
 	npos = tr->position;
 	while ((alpha = vec3_dot(t, dir)) < 0)
 	{
 		npos = vec3_add(npos, vec3_scale(t, 10.f));
-		d = vec3_distance(inter.position, npos);
-		dir = vec3_normalize(vec3_sub(npos, inter.position));
+		d = vec3_distance(i.position, npos);
+		dir = vec3_normalize(vec3_sub(npos, i.position));
 	}
 	while (vec3_dot(b, dir) < 0)
 	{
 		npos = vec3_add(npos, vec3_scale(b, 10.f));
-		d = vec3_distance(inter.position, npos);
-		dir = vec3_normalize(vec3_sub(npos, inter.position));
+		d = vec3_distance(i.position, npos);
+		dir = vec3_normalize(vec3_sub(npos, i.position));
 		alpha = vec3_dot(t, dir);
 	}
 	if (alpha < 1)

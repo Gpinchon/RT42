@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/02 22:52:19 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/02/07 16:06:05 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/02/07 21:09:38 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,17 +28,6 @@ static inline MAT3	tbn_matrix(VEC3 n, VEC3 pdir)
 	return (new_mat3(t, vec3_normalize(vec3_cross(n, t)), n));
 }
 
-static inline MAT3	plane_tbn_matrix(VEC3 n)
-{
-	VEC3	t;
-
-	t = vec3_cross(vec3_negate(n), new_vec3(0.0, 1.0, 0.0));
-	if (!vec3_length(t))
-		t = vec3_cross(n, new_vec3(0.0, 0.0, 1.0));
-	t = vec3_normalize(t);
-	return (new_mat3(t, vec3_normalize(vec3_cross(vec3_negate(n), t)), n));
-}
-
 static inline void	intersect_primitive(ENGINE *e, RTPRIMITIVE *p,
 	CAST_RETURN *ret)
 {
@@ -53,8 +42,7 @@ static inline void	intersect_primitive(ENGINE *e, RTPRIMITIVE *p,
 	&& check_intersection(ret->intersect.distance[0], in.distance[0]))
 	{
 		ret->intersect = in;
-		ret->tbn = p->prim.type == plane ? plane_tbn_matrix(in.normal) :
-			tbn_matrix(in.normal, t.rotation);
+		ret->tbn = tbn_matrix(in.normal, t.rotation);
 		if (p->material)
 			ret->mtl = *p->material;
 		if (e->uv_functions[p->prim.type])

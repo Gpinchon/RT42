@@ -13,7 +13,7 @@
 	{
 		"camera" :
 		{
-			"fov" : 90.0,
+			"fov" : 100.0,
 			"znear" : 0.001,
 			"zfar" : 1000,
             "transform" : {
@@ -36,7 +36,7 @@
 			"target" : {
                "position" : {
                  "x" : 0,
-                 "y" : 0,
+                 "y" : -3,
                  "z" : 0
 		       },
                "rotation" : {
@@ -233,7 +233,7 @@
 					"z" : 0
 				},
 				"cast_shadow" : true,
-				"power" : 0.67,
+				"power" : 1.0,
 				"attenuation" : 0.002,
 				"falloff" : 5,
 				"spot_size" : 80,
@@ -257,7 +257,7 @@
 					"z" : 0
 				},
 				"cast_shadow" : true,
-				"power" : 0.67,
+				"power" : 1.0,
 				"attenuation" : 0.002,
 				"falloff" : 5,
 				"spot_size" : 80,
@@ -281,7 +281,7 @@
 					"z" : 1
 				},
 				"cast_shadow" : true,
-				"power" : 0.67,
+				"power" : 1.0,
 				"attenuation" : 0.002,
 				"falloff" : 5,
 				"spot_size" : 80,
