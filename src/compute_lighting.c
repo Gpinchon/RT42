@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/02 22:54:03 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/02/07 14:21:43 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/02/07 15:24:36 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,11 +40,10 @@ VEC3	compute_lighting(ENGINE *e, CAST_RETURN *r)
 {
 	UINT		i;
 	LIGHT		l;
-	VEC3		color;
-	VEC3		lcolor;
+	VEC3		c;
 	CAST_RETURN	lr;
 
-	color = r->mtl.emitting.color;
+	c = r->mtl.emitting.color;
 	i = 0;
 	while (i < e->active_scene->lights.length)
 	{
@@ -58,21 +57,17 @@ VEC3	compute_lighting(ENGINE *e, CAST_RETURN *r)
 			r->intersect.position))
 		{
 			get_ret_mtl(&lr);
-			lcolor = compute_point_color(l, r->mtl,
-				r->intersect, lr.ray);
 			if (l.ambient_coef)
-				color = vec3_add(color,
-					vec3_scale(lcolor, l.ambient_coef));
+				c = vec3_add(c,	vec3_scale(compute_point_color(l, r->mtl,
+				r->intersect, lr.ray), l.ambient_coef));
 			if (lr.mtl.alpha < 1)
-				color = vec3_add(color,
-					semi_transparent_shadow(e, lr, lcolor, l));
+				c = vec3_add(c, semi_transparent_shadow(e, lr,
+				compute_point_color(l, r->mtl, r->intersect, lr.ray), l));
 		}
 		else
-		{
-			lcolor = compute_point_color(l, r->mtl, r->intersect, lr.ray);
-			color = vec3_add(color, lcolor);
-		}
+			c = vec3_add(c,
+				compute_point_color(l, r->mtl, r->intersect, lr.ray));
 		i++;
 	}
-	return (vec3_saturate(color));
+	return (vec3_saturate(c));
 }
