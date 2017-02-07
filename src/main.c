@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:32:51 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/02/06 18:30:55 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/02/07 16:09:50 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,9 +84,9 @@ BOOL	scene_contains_area_light(SCENE *scene)
 		p = *((RTPRIMITIVE*)ezarray_get_index(primitives, i));
 		if (p.material
 		&& p.material->emitting.power > 0
-		&& p.material->emitting.color.x > 0
-		&& p.material->emitting.color.y > 0
-		&& p.material->emitting.color.z > 0)
+		&& (p.material->emitting.color.x > 0
+		|| p.material->emitting.color.y > 0
+		|| p.material->emitting.color.z > 0))
 			return (true);
 		i++;
 	}

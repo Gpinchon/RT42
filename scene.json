@@ -147,7 +147,7 @@
                     "z" : 0
 				  }
                 },
-				"material" : "stained_glass"
+				"material" : "brick"
 			},
 			{
 				"type" : "PLANE",

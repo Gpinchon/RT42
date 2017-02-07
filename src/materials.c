@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/05 22:09:17 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/02/04 20:17:11 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/02/07 16:27:06 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,17 @@ MATERIAL	*new_material(SCENE *s, char *n)
 	return (mtl);
 }
 
+static inline void	update_intersection(CAST_RETURN *ret, VEC2 uv)
+{
+	if (ret->mtl.alpha == 1)
+	{
+		ret->intersect.position = vec3_add(ret->intersect.position,
+			vec3_scale(ret->intersect.normal,
+				sample_texture_filtered(ret->mtl.height_map, uv).x * ret->mtl.parallax));
+		ret->intersect.distance[0] = vec3_distance(ret->ray.origin, ret->intersect.position);
+	}
+}
+
 void		get_ret_mtl(CAST_RETURN *ret)
 {
 	VEC2		uv;
@@ -66,6 +77,9 @@ void		get_ret_mtl(CAST_RETURN *ret)
 		ret->uv = sample_height_map(ret->mtl.height_map, ret);
 		uv = ret->uv;
 	}
+	if (ret->mtl.alpha_map)
+		ret->mtl.alpha = sample_texture_filtered(ret->mtl.alpha_map, uv).x;
+	update_intersection(ret, uv);
 	if (ret->mtl.normal_map)
 		ret->intersect.normal = sample_normal_map(ret->mtl.normal_map, ret);
 	if (ret->mtl.base_map)
@@ -77,16 +91,7 @@ void		get_ret_mtl(CAST_RETURN *ret)
 		ret->mtl.roughness = sample_texture_filtered(ret->mtl.rough_map, uv).x;
 	if (ret->mtl.metal_map)
 		ret->mtl.metalness = sample_texture_filtered(ret->mtl.metal_map, uv).x;
-	if (ret->mtl.alpha_map)
-		ret->mtl.alpha = sample_texture_filtered(ret->mtl.alpha_map, uv).x;
 	if (ret->mtl.ao_map)
 		ret->mtl.base_color = vec3_mult(ret->mtl.base_color,
 			sample_texture_filtered(ret->mtl.ao_map, uv));
-	if (ret->mtl.alpha == 1)
-	{
-		ret->intersect.position = vec3_add(ret->intersect.position,
-			vec3_scale(ret->intersect.normal,
-				sample_texture_filtered(ret->mtl.height_map, uv).x * ret->mtl.parallax));
-		ret->intersect.distance[0] = vec3_distance(ret->ray.origin, ret->intersect.position);
-	}
 }
