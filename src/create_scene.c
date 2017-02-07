@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/26 17:01:53 by mbarbari          #+#    #+#             */
-/*   Updated: 2017/02/06 20:39:00 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/02/07 14:03:05 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "scene.h"
 #include "parser.h"
 
-unsigned long		djb2(const char *str)
+unsigned long	djb2(const char *str)
 {
 	unsigned long	hash;
 	int				c;
@@ -32,7 +32,7 @@ unsigned long		djb2(const char *str)
 	return (hash);
 }
 
-ENGINE		set_engine(t_value val)
+ENGINE			set_engine(t_value val)
 {
 	t_json			*json;
 	t_engine_opt	options;
@@ -49,23 +49,23 @@ ENGINE		set_engine(t_value val)
 	return (new_engine(options));
 }
 
-ENGINE		create_scene(t_value val)
+ENGINE			create_scene(t_value v)
 {
 	ENGINE		engine;
 	t_value		camera;
 	t_value		materials;
-	t_value		primitives;
+	t_value		p;
 	t_value		lights;
 
-	engine = set_engine(val);
-	camera = json_get(json_get(val.data.obj, "scene").data.obj, "camera");
-	materials = json_get(json_get(val.data.obj, "scene").data.obj, "materials");
-	primitives = json_get(json_get(val.data.obj, "scene").data.obj, "primitives");
-	lights = json_get(json_get(val.data.obj, "scene").data.obj, "lights");
+	engine = set_engine(v);
+	camera = json_get(json_get(v.data.obj, "scene").data.obj, "camera");
+	materials = json_get(json_get(v.data.obj, "scene").data.obj, "materials");
+	p = json_get(json_get(v.data.obj, "scene").data.obj, "primitives");
+	lights = json_get(json_get(v.data.obj, "scene").data.obj, "lights");
 	fill_camera(camera, &engine.scene);
 	json_foreach_arr(materials.data.arr, &fill_materials, &engine);
-	json_foreach_arr(primitives.data.arr, &fill_primitive, &engine);
+	json_foreach_arr(p.data.arr, &fill_primitive, &engine);
 	json_foreach_arr(lights.data.arr, &fill_lights, &engine);
-	free(val.data.obj);
+	free(v.data.obj);
 	return (engine);
 }

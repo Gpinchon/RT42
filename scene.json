@@ -19,7 +19,7 @@
             "transform" : {
                "position" : {
                  "x" : -2.5,
-                 "y" : 0.5,
+                 "y" : 2.5,
                  "z" : 2.5
 		       },
                "rotation" : {

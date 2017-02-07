@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/15 13:01:12 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/25 18:34:46 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/02/07 14:01:25 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	clear_buffers(ENGINE *engine)
 	ezforeach(engine->framebuffer.array, clear_uchar_bits);
 	ezforeach(engine->positionbuffer.array, clear_float_bits);
 	ezforeach(engine->normalbuffer.array, clear_float_bits);
-	//ezforeach(engine->mtlbuffer.array, clear_float_bits);
+	ezforeach(engine->depthbuffer.array, clear_float_bits);
 }
 
 void	clear_renderer(ENGINE *engine)

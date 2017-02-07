@@ -6,57 +6,72 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/02 22:54:03 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/02/04 17:05:07 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/02/07 14:21:43 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <rt.h>
 
-VEC3	compute_lighting(ENGINE *engine, CAST_RETURN *ret)
+static inline VEC3	semi_transparent_shadow(ENGINE *e,
+	CAST_RETURN r, VEC3 lcolor, LIGHT l)
+{
+	float	final_alpha;
+
+	final_alpha = r.mtl.alpha;
+	r.ray.origin = vec3_add(r.intersect.position,
+		vec3_scale(r.ray.direction, 0.0001));
+	while (final_alpha < 1
+	&& (r = cast_ray(e, e->active_scene, r.ray)).intersect.intersects
+	&& vec3_dot(compute_lightdir(l, r.intersect.position),
+		r.ray.direction) > 0)
+	{
+		get_ret_mtl(&r);
+		lcolor = vec3_mult(lcolor, vec3_scale(r.mtl.base_color,
+			1 - r.mtl.alpha));
+		final_alpha += r.mtl.alpha;
+		r.ray.origin = vec3_add(r.intersect.position,
+			vec3_scale(r.ray.direction, 0.0001));
+	}
+	return (vec3_scale(lcolor, (1 - CLAMP(final_alpha, 0,
+		1 - l.ambient_coef))));
+}
+
+VEC3	compute_lighting(ENGINE *e, CAST_RETURN *r)
 {
 	UINT		i;
 	LIGHT		l;
 	VEC3		color;
 	VEC3		lcolor;
-	RAY			ray;
-	CAST_RETURN	lret;
+	CAST_RETURN	lr;
 
-	color = ret->mtl.emitting.color;
+	color = r->mtl.emitting.color;
 	i = 0;
-	while (i < engine->active_scene->lights.length)
+	while (i < e->active_scene->lights.length)
 	{
-		l = *((LIGHT*)ezarray_get_index(engine->active_scene->lights, i));
-		ray.direction = compute_lightdir(l, ret->intersect.position);
-		ray.origin = vec3_add(ret->intersect.position, vec3_scale(ret->intersect.normal, 0.0001));
+		l = *((LIGHT*)ezarray_get_index(e->active_scene->lights, i));
+		lr.ray = new_ray(vec3_add(r->intersect.position,
+			vec3_scale(r->intersect.normal, 0.0001)),
+			compute_lightdir(l, r->intersect.position));
 		if (l.cast_shadow
-		&& (lret = cast_ray(engine, engine->active_scene, ray)).intersect.intersects
-		&& lret.intersect.distance[0] < vec3_distance(l.position, ret->intersect.position))
+		&& (lr = cast_ray(e, e->active_scene, lr.ray)).intersect.intersects
+		&& lr.intersect.distance[0] < vec3_distance(l.position,
+			r->intersect.position))
 		{
-			get_ret_mtl(&lret);
-			lcolor = compute_point_color(l, ret->mtl, ret->intersect, ray);
+			get_ret_mtl(&lr);
+			lcolor = compute_point_color(l, r->mtl,
+				r->intersect, lr.ray);
 			if (l.ambient_coef)
-				color = vec3_add(color, vec3_scale(lcolor, l.ambient_coef));
-			if (lret.mtl.alpha < 1)
-			{
-				float	final_alpha;
-
-				final_alpha = lret.mtl.alpha;
-				ray.origin = vec3_add(lret.intersect.position, vec3_scale(ray.direction, 0.0001));
-				while (final_alpha < 1
-				&& (lret = cast_ray(engine, engine->active_scene, ray)).intersect.intersects
-				&& vec3_dot(compute_lightdir(l, lret.intersect.position), ray.direction) > 0)
-				{
-					get_ret_mtl(&lret);
-					lcolor = vec3_mult(lcolor, vec3_scale(lret.mtl.base_color, 1 - lret.mtl.alpha));
-					final_alpha += lret.mtl.alpha;
-					ray.origin = vec3_add(lret.intersect.position, vec3_scale(ray.direction, 0.0001));
-				}
-				color = vec3_add(color, vec3_scale(lcolor, (1 - CLAMP(final_alpha, 0, 1 - l.ambient_coef))));
-			}
+				color = vec3_add(color,
+					vec3_scale(lcolor, l.ambient_coef));
+			if (lr.mtl.alpha < 1)
+				color = vec3_add(color,
+					semi_transparent_shadow(e, lr, lcolor, l));
 		}
 		else
-			color = vec3_add(color, lcolor = compute_point_color(l, ret->mtl, ret->intersect, ray));
-		color = vec3_saturate(color);
+		{
+			lcolor = compute_point_color(l, r->mtl, r->intersect, lr.ray);
+			color = vec3_add(color, lcolor);
+		}
 		i++;
 	}
 	return (vec3_saturate(color));

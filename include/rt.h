@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:06:34 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/30 15:12:31 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/02/07 14:30:43 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ typedef struct	s_light
 	VEC3		direction;
 }				t_light;
 
+# pragma pack(push, 1)
 typedef struct	s_mtl
 {
 	char		*name;
@@ -96,6 +97,16 @@ typedef struct	s_rtprim
 	MATERIAL	*material;
 	PRIMITIVE	prim;
 }				t_rtprim;
+
+typedef struct	s_cast_return
+{
+	VEC2		uv;
+	RAY			ray;
+	INTERSECT	intersect;
+	MAT3		tbn;
+	MATERIAL	mtl;
+}				t_cast_return;
+# pragma pack(pop)
 
 typedef struct	s_camera
 {
@@ -128,15 +139,6 @@ typedef struct	s_framebuffer
 	t_point2	size;
 	ARRAY		array;
 }				t_framebuffer;
-
-typedef struct	s_cast_return
-{
-	VEC2		uv;
-	RAY			ray;
-	INTERSECT	intersect;
-	MAT3		tbn;
-	MATERIAL	mtl;
-}				t_cast_return;
 
 typedef struct	s_engine_opt
 {
