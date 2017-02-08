@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/23 15:03:14 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/30 15:08:51 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/02/08 18:33:13 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static inline void	display_loading(ENGINE *engine, void *img)
 	}
 }
 
-void	print_progress(ENGINE *engine, float progress)
+void				print_progress(ENGINE *engine, float progress)
 {
 	t_rgba		color;
 	t_point2	coord;

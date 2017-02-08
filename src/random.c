@@ -6,13 +6,14 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/16 11:24:55 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/02/03 21:36:12 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/02/08 18:34:30 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <rt.h>
 
-static char	point_is_too_close(VEC2 p, VEC2 *d, UINT dsize, float mdist, int *grid)
+static char	point_is_too_close(VEC2 p, VEC2 *d, UINT dsize,
+	float mdist, int *grid)
 {
 	UINT	i;
 

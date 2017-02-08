@@ -6,12 +6,20 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/25 17:49:13 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/02/04 16:43:23 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/02/08 18:53:36 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <rt.h>
 #include <pthread.h>
+
+static inline VEC2	normalize_screen_coord(t_point2 screen_coord,
+	t_point2 resolution)
+{
+	return ((VEC2){
+		(2 * ((float)(screen_coord.x + 0.5) / (float)resolution.x) - 1),
+		(1 - 2 * ((float)(screen_coord.y + 0.5) / (float)resolution.y))});
+}
 
 static inline VEC4	pixel_color(ENGINE *e, CAST_RETURN *r, BOOL area_lights)
 {
@@ -26,7 +34,8 @@ static inline VEC4	pixel_color(ENGINE *e, CAST_RETURN *r, BOOL area_lights)
 	return (vec3_to_vec4(vec3_saturate(col), 1));
 }
 
-static inline void	render_pixel(t_pth_args args, CAMERA cam, FRAMEBUFFER f, t_point2 scoord)
+static inline void	render_pixel(t_pth_args args, CAMERA cam,
+	FRAMEBUFFER f, t_point2 scoord)
 {
 	CAST_RETURN	r;
 	VEC2		nscoord;
@@ -36,7 +45,8 @@ static inline void	render_pixel(t_pth_args args, CAMERA cam, FRAMEBUFFER f, t_po
 		vec3_normalize((VEC3){nscoord.x, nscoord.y, -2}));
 	if ((r = cast_ray(args.engine, args.scene, cam.ray)).intersect.intersects)
 	{
-		put_pixel_to_buffer(f, scoord, pixel_color(args.engine, &r, args.area_lights));
+		put_pixel_to_buffer(f, scoord, pixel_color(args.engine, &r,
+			args.area_lights));
 		fill_buffers(args.engine, scoord, &r);
 	}
 	else

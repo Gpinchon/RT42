@@ -59,9 +59,9 @@
 			{
 				"name" : "plastic",
 				"base_color" : {
-					"x" : 1,
-					"y" : 1,
-					"z" : 1
+					"x" : 0.6,
+					"y" : 0.6,
+					"z" : 0.6
 				},
 				"refraction_color" : {
 					"x" : 1,
@@ -73,14 +73,11 @@
 				"alpha" : 0.8
 			},
 			{
-				"name" : "bamboo",
-				"base_map" : "res/bamboo/bamboo_base.bmp",
-				"ao_map" : "res/bamboo/bamboo_ao.bmp",
-				"rough_map" : "res/bamboo/bamboo_rough.bmp",
-				"metal_map" : "res/bamboo/bamboo_metal.bmp",
-				"normal_map" : "res/bamboo/bamboo_normal.bmp",
-				"height_map" : "res/bamboo/bamboo_height.bmp",
-				"parallax" : 0.1,
+				"name" : "scuffed_aluminium",
+				"base_map" : "res/scuffed_aluminium/scuffed_aluminium_base.bmp",
+				"rough_map" : "res/scuffed_aluminium/scuffed_aluminium_rough.bmp",
+				"metal_map" : "res/scuffed_aluminium/scuffed_aluminium_metal.bmp",
+				"normal_map" : "res/scuffed_aluminium/scuffed_aluminium_normal.bmp",
 				"refraction" : 1.52,
 				"refraction_color" : {
 					"x" : 1,
@@ -121,7 +118,7 @@
 			{
 				"type" : "DISC",
 				"radius" : 5,
-				"material" : "bamboo",
+				"material" : "scuffed_aluminium",
 				"transform" : {
                   "position" : {
                     "x" : 0,

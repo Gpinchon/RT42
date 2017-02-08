@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:06:34 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/02/07 14:30:43 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/02/08 19:02:31 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 # define CAMERA			struct s_camera
 # define RTTRANSFORM	struct s_rttransform
 # define CAST_RETURN	struct s_cast_return
+# define P2				struct s_point2
 # define UPVEC			(VEC3){0, 1, 0}
 # define MAX_REFL		3
 # define MAX_REFR		3
@@ -266,7 +267,6 @@ BOOL			render_scene(ENGINE *e, SCENE *scene);
 void			*render_part(void *pth_args);
 void			fill_buffers(ENGINE *engine, t_point2 screen_coord, CAST_RETURN *ret);
 VEC3			compute_area_lighting(ENGINE *engine, CAST_RETURN *ret);
-VEC2			normalize_screen_coord(t_point2 screen_coord, t_point2 resolution);
 BOOL			scene_contains_area_light(SCENE *scene);
 
 void			clear_renderer(ENGINE *engine);

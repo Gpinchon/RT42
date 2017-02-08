@@ -1,0 +1,232 @@
+{
+	"engine" :
+	{
+		"max_refr" : 4,
+		"max_refl" : 4,
+		"area_sampling" : 512,
+		"window height" : 1024,
+		"window width" : 768,
+		"internal height" : 1024,
+		"internal width" : 768
+	},
+	"scene" :
+	{
+		"camera" :
+		{
+			"fov" : 90.0,
+			"znear" : 0.001,
+			"zfar" : 1000,
+			"transform" : {
+				"position" : {
+					"x" : 1.5,
+					"y" : 2.5,
+					"z" : 2.5
+				},
+				"rotation" : {
+					"x" : 0,
+					"y" : 0,
+					"z" : 0
+				},
+				"scaling" : {
+					"x" : 1,
+					"y" : 1,
+					"z" : 1
+				}
+			},
+			"target" : {
+				"position" : {
+					"x" : 0,
+					"y" : 1,
+					"z" : 0
+				},
+				"rotation" : {
+					"x" : 0,
+					"y" : 0,
+					"z" : 0
+				},
+				"scaling" : {
+					"x" : 1,
+					"y" : 1,
+					"z" : 1
+				}
+			},
+			"bloom_threshold" : 0.6,
+			"bloom_intensity" : 0.5,
+			"bloom_radius" : 0.025
+		},
+		"materials" :
+		[
+			{
+				"name" : "cube",
+				"base_map" : "res/cube/cube_base.bmp",
+				"ao_map" : "res/cube/cube_ao.bmp",
+				"metal_map" : "res/cube/cube_metal.bmp",
+				"normal_map" : "res/cube/cube_normal.bmp",
+				"height_map" : "res/cube/cube_height.bmp",
+				"alpha_map" : "res/cube/cube_alpha.bmp",
+				"rough_map" : "res/cube/cube_rough.bmp",
+				"parallax" : 0.5,
+				"refraction" : 1.52,
+				"refraction_color" : {
+					"x" : 1,
+					"y" : 1,
+					"z" : 1
+				},
+				"uv_scale" : {
+					"x" : 1,
+					"y" : 1
+				},
+				"alpha" : 1,
+				"roughness" : 0.03
+			},
+			{
+				"name" : "harshbricks",
+				"base_map" : "res/harshbricks/harshbricks_base.bmp",
+				"ao_map" : "res/harshbricks/harshbricks_ao.bmp",
+				"rough_map" : "res/harshbricks/harshbricks_rough.bmp",
+				"metal_map" : "res/harshbricks/harshbricks_metal.bmp",
+				"normal_map" : "res/harshbricks/harshbricks_normal.bmp",
+				"height_map" : "res/harshbricks/harshbricks_height.bmp",
+				"parallax" : 0.1,
+				"refraction" : 1.52,
+				"refraction_color" : {
+					"x" : 1,
+					"y" : 1,
+					"z" : 1
+				},
+				"base_color" : {
+					"x" : 1,
+					"y" : 1,
+					"z" : 1
+				},
+				"uv_scale" : {
+					"x" : 4,
+					"y" : 4
+				},
+				"alpha" : 1
+			},
+			{
+				"name" : "octostone",
+				"base_map" : "res/octostone/octostone_base.bmp",
+				"ao_map" : "res/octostone/octostone_ao.bmp",
+				"rough_map" : "res/octostone/octostone_rough.bmp",
+				"metal_map" : "res/octostone/octostone_metal.bmp",
+				"normal_map" : "res/octostone/octostone_normal.bmp",
+				"height_map" : "res/octostone/octostone_height.bmp",
+				"parallax" : 0.1,
+				"refraction" : 1.52,
+				"refraction_color" : {
+					"x" : 1,
+					"y" : 1,
+					"z" : 1
+				},
+				"base_color" : {
+					"x" : 1,
+					"y" : 1,
+					"z" : 1
+				},
+				"uv_scale" : {
+					"x" : 4,
+					"y" : 4
+				},
+				"alpha" : 1
+			}
+		],
+		"primitives" :
+		[
+			{
+				"type" : "SPHERE",
+				"radius" : 1,
+				"transform" : {
+					"position" : {
+						"x" : 0,
+						"y" : 1,
+						"z" : 0
+					},
+					"rotation" : {
+						"x" : 0,
+						"y" : -1,
+						"z" : 0
+					},
+					"scaling" : {
+						"x" : 1,
+						"y" : 1,
+						"z" : 1
+					}
+				},
+				"material" : "cube"
+			},
+			{
+				"type" : "PLANE",
+				"transform" :
+				{
+					"position" : {
+						"x" : 0,
+						"y" : 0,
+						"z" : 0
+					},
+					"rotation" : {
+						"x" : 0,
+						"y" : 1,
+						"z" : 0
+					},
+					"scaling" : {
+						"x" : 1,
+						"y" : 1,
+						"z" : 1
+					}
+				},
+				"material" : "octostone"
+			},
+			{
+				"type" : "PLANE",
+				"transform" :
+				{
+					"position" : {
+						"x" : -2,
+						"y" : 0,
+						"z" : 0
+					},
+					"rotation" : {
+						"x" : 1,
+						"y" : 0,
+						"z" : 0
+					},
+					"scaling" : {
+						"x" : 1,
+						"y" : 1,
+						"z" : 1
+					}
+				},
+				"material" : "harshbricks"
+			}
+		],
+		"lights" :
+		[
+			{
+				"type" : 1,
+				"position" : {
+					"x" : 3,
+					"y" : 3,
+					"z" : 3
+				},
+				"direction" : {
+					"x" : -1,
+					"y" : -1,
+					"z" : -1
+				},
+				"color" : {
+					"x" : 1,
+					"y" : 1,
+					"z" : 1
+				},
+				"cast_shadow" : true,
+				"power" : 2.0,
+				"attenuation" : 0.002,
+				"falloff" : 5,
+				"spot_size" : 60,
+				"ambient_coef" : 0.2
+			}
+		]
+	}
+}

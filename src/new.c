@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/15 10:44:45 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/02/06 18:11:50 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/02/08 18:30:05 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ FRAMEBUFFER	new_framebuffer(TYPE type, t_point2 size, Uint8 depth)
 	return (buffer);
 }
 
-SCENE		new_scene()
+SCENE		new_scene(void)
 {
 	SCENE	scene;
 
@@ -32,13 +32,13 @@ SCENE		new_scene()
 	return (scene);
 }
 
-void		create_framebuffers(ENGINE *engine, t_engine_opt options)
+void		create_framebuffers(ENGINE *engine, t_engine_opt opt)
 {
-	engine->framebuffer = new_framebuffer(unsigned_char, options.internal_size, 4);
-	engine->finalbuffer = new_framebuffer(unsigned_char, options.internal_size, 4);
-	engine->positionbuffer = new_framebuffer(FLOAT, options.internal_size, 3);
-	engine->normalbuffer = new_framebuffer(FLOAT, options.internal_size, 3);
-	engine->depthbuffer = new_framebuffer(FLOAT, options.internal_size, 1);
+	engine->framebuffer = new_framebuffer(unsigned_char, opt.internal_size, 4);
+	engine->finalbuffer = new_framebuffer(unsigned_char, opt.internal_size, 4);
+	engine->positionbuffer = new_framebuffer(FLOAT, opt.internal_size, 3);
+	engine->normalbuffer = new_framebuffer(FLOAT, opt.internal_size, 3);
+	engine->depthbuffer = new_framebuffer(FLOAT, opt.internal_size, 1);
 }
 
 void		assign_functions(ENGINE *engine)
@@ -57,24 +57,25 @@ void		assign_functions(ENGINE *engine)
 	engine->uv_functions[disc] = plane_uv;
 }
 
-ENGINE		new_engine(t_engine_opt options)
+ENGINE		new_engine(t_engine_opt o)
 {
-	ENGINE	engine;
+	ENGINE	e;
 
-	memset(&engine, 0, sizeof(ENGINE));
-	engine.framework = new_framework();
-	engine.window = new_window(engine.framework, options.window_size.x, options.window_size.y, "RT");
-	set_loop_hook(engine.framework, new_callback((void(*)(void*))refresh_window, engine.window));
-	engine.progress_callback = print_progress;
-	engine.loading_screen = load_image_file(engine.framework, "./res/loading_screen.bmp");
-	engine.image = new_image(engine.framework, options.window_size.x, options.window_size.y);
-	attach_image_to_window(engine.window, engine.image);
-	create_framebuffers(&engine, options);
-	engine.post_treatments = new_ezarray(other, 0, sizeof(t_callback));
-	assign_functions(&engine);
-	engine.max_refl = options.max_refl;
-	engine.max_refr = options.max_refr;
-	engine.area_sampling = options.area_sampling;
-	generate_poisson_disc(engine.poisson_disc, 64, 0.05f, new_vec2(0, 1));
-	return (engine);
+	memset(&e, 0, sizeof(ENGINE));
+	e.framework = new_framework();
+	e.window = new_window(e.framework, o.window_size.x, o.window_size.y, "RT");
+	set_loop_hook(e.framework, new_callback((void(*)(void*))refresh_window,
+		e.window));
+	e.progress_callback = print_progress;
+	e.loading_screen = load_image_file(e.framework, "./res/loading_screen.bmp");
+	e.image = new_image(e.framework, o.window_size.x, o.window_size.y);
+	attach_image_to_window(e.window, e.image);
+	create_framebuffers(&e, o);
+	e.post_treatments = new_ezarray(other, 0, sizeof(t_callback));
+	assign_functions(&e);
+	e.max_refl = o.max_refl;
+	e.max_refr = o.max_refr;
+	e.area_sampling = o.area_sampling;
+	generate_poisson_disc(e.poisson_disc, 64, 0.05f, new_vec2(0, 1));
+	return (e);
 }

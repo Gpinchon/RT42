@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/17 18:00:44 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/02/04 16:23:31 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/02/08 19:02:39 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,9 @@ VEC4		blur_sample_with_threshold(ENGINE *engine, t_point2 p,
 {
 	UCHAR		*col;
 	VEC4		vcolor;
-	UINT		i;
 	VEC2		uv;
 	t_point2	size;
+	UINT		i;
 
 	i = 0;
 	size = engine->framebuffer.size;
@@ -116,37 +116,34 @@ void		bloom(ENGINE *engine, t_point2 coord)
 	put_pixel_to_buffer(engine->finalbuffer, coord, vcolor);
 }
 
-float		poisson_ssao(ENGINE *engine, t_point2 p)
+float		poisson_ssao(ENGINE *e, t_point2 p)
 {
-	VEC3		norm;
-	VEC3		pos;
-	VEC3		posdif;
+	VEC3		v[3];
+	float		f[3];
+	t_point2	s;
+	VEC2		uv;
+	VEC2		*d;
 	UINT		i;
-	t_point2	size;
-	float		radius;
-	float		amount;
-	float		angle;
+	
 
 	i = 0;
-	amount = 0;
-	radius = 1.f / *((float*)get_buffer_value(engine->depthbuffer, p)) * 0.04;
-	size = engine->positionbuffer.size;
-	norm = *((VEC3*)get_buffer_value(engine->normalbuffer, p));
-	pos = *((VEC3*)get_buffer_value(engine->positionbuffer, p));
-	VEC2 uv = new_vec2(p.x / (float)size.x, p.y / (float)size.y);
+	f[1] = 0;
+	f[0] = 1.f / *((float*)get_buffer_value(e->depthbuffer, p)) * 0.04;
+	s = e->positionbuffer.size;
+	v[0] = *((VEC3*)get_buffer_value(e->normalbuffer, p));
+	v[1] = *((VEC3*)get_buffer_value(e->positionbuffer, p));
+	uv = new_vec2(p.x / (float)s.x, p.y / (float)s.y);
+	d = e->poisson_disc;
 	while (i < 64)
 	{
-		p = (t_point2){
-			(uv.x + (engine->poisson_disc[i].x * 2 - 1) * radius) * size.x,
-			(uv.y + (engine->poisson_disc[i].y * 2 - 1) * radius) * size.y};
-		p = (t_point2){CLAMP(p.x, 0, size.x - 1), CLAMP(p.y, 0, size.y - 1)};
-		posdif = vec3_sub(*((VEC3*)get_buffer_value(engine->positionbuffer, p)), pos);
-		angle = vec3_dot(norm, vec3_normalize(posdif));
-		if (angle >= 0)
-			amount += (angle * (2.f / (1.f + vec3_length(posdif))));
+		p = (P2){CLAMP((uv.x + (d[i].x * 2 - 1) * f[0]) * s.x, 0, s.x - 1),
+			CLAMP((uv.y + (d[i].y * 2 - 1) * f[0]) * s.y, 0, s.y - 1)};
+		v[2] = vec3_sub(*((VEC3*)get_buffer_value(e->positionbuffer, p)), v[1]);
+		f[2] = vec3_dot(v[0], vec3_normalize(v[2]));
+		f[1] += f[2] >= 0 ? (f[2] * (2.f / (1.f + vec3_length(v[2])))) : 0;
 		i++;
 	}
-	return (CLAMP(1 - amount / 64.f, 0, 1));
+	return (CLAMP(1 - f[1] / 64.f, 0, 1));
 }
 
 void		ssao(ENGINE *engine, t_point2 coord)
@@ -157,7 +154,6 @@ void		ssao(ENGINE *engine, t_point2 coord)
 	col = get_buffer_value(engine->framebuffer, coord);
 	vcolor = vec4_scale(new_vec4(col[2] / 255.f, col[1] / 255.f, col[0] / 255.f, col[3] / 255.f),
 		poisson_ssao(engine, coord));
-	//vcolor.x = vcolor.y = vcolor.z = poisson_ssao(engine, coord);
 	vcolor.w = 1;
 	put_pixel_to_buffer(engine->finalbuffer, coord, vcolor);
 }

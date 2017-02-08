@@ -6,30 +6,34 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/15 11:04:09 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/01/16 14:21:26 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/02/08 18:42:33 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <rt.h>
 
-RTPRIMITIVE	*new_rtprim(SCENE *scene)
+RTPRIMITIVE	*new_rtprim(SCENE *s)
 {
 	RTPRIMITIVE	primitive;
 
 	vml_memset(&primitive, 0, sizeof(RTPRIMITIVE));
-	if (!scene->primitives.length)
-		scene->primitives = new_ezarray(other, scene->primitives.length + 1, sizeof(RTPRIMITIVE));
+	if (!s->primitives.length)
+		s->primitives = new_ezarray(other, s->primitives.length + 1,
+			sizeof(RTPRIMITIVE));
 	else
-		ezarray_push(&scene->primitives, &primitive);
-	return (ezarray_get_index(scene->primitives, scene->primitives.length - 1));
+		ezarray_push(&s->primitives, &primitive);
+	return (ezarray_get_index(s->primitives, s->primitives.length - 1));
 }
 
 CAMERA		*new_camera(SCENE *scene, float fov, float znear, float zfar)
 {
-	LINK	*new_link;
+	t_ezlink	*new_link;
 
 	if (!scene->cameras)
-		new_link = scene->cameras = new_ezlink(other, 1, sizeof(CAMERA));
+	{
+		new_link = new_ezlink(other, 1, sizeof(CAMERA));
+		scene->cameras = new_link;
+	}
 	else
 	{
 		new_link = new_ezlink(other, 1, sizeof(CAMERA));
@@ -41,18 +45,19 @@ CAMERA		*new_camera(SCENE *scene, float fov, float znear, float zfar)
 	return (ezlink_get_data(new_link));
 }
 
-RTTRANSFORM	*new_rttransform(SCENE *scene, VEC3 position, VEC3 rotation, VEC3 scaling)
+RTTRANSFORM	*new_rttransform(SCENE *scene, VEC3 p,
+	VEC3 r, VEC3 s)
 {
-	LINK		*new_link;
+	t_ezlink		*nl;
 
-	new_link = new_ezlink(other, 1, sizeof(RTTRANSFORM));
+	nl = new_ezlink(other, 1, sizeof(RTTRANSFORM));
 	if (!scene->transforms)
-		scene->transforms = new_link;
+		scene->transforms = nl;
 	else
-		ezlink_append(scene->transforms, new_link);
-	((RTTRANSFORM*)ezlink_get_data(new_link))->current = new_transform(position, rotation, scaling, UPVEC);
-	//transform_update(&(((RTTRANSFORM*)ezlink_get_data(new_link))->current));
-	return (ezlink_get_data(new_link));
+		ezlink_append(scene->transforms, nl);
+	((RTTRANSFORM*)ezlink_get_data(nl))->current =
+	new_transform(p, r, s, UPVEC);
+	return (ezlink_get_data(nl));
 }
 
 LIGHT		*new_light(SCENE *scene, UCHAR type, VEC3 position)

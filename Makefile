@@ -6,14 +6,15 @@
 #    By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/11/13 17:17:47 by gpinchon          #+#    #+#              #
-#    Updated: 2017/02/08 16:42:28 by gpinchon         ###   ########.fr        #
+#    Updated: 2017/02/08 18:04:38 by gpinchon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	=	RT
 SRC		=	./src/main.c					\
 			./src/cast_ray.c				\
-			./src/cast_light_ray.c				\
+			./src/cast_light_ray.c			\
+			./src/area_lighting.c			\
 			./src/light_formulas.c			\
 			./src/light_formulas1.c			\
 			./src/compute_lighting.c		\

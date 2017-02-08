@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/02 22:50:09 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/02/07 21:39:38 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/02/08 18:47:55 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@ VEC3	compute_refraction(ENGINE *e, CAST_RETURN *re, RAY *r, float a)
 		return ((VEC3){0, 0, 0});
 	e->refr_iteration++;
 	c = (VEC3){0, 0, 0};
-	d = vec3_refract(r->direction, re->intersect.normal, re->mtl.refraction, a);
+	d = vec3_refract(r->direction, re->intersect.normal,
+		re->mtl.refraction, a);
 	ray = new_ray(vec3_add(re->intersect.position,
 		vec3_scale(d, 0.0001)), d);
 	if ((cr = cast_ray(e, e->active_scene, ray)).intersect.intersects)
@@ -44,23 +45,26 @@ VEC3	compute_reflection(ENGINE *e, CAST_RETURN *re, RAY *r)
 	VEC3		c;
 	RAY			ray;
 	CAST_RETURN	cr;
+	float		ro;
+	INTERSECT	i;
 
 	if (e->refl_iteration >= e->max_refl)
 		return ((VEC3){0, 0, 0});
 	e->refl_iteration++;
 	c = (VEC3){0, 0, 0};
-	ray = new_ray(vec3_add(re->intersect.position, vec3_scale(re->intersect.normal, 0.0001)),
-		vec3_normalize(vec3_fadd(vec3_reflect(r->direction, re->intersect.normal),
-		frand_a_b(-re->mtl.roughness, re->mtl.roughness) * 0.5)));
-	if ((cr = cast_ray(e, e->active_scene, ray)).intersect.intersects && re->mtl.roughness < 1)
+	ro = re->mtl.roughness;
+	i = re->intersect;
+	ray = new_ray(vec3_add(i.position, vec3_scale(i.normal, 0.0001)),
+		vec3_normalize(vec3_fadd(vec3_reflect(r->direction, i.normal),
+		frand_a_b(-ro, ro) * ro)));
+	if ((cr = cast_ray(e, e->active_scene, ray)).intersect.intersects && ro < 1)
 	{
 		get_ret_mtl(&cr);
-		c = vec3_add(c, compute_reflection(e, &cr, &ray));
-		c = vec3_add(c, compute_refraction(e, &cr, &ray, 1.f));
-		c = vec3_add(c, compute_lighting(e, &cr));
-		c = vec3_interp(interp_linear, c, (VEC3){0, 0, 0}, re->mtl.roughness);
-		c = vec3_interp(interp_linear, c, (VEC3){0, 0, 0}, CLAMP(1 - re->mtl.metalness, 0.2, 1));
-		c = vec3_mult(c, re->mtl.reflection_color);
+		c = vec3_mult(vec3_add(compute_lighting(e, &cr),
+		vec3_add(compute_reflection(e, &cr, &ray),
+		compute_refraction(e, &cr, &ray, 1.f))), re->mtl.reflection_color);
+		c = vec3_interp(interp_linear, c, (VEC3){0, 0, 0}, ro);
+		c = vec3_interp(interp_linear, c, (VEC3){0, 0, 0}, fmax(1 - re->mtl.metalness, 0.2));
 	}
 	e->refl_iteration = 0;
 	return (c);
