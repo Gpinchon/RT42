@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/31 11:16:20 by mbarbari          #+#    #+#             */
-/*   Updated: 2017/02/07 13:31:20 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/02/08 17:44:30 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "scene.h"
 #include "parser.h"
 
-int					get_idfct(unsigned long *key, unsigned long val)
+int			get_idfct(unsigned long *key, unsigned long val)
 {
 	int			i;
 
@@ -25,7 +25,7 @@ int					get_idfct(unsigned long *key, unsigned long val)
 	return (-1);
 }
 
-PRIMITIVE			create_primitive(t_value val, t_objprim prim)
+PRIMITIVE	create_primitive(t_value val, t_objprim prim)
 {
 	if (prim.args == args1)
 		return (((cb_1)prim.fct)(json_get(val.data.obj, "radius").data.number));
@@ -36,10 +36,11 @@ PRIMITIVE			create_primitive(t_value val, t_objprim prim)
 		return (((cb_3)prim.fct)(get_vec3_json(json_get(val.data.obj, "a")),
 							get_vec3_json(json_get(val.data.obj, "b")),
 							get_vec3_json(json_get(val.data.obj, "c"))));
-	return (((cb_0)prim.fct)());
+	else
+		return (((cb_0)prim.fct)());
 }
 
-int				key_primitive(unsigned long id)
+int			key_primitive(unsigned long id)
 {
 	static unsigned long	key_primitive[20];
 	static int				isinit = 0;
@@ -59,7 +60,7 @@ int				key_primitive(unsigned long id)
 	return (id == 0 ? -1 : get_idfct(key_primitive, id));
 }
 
-t_objprim			get_fct_primitive(int id)
+t_objprim	get_fct_primitive(int id)
 {
 	static t_objprim	fct_primitive[20];
 	static int			isinit = 0;
@@ -78,4 +79,3 @@ t_objprim			get_fct_primitive(int id)
 	}
 	return (id < 0 ? fct_primitive[19] : fct_primitive[id]);
 }
-

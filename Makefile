@@ -6,7 +6,7 @@
 #    By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/11/13 17:17:47 by gpinchon          #+#    #+#              #
-#    Updated: 2017/02/07 15:59:04 by gpinchon         ###   ########.fr        #
+#    Updated: 2017/02/08 16:42:28 by gpinchon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,7 +48,7 @@ OBJ		=	$(SRC:.c=.o)
 CC		=	gcc
 
 INCLUDE_REP = 	./include \
-				./libs/json/include \
+				./libs/json/inc \
 				./libs/ezmem/include \
 				./libs/sdl_framework/include \
 				./libs/vml/include

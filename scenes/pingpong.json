@@ -73,13 +73,13 @@
 				"alpha" : 0.8
 			},
 			{
-				"name" : "octostone",
-				"base_map" : "res/octostone/octostone_base.bmp",
-				"ao_map" : "res/octostone/octostone_ao.bmp",
-				"rough_map" : "res/octostone/octostone_rough.bmp",
-				"metal_map" : "res/octostone/octostone_metal.bmp",
-				"normal_map" : "res/octostone/octostone_normal.bmp",
-				"height_map" : "res/octostone/octostone_height.bmp",
+				"name" : "bamboo",
+				"base_map" : "res/bamboo/bamboo_base.bmp",
+				"ao_map" : "res/bamboo/bamboo_ao.bmp",
+				"rough_map" : "res/bamboo/bamboo_rough.bmp",
+				"metal_map" : "res/bamboo/bamboo_metal.bmp",
+				"normal_map" : "res/bamboo/bamboo_normal.bmp",
+				"height_map" : "res/bamboo/bamboo_height.bmp",
 				"parallax" : 0.1,
 				"refraction" : 1.52,
 				"refraction_color" : {
@@ -121,7 +121,7 @@
 			{
 				"type" : "DISC",
 				"radius" : 5,
-				"material" : "octostone",
+				"material" : "bamboo",
 				"transform" : {
                   "position" : {
                     "x" : 0,

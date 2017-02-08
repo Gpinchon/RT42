@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/26 17:01:53 by mbarbari          #+#    #+#             */
-/*   Updated: 2017/02/07 14:03:05 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/02/08 16:34:43 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ ENGINE			set_engine(t_value val)
 	options.window_size.y = json_get(json, "window width").data.number;
 	options.internal_size.x = json_get(json, "internal height").data.number;
 	options.internal_size.y = json_get(json, "internal width").data.number;
-	free(json);
 	return (new_engine(options));
 }
 
@@ -66,6 +65,5 @@ ENGINE			create_scene(t_value v)
 	json_foreach_arr(materials.data.arr, &fill_materials, &engine);
 	json_foreach_arr(p.data.arr, &fill_primitive, &engine);
 	json_foreach_arr(lights.data.arr, &fill_lights, &engine);
-	free(v.data.obj);
 	return (engine);
 }

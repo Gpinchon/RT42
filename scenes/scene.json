@@ -102,27 +102,6 @@
 					"y" : 4
 				},
 				"alpha" : 1
-			},
-			{
-				"name" : "brick",
-				"base_map" : "res/brick/brick_base.bmp",
-				"ao_map" : "res/brick/brick_ao.bmp",
-				"rough_map" : "res/brick/brick_rough.bmp",
-				"metal_map" : "res/brick/brick_metal.bmp",
-				"normal_map" : "res/brick/brick_normal.bmp",
-				"height_map" : "res/brick/brick_height.bmp",
-				"parallax" : 0.1,
-				"refraction" : 1.52,
-				"refraction_color" : {
-					"x" : 1,
-					"y" : 1,
-					"z" : 1
-				},
-				"uv_scale" : {
-					"x" : 4,
-					"y" : 4
-				},
-				"alpha" : 1
 			}
 		],
 		"primitives" :
@@ -147,7 +126,7 @@
                     "z" : 0
 				  }
                 },
-				"material" : "brick"
+				"material" : "stained_glass"
 			},
 			{
 				"type" : "PLANE",

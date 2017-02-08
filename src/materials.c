@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/05 22:09:17 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/02/07 16:27:06 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/02/08 17:45:37 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 ** Why not LINK instead of t_link ? Because norminette -_-
 */
 
-MATERIAL	*get_mtl_by_name(SCENE *s, char *n)
+MATERIAL			*get_mtl_by_name(SCENE *s, char *n)
 {
 	t_ezlink	*link;
 
@@ -30,7 +30,7 @@ MATERIAL	*get_mtl_by_name(SCENE *s, char *n)
 	return (link ? ezlink_get_data(link) : NULL);
 }
 
-MATERIAL	*new_material(SCENE *s, char *n)
+MATERIAL			*new_material(SCENE *s, char *n)
 {
 	t_ezlink	*nl;
 	MATERIAL	*mtl;
@@ -62,12 +62,14 @@ static inline void	update_intersection(CAST_RETURN *ret, VEC2 uv)
 	{
 		ret->intersect.position = vec3_add(ret->intersect.position,
 			vec3_scale(ret->intersect.normal,
-				sample_texture_filtered(ret->mtl.height_map, uv).x * ret->mtl.parallax));
-		ret->intersect.distance[0] = vec3_distance(ret->ray.origin, ret->intersect.position);
+				sample_texture_filtered(ret->mtl.height_map, uv).x *
+				ret->mtl.parallax));
+		ret->intersect.distance[0] = vec3_distance(ret->ray.origin,
+			ret->intersect.position);
 	}
 }
 
-void		get_ret_mtl(CAST_RETURN *ret)
+void				get_ret_mtl(CAST_RETURN *ret)
 {
 	VEC2		uv;
 

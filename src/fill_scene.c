@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/31 11:14:10 by mbarbari          #+#    #+#             */
-/*   Updated: 2017/02/06 23:23:37 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/02/08 17:00:03 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,31 +39,32 @@ void		fill_camera(t_value val, void *obj)
 	scene->bloom_threshold = json_get(json, "bloom_threshold").data.number;
 	scene->bloom_intensity = json_get(json, "bloom_intensity").data.number;
 	scene->bloom_radius = json_get(json, "bloom_radius").data.number;
-	free(val.data.obj);
 }
 
-void		fill_map(t_value val, ENGINE *engine, MATERIAL *mtl)
+void		fill_map(t_value val, ENGINE *engine, MATERIAL *m)
 {
 	t_json					*json;
-	void					*fmk;
+	void					*f;
 	t_value					v;
 
 	json = val.data.obj;
-	fmk = engine->framework;
+	f = engine->framework;
 	v = json_get(json, "normal_map");
-	mtl->normal_map = load_image_file(fmk, v.error == TYPE_ERROR ? NULL : v.data.s);
+	m->normal_map = load_image_file(f, v.error == TYPE_ERROR ? NULL :
+		v.data.s);
 	v = json_get(json, "alpha_map");
-	mtl->alpha_map = load_image_file(fmk, v.error == TYPE_ERROR ? NULL : v.data.s);
+	m->alpha_map = load_image_file(f, v.error == TYPE_ERROR ? NULL : v.data.s);
 	v = json_get(json, "height_map");
-	mtl->height_map = load_image_file(fmk, v.error == TYPE_ERROR ? NULL : v.data.s);
+	m->height_map = load_image_file(f, v.error == TYPE_ERROR ? NULL :
+		v.data.s);
 	v = json_get(json, "base_map");
-	mtl->base_map = load_image_file(fmk, v.error == TYPE_ERROR ? NULL : v.data.s);
+	m->base_map = load_image_file(f, v.error == TYPE_ERROR ? NULL : v.data.s);
 	v = json_get(json, "metal_map");
-	mtl->metal_map = load_image_file(fmk, v.error == TYPE_ERROR ? NULL : v.data.s);
+	m->metal_map = load_image_file(f, v.error == TYPE_ERROR ? NULL : v.data.s);
 	v = json_get(json, "rough_map");
-	mtl->rough_map = load_image_file(fmk, v.error == TYPE_ERROR ? NULL : v.data.s);
+	m->rough_map = load_image_file(f, v.error == TYPE_ERROR ? NULL : v.data.s);
 	v = json_get(json, "ao_map");
-	mtl->ao_map = load_image_file(fmk, v.error == TYPE_ERROR ? NULL : v.data.s);
+	m->ao_map = load_image_file(f, v.error == TYPE_ERROR ? NULL : v.data.s);
 }
 
 void		fill_materials(t_value val, int id, void *engine)

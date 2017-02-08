@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:32:51 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/02/07 16:09:50 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/02/08 16:36:38 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,13 +97,16 @@ int		main(int argc, char *argv[])
 {
 	ENGINE			engine;
 	t_callback		callback;
+	t_value			val;
 
 	if (argc < 2 || (argc == 2 && access(argv[1], 0 | F_OK | R_OK) != 0))
 	{
 		write(1, "Cannot find file !\n", 20);
 		exit(0);
 	}
-	engine = create_scene(parser(argv[1]));
+	val = parser(argv[1]);
+	engine = create_scene(val);
+	json_free(val);
 	set_onexit_hook(engine.framework, new_callback(destroy_engine, &engine));
 	callback = new_callback(ssao, &engine);
 	ezarray_push(&engine.post_treatments, &callback);
