@@ -59,9 +59,9 @@
 			{
 				"name" : "plastic",
 				"base_color" : {
-					"x" : 0.6,
-					"y" : 0.6,
-					"z" : 0.6
+					"x" : 1,
+					"y" : 1,
+					"z" : 1
 				},
 				"refraction_color" : {
 					"x" : 1,
@@ -69,7 +69,7 @@
 					"z" : 1
 				},
 				"refraction" : 1,
-				"roughness" : 0.8,
+				"roughness" : 1,
 				"alpha" : 0.8
 			},
 			{

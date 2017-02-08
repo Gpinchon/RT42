@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/02 22:54:03 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/02/07 15:56:08 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/02/08 23:31:42 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,9 @@ static inline VEC3	semi_transparent_shadow(ENGINE *e,
 	final_alpha = r.mtl.alpha;
 	r.ray.origin = vec3_add(r.intersect.position,
 		vec3_scale(r.ray.direction, 0.0001));
+	get_ret_mtl(&r);
+	lcolor = vec3_mult(lcolor, vec3_scale(r.mtl.base_color,
+			1 - r.mtl.alpha));
 	while (final_alpha < 1
 	&& (r = cast_ray(e, e->active_scene, r.ray)).intersect.intersects
 	&& vec3_dot(compute_lightdir(l, r.intersect.position),

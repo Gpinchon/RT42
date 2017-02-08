@@ -164,7 +164,7 @@
 					"z" : 1
 				},
 				"cast_shadow" : true,
-				"power" : 2.0,
+				"power" : 1.0,
 				"attenuation" : 0.002,
 				"falloff" : 5,
 				"spot_size" : 80,
