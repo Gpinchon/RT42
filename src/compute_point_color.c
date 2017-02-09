@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/18 16:15:09 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/02/09 00:02:12 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/02/09 16:56:26 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ VEC3			compute_point_color(LIGHT l, MATERIAL mtl,
 	VEC3	vd;
 	VEC3	ld;
 	VEC3	c;
+	VEC3	lumcol;
 	float	a;
 
 	vd = vec3_normalize(vec3_sub(ray.origin, inter.position));
@@ -52,10 +53,9 @@ VEC3			compute_point_color(LIGHT l, MATERIAL mtl,
 		inter.normal = vec3_negate(inter.normal);
 	else
 		mtl.alpha = 1;
-	c = vec3_add(c, vec3_scale(vec3_mult(mtl.base_color,
-		vec3_scale(vec3_add(l.color, mtl.base_color), a)),
-		CLAMP(DIFFUSE(inter.normal, vd, ld, &mtl), 0, mtl.alpha)));
-	return (vec3_saturate(vec3_scale(vec3_add(c,
-		vec3_scale(vec3_add(l.color, mtl.base_color),
-		CLAMP(SPECULAR(inter.normal, vd, ld, &mtl), 0, mtl.alpha))), a)));
+	lumcol = vec3_mult(mtl.base_color, l.color);
+	c = vec3_add(c, vec3_scale(lumcol, fmax(a * DIFFUSE(inter.normal, vd,
+			ld, &mtl) * mtl.alpha, 0)));
+	return (vec3_add(c, vec3_scale(lumcol,
+		fmax(a * SPECULAR(inter.normal, vd, ld, &mtl) * mtl.alpha, 0))));
 }

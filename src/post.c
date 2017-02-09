@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/17 18:00:44 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/02/08 19:02:39 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/02/09 14:57:20 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,15 +38,15 @@ VEC4		blur_sample(ENGINE *engine, t_point2 c, float intensity)
 	return (vec4_fdiv(vcolor, 64.f));
 }
 
-static inline float		color_to_factor(UCHAR *c)
+/*static inline float		color_to_factor(UCHAR *c)
 {
 	return ((c[0] + c[1] + c[2]) / 255.f / 3.f);
-}
+}*/
 
 VEC4		blur_sample_with_threshold(ENGINE *engine, t_point2 p,
 	float intensity, float threshold)
 {
-	UCHAR		*col;
+	VEC4		c;
 	VEC4		vcolor;
 	VEC2		uv;
 	t_point2	size;
@@ -62,10 +62,9 @@ VEC4		blur_sample_with_threshold(ENGINE *engine, t_point2 p,
 			intensity) * size.x, (uv.y + (engine->poisson_disc[i].y * 2 - 1)
 			* intensity) * size.y};
 		p = (t_point2){CLAMP(p.x, 0, size.x - 1), CLAMP(p.y, 0, size.y - 1)};
-		col = get_buffer_value(engine->framebuffer, p);
-		if (color_to_factor(col) >= threshold)
-			vcolor = vec4_add(vcolor, new_vec4(col[2] / 255.f, col[1] / 255.f,
-			col[0] / 255.f, col[3] / 255.f));
+		c = *((VEC4*)get_buffer_value(engine->hdrbuffer, p));
+		if (vec4_dot(c, new_vec4(0.299, 0.587, 0.114, 1)) > threshold)
+			vcolor = vec4_add(vcolor, vec4_saturate(c));
 		i++;
 	}
 	return (vec4_fdiv(vcolor, 64));

@@ -18,8 +18,8 @@
 			"zfar" : 1000,
             "transform" : {
                "position" : {
-                 "x" : 2.5,
-                 "y" : 2.5,
+                 "x" : 0,
+                 "y" : 4.5,
                  "z" : 2.5
 		       },
                "rotation" : {
@@ -50,7 +50,7 @@
                  "z" : 1
 		       }
 			},
-            "bloom_threshold" : 0.6,
+            "bloom_threshold" : 1,
             "bloom_intensity" : 0.5,
             "bloom_radius" : 0.025
 		},
@@ -68,17 +68,17 @@
 					"y" : 1,
 					"z" : 1
 				},
-				"refraction" : 1,
+				"refraction" : 1.55,
 				"roughness" : 1,
-				"alpha" : 0.8
+				"alpha" : 1
 			},
 			{
 				"name" : "scuffed_aluminium",
 				"base_map" : "res/scuffed_aluminium/scuffed_aluminium_base.bmp",
 				"rough_map" : "res/scuffed_aluminium/scuffed_aluminium_rough.bmp",
-				"metal_map" : "res/scuffed_aluminium/scuffed_aluminium_metal.bmp",
 				"normal_map" : "res/scuffed_aluminium/scuffed_aluminium_normal.bmp",
 				"refraction" : 1.52,
+				"metalness" : 0.3,
 				"refraction_color" : {
 					"x" : 1,
 					"y" : 1,
@@ -158,9 +158,9 @@
 					"z" : 0
 				},
 				"cast_shadow" : true,
-				"power" : 0.66,
-				"attenuation" : 0.002,
-				"falloff" : 5,
+				"power" : 1.5,
+				"attenuation" : 0.00002,
+				"falloff" : 10,
 				"spot_size" : 80,
 				"ambient_coef" : 0
 			},
@@ -169,7 +169,7 @@
 				"position" : {
 					"x" : 0,
 					"y" : 1.5,
-					"z" : 2.5
+					"z" : 3
 				},
 				"direction" : {
 					"x" : 0,
@@ -182,9 +182,9 @@
 					"z" : 0
 				},
 				"cast_shadow" : true,
-				"power" : 0.66,
-				"attenuation" : 0.002,
-				"falloff" : 5,
+				"power" : 1.5,
+				"attenuation" : 0.00002,
+				"falloff" : 10,
 				"spot_size" : 80,
 				"ambient_coef" : 0
 			},
@@ -206,9 +206,9 @@
 					"z" : 1
 				},
 				"cast_shadow" : true,
-				"power" : 0.66,
-				"attenuation" : 0.002,
-				"falloff" : 5,
+				"power" : 1.5,
+				"attenuation" : 0.00002,
+				"falloff" : 10,
 				"spot_size" : 80,
 				"ambient_coef" : 0
 			}

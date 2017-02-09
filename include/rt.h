@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:06:34 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/02/08 19:02:31 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/02/09 14:43:01 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,6 +176,7 @@ typedef struct	s_engine
 	ARRAY		post_treatments;
 	FRAMEBUFFER	framebuffer;
 	FRAMEBUFFER	finalbuffer;
+	FRAMEBUFFER	hdrbuffer;
 	FRAMEBUFFER	positionbuffer;
 	FRAMEBUFFER	normalbuffer;
 	FRAMEBUFFER	depthbuffer;

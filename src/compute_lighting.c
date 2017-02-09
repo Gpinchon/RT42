@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/02 22:54:03 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/02/08 23:31:42 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/02/09 14:49:02 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,5 +81,5 @@ VEC3				compute_lighting(ENGINE *e, CAST_RETURN *r)
 		c = vec3_add(c, compute_shadow(e, r, l));
 		i++;
 	}
-	return (vec3_saturate(c));
+	return (c);
 }

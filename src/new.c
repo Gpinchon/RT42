@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/15 10:44:45 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/02/08 18:30:05 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/02/09 14:47:46 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ void		create_framebuffers(ENGINE *engine, t_engine_opt opt)
 {
 	engine->framebuffer = new_framebuffer(unsigned_char, opt.internal_size, 4);
 	engine->finalbuffer = new_framebuffer(unsigned_char, opt.internal_size, 4);
+	engine->hdrbuffer = new_framebuffer(FLOAT, opt.internal_size, 4);
 	engine->positionbuffer = new_framebuffer(FLOAT, opt.internal_size, 3);
 	engine->normalbuffer = new_framebuffer(FLOAT, opt.internal_size, 3);
 	engine->depthbuffer = new_framebuffer(FLOAT, opt.internal_size, 1);

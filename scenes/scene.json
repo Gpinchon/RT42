@@ -50,7 +50,7 @@
                  "z" : 1
 		       }
 			},
-            "bloom_threshold" : 0.6,
+            "bloom_threshold" : 1,
             "bloom_intensity" : 0.5,
             "bloom_radius" : 0.025
 		},
@@ -164,7 +164,7 @@
 					"z" : 1
 				},
 				"cast_shadow" : true,
-				"power" : 1.0,
+				"power" : 2.0,
 				"attenuation" : 0.002,
 				"falloff" : 5,
 				"spot_size" : 80,

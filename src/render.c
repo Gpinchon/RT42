@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/25 17:49:13 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/02/08 18:53:36 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/02/09 14:49:21 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static inline VEC4	pixel_color(ENGINE *e, CAST_RETURN *r, BOOL area_lights)
 	col = vec3_add(col, compute_refraction(e, r, &r->ray, 1.f));
 	if (area_lights && r->mtl.alpha > 0.0001)
 		col = vec3_add(col, compute_area_lighting(e, r));
-	return (vec3_to_vec4(vec3_saturate(col), 1));
+	return (vec3_to_vec4(col, 1));
 }
 
 static inline void	render_pixel(t_pth_args args, CAMERA cam,
@@ -39,14 +39,16 @@ static inline void	render_pixel(t_pth_args args, CAMERA cam,
 {
 	CAST_RETURN	r;
 	VEC2		nscoord;
+	VEC4		c;
 
 	nscoord = normalize_screen_coord(scoord, f.size);
 	cam.ray.direction = mat4_mult_vec3(cam.m4_view,
 		vec3_normalize((VEC3){nscoord.x, nscoord.y, -2}));
 	if ((r = cast_ray(args.engine, args.scene, cam.ray)).intersect.intersects)
 	{
-		put_pixel_to_buffer(f, scoord, pixel_color(args.engine, &r,
-			args.area_lights));
+		c = pixel_color(args.engine, &r, args.area_lights);
+		put_pixel_to_buffer(f, scoord, c);
+		*((VEC4*)get_buffer_value(args.engine->hdrbuffer, scoord)) = c;
 		fill_buffers(args.engine, scoord, &r);
 	}
 	else
