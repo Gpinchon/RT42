@@ -6,7 +6,7 @@
 #    By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/11/13 17:17:47 by gpinchon          #+#    #+#              #
-#    Updated: 2017/02/08 22:52:20 by gpinchon         ###   ########.fr        #
+#    Updated: 2017/02/10 11:24:02 by mbarbari         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,6 +38,8 @@ SRC		=	./src/main.c					\
 			./src/blit.c					\
 			./src/print_progress.c			\
 			./src/post.c					\
+			./src/blur.c					\
+			./src/ssao.c					\
 			./src/render.c					\
 			./src/create_scene.c			\
 			./src/fill_scene.c				\

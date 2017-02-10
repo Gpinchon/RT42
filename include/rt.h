@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:06:34 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/02/10 10:13:45 by mbarbari         ###   ########.fr       */
+/*   Updated: 2017/02/10 12:02:06 by mbarbari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -215,6 +215,9 @@ void			gamma_correction(ENGINE *engine, t_point2 coord);
 void			depth_of_field(ENGINE *engine, t_point2 coord);
 void			bloom(ENGINE *engine, t_point2 coord);
 void			ssao(ENGINE *engine, t_point2 coord);
+VEC4			blur_sample(ENGINE *engine, t_point2 c, float intensity);
+VEC4			blur_sample_with_threshold(ENGINE *engine, t_point2 p,
+					float intensity, float threshold);
 BOOL			do_post_treatment(ENGINE *engine, t_callback *callback);
 
 VEC2			sphere_uv(u_obj sphere, INTERSECT inter, TRANSFORM *transform);

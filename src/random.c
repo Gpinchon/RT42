@@ -32,7 +32,7 @@ inline float	frand_a_b(float a, float b)
 	return ((random() / (float)RAND_MAX) * (b - a) + a);
 }
 
-static VEC2	new_point_around(float mdist, VEC2 p, VEC2 limits)
+static VEC2		new_point_around(float mdist, VEC2 p, VEC2 limits)
 {
 	float	radius;
 	float	angle;
@@ -45,7 +45,8 @@ static VEC2	new_point_around(float mdist, VEC2 p, VEC2 limits)
 	return (p);
 }
 
-void		generate_poisson_disc(VEC2 *d, UINT dsize, float mdist, VEC2 limits)
+void			generate_poisson_disc(VEC2 *d, UINT dsize, float mdist,
+		VEC2 limits)
 {
 	UINT	i;
 	UINT	index;
