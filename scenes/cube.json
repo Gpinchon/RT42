@@ -179,29 +179,6 @@
 				"material" : "cube"
 			},
 			{
-				"type" : "DISC",
-				"radius" : 0.5,
-				"transform" :
-				{
-					"position" : {
-						"x" : 2.5,
-						"y" : 2.5,
-						"z" : 2.5
-					},
-					"rotation" : {
-						"x" : 1,
-						"y" : 1,
-						"z" : 1
-					},
-					"scaling" : {
-						"x" : 1,
-						"y" : 1,
-						"z" : 1
-					}
-				},
-				"material" : "stained_glass"
-			},
-			{
 				"type" : "PLANE",
 				"transform" :
 				{
