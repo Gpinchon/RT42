@@ -220,9 +220,9 @@ VEC4			blur_sample_with_threshold(ENGINE *engine, t_point2 p,
 					float intensity, float threshold);
 BOOL			do_post_treatment(ENGINE *engine, t_callback *callback);
 
-VEC2			sphere_uv(u_obj sphere, INTERSECT inter, TRANSFORM *transform);
-VEC2			cylinder_uv(u_obj cylinder, INTERSECT inter, TRANSFORM *transform);
-VEC2			plane_uv(u_obj plane, INTERSECT inter, TRANSFORM *transform);
+VEC2			sphere_uv(t_obj sphere, INTERSECT inter, TRANSFORM *transform);
+VEC2			cylinder_uv(t_obj cylinder, INTERSECT inter, TRANSFORM *transform);
+VEC2			plane_uv(t_obj plane, INTERSECT inter, TRANSFORM *transform);
 VEC3			sample_texture(void *image, VEC2 uv);
 VEC3			sample_texture_filtered(void *image, VEC2 uv);
 VEC2			sample_height_map(void *height_map, CAST_RETURN *ret);

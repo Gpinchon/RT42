@@ -6,7 +6,7 @@
 #    By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/11/13 17:17:47 by gpinchon          #+#    #+#              #
-#    Updated: 2017/02/10 11:24:02 by mbarbari         ###   ########.fr        #
+#    Updated: 2017/02/10 19:41:21 by gpinchon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -68,8 +68,6 @@ LIBFILE	=	./libs/json/libjson.a \
 			./libs/sdl_framework/libSDLframework.a \
 			./libs/vml/libvml.a
 
-CFLAGS	=	-Ofast -ffast-math -Wall -Wextra -Werror $(INCLUDE)
-
 ifeq ($(OS), Windows_NT)
 LIBS	=	$(addprefix -L , $(LIBDIR)) -lezmem -lvml -ljson -lmingw32 -lSDLframework -lSDL2main -lSDL2  -lopengl32 -lm
 else ifeq ($(shell uname -s), Darwin)
@@ -79,6 +77,8 @@ else
 LIBS	=	$(addprefix -L , $(LIBDIR)) -lezmem -lvml -ljson -lSDLframework -lSDL2main -lSDL2 -lGL -lm -lpthread
 INCLUDE	=	$(addprefix -I, $(INCLUDE_REP)) -I./include/
 endif
+
+CFLAGS	=	-Ofast -ffast-math -Wall -Wextra -Werror $(INCLUDE)
 
 print-% : ; $(info $* is $(flavor $*) variable set to [$($*)]) @true
 

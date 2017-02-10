@@ -6,13 +6,13 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/16 14:46:46 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/02/10 11:02:14 by mbarbari         ###   ########.fr       */
+/*   Updated: 2017/02/10 19:43:35 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <rt.h>
 
-VEC2		sphere_uv(u_obj sphere, INTERSECT inter, TRANSFORM *t)
+VEC2		sphere_uv(t_obj sphere, INTERSECT inter, TRANSFORM *t)
 {
 	float	phi;
 	VEC2	uv;
@@ -37,7 +37,7 @@ VEC2		sphere_uv(u_obj sphere, INTERSECT inter, TRANSFORM *t)
 	(void)sphere;
 }
 
-VEC2		cylinder_uv(u_obj o, INTERSECT inter, TRANSFORM *t)
+VEC2		cylinder_uv(t_obj o, INTERSECT inter, TRANSFORM *t)
 {
 	VEC2	uv;
 	VEC3	vp;
@@ -66,7 +66,7 @@ VEC2		cylinder_uv(u_obj o, INTERSECT inter, TRANSFORM *t)
 	return (uv);
 }
 
-VEC2	plane_uv(u_obj plane, INTERSECT i, TRANSFORM *tr)
+VEC2	plane_uv(t_obj plane, INTERSECT i, TRANSFORM *tr)
 {
 	VEC2	uv;
 	VEC3	t;
