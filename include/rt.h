@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:06:34 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/02/09 14:43:01 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/02/10 10:13:45 by mbarbari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@
 # define DIFFUSE		oren_nayar_diffuse
 # define SPECULAR		ggx_specular
 # define RENDER_NORMALS	false
-# define NUM_THREADS	16
+# define NUMTHREADS		16
 # define DIV_THREADS	4
 
 typedef struct	s_rttransform

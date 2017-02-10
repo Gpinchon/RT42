@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/30 15:05:05 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/02/08 17:47:54 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/02/10 10:17:16 by mbarbari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ t_point2	*get_scoords(t_point2 size)
 	t_point2	p;
 	t_point2	inc;
 
-	scoords = (t_point2 *)malloc(NUM_THREADS * sizeof(t_point2));
+	scoords = (t_point2 *)malloc(NUMTHREADS * sizeof(t_point2));
 	i = 0;
 	p.y = 0;
 	inc.x = size.x / DIV_THREADS;
@@ -46,7 +46,7 @@ t_point2	*get_limits(t_point2 size)
 	t_point2	p;
 	t_point2	inc;
 
-	limits = (t_point2 *)malloc(NUM_THREADS * sizeof(t_point2));
+	limits = (t_point2 *)malloc(NUMTHREADS * sizeof(t_point2));
 	i = 0;
 	p.y = size.y / DIV_THREADS;
 	inc.x = size.x / DIV_THREADS;
@@ -65,18 +65,18 @@ t_point2	*get_limits(t_point2 size)
 	return (limits);
 }
 
-BOOL	join_threads(pthread_t *threads, ENGINE *e)
+BOOL		join_threads(pthread_t *threads, ENGINE *e)
 {
 	int			t;
 	void		*status;
 
 	t = 0;
-	while (t < NUM_THREADS)
+	while (t < NUMTHREADS)
 	{
-		e->progress_callback(e, t / (float)NUM_THREADS);
+		e->progress_callback(e, t / (float)NUMTHREADS);
 		if (pthread_join(threads[t], &status))
 			return (false);
-		e->progress_callback(e, t / (float)NUM_THREADS);
+		e->progress_callback(e, t / (float)NUMTHREADS);
 		if (e->stop_rendering)
 			return (false);
 		t++;
@@ -84,7 +84,7 @@ BOOL	join_threads(pthread_t *threads, ENGINE *e)
 	return (true);
 }
 
-void	*render_multithread(pthread_t *threads, ENGINE *e, SCENE *scene,
+void		*render_multithread(pthread_t *threads, ENGINE *e, SCENE *scene,
 	BOOL area_lights)
 {
 	int			t;
@@ -93,10 +93,10 @@ void	*render_multithread(pthread_t *threads, ENGINE *e, SCENE *scene,
 	t_point2	*limits;
 
 	t = 0;
-	args = (t_pth_args *)malloc(NUM_THREADS * sizeof(t_pth_args));
+	args = (t_pth_args *)malloc(NUMTHREADS * sizeof(t_pth_args));
 	scoords = get_scoords(e->framebuffer.size);
 	limits = get_limits(e->framebuffer.size);
-	while (t < NUM_THREADS)
+	while (t < NUMTHREADS)
 	{
 		args[t].engine = memcpy(malloc(sizeof(ENGINE)), e, sizeof(ENGINE));
 		args[t].scene = scene;
@@ -112,14 +112,14 @@ void	*render_multithread(pthread_t *threads, ENGINE *e, SCENE *scene,
 	return (args);
 }
 
-BOOL	render_scene(ENGINE *e, SCENE *s)
+BOOL		render_scene(ENGINE *e, SCENE *s)
 {
 	pthread_t	*th;
 	t_pth_args	*arg;
 	BOOL		ret;
 	int			t;
 
-	th = (pthread_t *)malloc(NUM_THREADS * sizeof(pthread_t));
+	th = (pthread_t *)malloc(NUMTHREADS * sizeof(pthread_t));
 	e->active_scene = s;
 	ret = true;
 	if (!(arg = render_multithread(th, e, s, scene_contains_area_light(s))))
@@ -127,7 +127,7 @@ BOOL	render_scene(ENGINE *e, SCENE *s)
 	if (!ret || !join_threads(th, e))
 		ret = false;
 	t = 0;
-	while(t < NUM_THREADS)
+	while (t < NUMTHREADS)
 	{
 		free(arg[t].engine);
 		t++;
