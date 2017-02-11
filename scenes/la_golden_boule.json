@@ -1,0 +1,439 @@
+{
+	"engine" :
+	{
+		"max_refr" : 4,
+		"max_refl" : 4,
+		"area_sampling" : 512,
+		"window height" : 1024,
+		"window width" : 768,
+		"internal height" : 1024,
+		"internal width" : 768
+	},
+	"scene" :
+	{
+		"camera" :
+		{
+			"fov" : 90.0,
+			"znear" : 0.001,
+			"zfar" : 1000,
+            "transform" : {
+               "position" : {
+                 "x" : 0,
+                 "y" : 1.5,
+                 "z" : 3.5
+		       },
+               "rotation" : {
+                 "x" : 0,
+                 "y" : 0,
+                 "z" : 0
+		       },
+               "scaling" : {
+                 "x" : 1,
+                 "y" : 1,
+                 "z" : 1
+		       }
+           },
+			"target" : {
+               "position" : {
+                 "x" : 0,
+                 "y" : 1.5,
+                 "z" : 0
+		       },
+               "rotation" : {
+                 "x" : 0,
+                 "y" : 0,
+                 "z" : 0
+		       },
+               "scaling" : {
+                 "x" : 1,
+                 "y" : 1,
+                 "z" : 1
+		       }
+			},
+            "bloom_threshold" : 1,
+            "bloom_intensity" : 1,
+            "bloom_radius" : 0.025
+		},
+		"materials" :
+		[
+			{
+				"name" : "gold",
+				"rough_map" : "res/scuffed_aluminium/scuffed_aluminium_rough.bmp",
+				"metal_map" : "res/scuffed_aluminium/scuffed_aluminium_metal.bmp",
+				"normal_map" : "res/scuffed_aluminium/scuffed_aluminium_normal.bmp",
+				"refraction" : 1.5,
+				"base_color" : {
+					"x" : 0.6392,
+					"y" : 0.5529,
+					"z" : 0.1098
+				},
+				"reflection_color" : {
+					"x" : 0.6392,
+					"y" : 0.5529,
+					"z" : 0.1098
+				},
+				"refraction_color" : {
+					"x" : 1,
+					"y" : 1,
+					"z" : 1
+				},
+				"uv_scale" : {
+					"x" : 1,
+					"y" : 1
+				},
+				"alpha" : 1
+			},
+			{
+				"name" : "red",
+				"refraction" : 1.5,
+				"base_color" : {
+					"x" : 1,
+					"y" : 0.1,
+					"z" : 0.1
+				},
+				"reflection_color" : {
+					"x" : 1,
+					"y" : 1,
+					"z" : 1
+				},
+				"refraction_color" : {
+					"x" : 1,
+					"y" : 0.1,
+					"z" : 0.1
+				},
+				"uv_scale" : {
+					"x" : 1,
+					"y" : 1
+				},
+				"roughness" : 0,
+				"metalness" : 1,
+				"alpha" : 1
+			},
+			{
+				"name" : "green",
+				"refraction" : 1.5,
+				"base_color" : {
+					"x" : 0.1,
+					"y" : 1,
+					"z" : 0.1
+				},
+				"reflection_color" : {
+					"x" : 0.1,
+					"y" : 1,
+					"z" : 0.1
+				},
+				"refraction_color" : {
+					"x" : 1,
+					"y" : 1,
+					"z" : 1
+				},
+				"uv_scale" : {
+					"x" : 1,
+					"y" : 1
+				},
+				"roughness" : 0,
+				"metalness" : 1,
+				"alpha" : 1
+			},
+			{
+				"name" : "blue",
+				"refraction" : 1.5,
+				"base_color" : {
+					"x" : 0.1,
+					"y" : 0.1,
+					"z" : 1
+				},
+				"reflection_color" : {
+					"x" : 0.1,
+					"y" : 0.1,
+					"z" : 1
+				},
+				"refraction_color" : {
+					"x" : 1,
+					"y" : 1,
+					"z" : 1
+				},
+				"uv_scale" : {
+					"x" : 1,
+					"y" : 1
+				},
+				"roughness" : 0,
+				"metalness" : 1,
+				"alpha" : 1
+			},
+			{
+				"name" : "brick",
+				"base_map" : "res/brick/brick_base.bmp",
+				"ao_map" : "res/brick/brick_ao.bmp",
+				"rough_map" : "res/brick/brick_rough.bmp",
+				"metal_map" : "res/brick/brick_metal.bmp",
+				"normal_map" : "res/brick/brick_normal.bmp",
+				"height_map" : "res/brick/brick_height.bmp",
+				"parallax" : 0.1,
+				"refraction" : 1.5,
+				"base_color" : {
+					"x" : 0.6392,
+					"y" : 0.5529,
+					"z" : 0.1098
+				},
+				"refraction_color" : {
+					"x" : 1,
+					"y" : 1,
+					"z" : 1
+				},
+				"uv_scale" : {
+					"x" : 3,
+					"y" : 3
+				},
+				"alpha" : 1
+			},
+			{
+				"name" : "octostone",
+				"base_map" : "res/octostone/octostone_base.bmp",
+				"ao_map" : "res/octostone/octostone_ao.bmp",
+				"rough_map" : "res/octostone/octostone_rough.bmp",
+				"metal_map" : "res/octostone/octostone_metal.bmp",
+				"normal_map" : "res/octostone/octostone_normal.bmp",
+				"height_map" : "res/octostone/octostone_height.bmp",
+				"parallax" : 0.1,
+				"refraction" : 1.52,
+				"refraction_color" : {
+					"x" : 1,
+					"y" : 1,
+					"z" : 1
+				},
+				"uv_scale" : {
+					"x" : 4,
+					"y" : 4
+				},
+				"alpha" : 1
+			}
+		],
+		"primitives" :
+		[
+			{
+				"type" : "SPHERE",
+                "radius" : 1,
+                "transform" : {
+                  "position" : {
+                    "x" : 0,
+                    "y" : 1.5,
+                    "z" : 0
+				  },
+                  "rotation" : {
+                    "x" : 0,
+                    "y" : 1,
+                    "z" : 0
+				  },
+                  "scaling" : {
+                    "x" : 0,
+                    "y" : 1,
+                    "z" : 0
+				  }
+                },
+				"material" : "gold"
+			},
+			{
+				"type" : "PLANE",
+				"transform" :
+				{
+					"position" : {
+						"x" : 0,
+						"y" : 0,
+						"z" : 0
+					},
+					"rotation" : {
+						"x" : 0,
+						"y" : 1,
+						"z" : 0
+					}
+				},
+				"material" : "octostone"
+			},
+			{
+				"type" : "PLANE",
+				"transform" :
+				{
+					"position" : {
+						"x" : 0,
+						"y" : 0,
+						"z" : -1.5
+					},
+					"rotation" : {
+						"x" : 0,
+						"y" : 0,
+						"z" : 1
+					}
+				},
+				"material" : "brick"
+			},
+			{
+				"type" : "CYLINDER",
+				"radius" : 0.75,
+				"size" : 1.5,
+				"transform" :
+				{
+					"position" : {
+						"x" : 0,
+						"y" : 0.75,
+						"z" : 0
+					},
+					"rotation" : {
+						"x" : 0,
+						"y" : 1,
+						"z" : 0
+					}
+				},
+				"material" : "green"
+			},
+			{
+				"type" : "CYLINDER",
+				"radius" : 1,
+				"size" : 0.5,
+				"transform" :
+				{
+					"position" : {
+						"x" : 0,
+						"y" : 0.25,
+						"z" : 0
+					},
+					"rotation" : {
+						"x" : 0,
+						"y" : 1,
+						"z" : 0
+					}
+				},
+				"material" : "green"
+			},
+			{
+				"type" : "DISC",
+				"radius" : 1,
+				"transform" :
+				{
+					"position" : {
+						"x" : 0,
+						"y" : 0.5,
+						"z" : 0
+					},
+					"rotation" : {
+						"x" : 0,
+						"y" : 1,
+						"z" : 0
+					}
+				},
+				"material" : "green"
+			},
+			{
+				"type" : "CONE",
+				"radius" : 0.5,
+				"transform" :
+				{
+					"position" : {
+						"x" : 1.25,
+						"y" : 2.5,
+						"z" : 0
+					},
+					"rotation" : {
+						"x" : 1,
+						"y" : 1,
+						"z" : 0
+					}
+				},
+				"material" : "red"
+			},
+			{
+				"type" : "CONE",
+				"radius" : 0.5,
+				"transform" :
+				{
+					"position" : {
+						"x" : -1.25,
+						"y" : 2.5,
+						"z" : 0
+					},
+					"rotation" : {
+						"x" : -1,
+						"y" : 1,
+						"z" : 0
+					}
+				},
+				"material" : "blue"
+			}
+		],
+		"lights" :
+		[
+			{
+				"type" : 1,
+				"position" : {
+					"x" : 3,
+					"y" : 0.2,
+					"z" : 3
+				},
+				"direction" : {
+					"x" : -1,
+					"y" : 0.5,
+					"z" : -1
+				},
+				"color" : {
+					"x" : 1,
+					"y" : 0,
+					"z" : 0
+				},
+				"cast_shadow" : true,
+				"power" : 2.0,
+				"attenuation" : 0.002,
+				"falloff" : 5,
+				"spot_size" : 80,
+				"ambient_coef" : 0.2
+			},
+			{
+				"type" : 1,
+				"position" : {
+					"x" : 0,
+					"y" : 0.2,
+					"z" : 3
+				},
+				"direction" : {
+					"x" : 0,
+					"y" : 0.5,
+					"z" : -1
+				},
+				"color" : {
+					"x" : 0,
+					"y" : 1,
+					"z" : 0
+				},
+				"cast_shadow" : true,
+				"power" : 2.0,
+				"attenuation" : 0.002,
+				"falloff" : 5,
+				"spot_size" : 80,
+				"ambient_coef" : 0.2
+			},
+			{
+				"type" : 1,
+				"position" : {
+					"x" : -3,
+					"y" : 0.2,
+					"z" : 3
+				},
+				"direction" : {
+					"x" : 1,
+					"y" : 0.5,
+					"z" : -1
+				},
+				"color" : {
+					"x" : 0,
+					"y" : 0,
+					"z" : 1
+				},
+				"cast_shadow" : true,
+				"power" : 2.0,
+				"attenuation" : 0.002,
+				"falloff" : 5,
+				"spot_size" : 80,
+				"ambient_coef" : 0.2
+			},
+		]
+	}
+}
