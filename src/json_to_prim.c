@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/31 11:16:20 by mbarbari          #+#    #+#             */
-/*   Updated: 2017/02/13 18:39:02 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/02/13 18:52:12 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,17 +25,18 @@ int			get_idfct(unsigned long *key, unsigned long val)
 	return (-1);
 }
 
-PRIMITIVE	create_primitive(t_value val, t_objprim prim)
+PRIMITIVE	create_primitive(t_value v, t_objprim prim)
 {
 	if (prim.args == args1)
-		return (((t_cb_1)prim.fct)(json_get(val.data.obj, "radius").data.number));
+		return (((t_cb_1)prim.fct)(json_get(v.data.obj,
+			"radius").data.number));
 	else if (prim.args == args2)
-		return (((t_cb_2)prim.fct)(json_get(val.data.obj, "radius").data.number,
-					json_get(val.data.obj, "size").data.number));
+		return (((t_cb_2)prim.fct)(json_get(v.data.obj, "radius").data.number,
+					json_get(v.data.obj, "size").data.number));
 	else if (prim.args == args4)
-		return (((t_cb_3)prim.fct)(get_vec3_json(json_get(val.data.obj, "a")),
-							get_vec3_json(json_get(val.data.obj, "b")),
-							get_vec3_json(json_get(val.data.obj, "c"))));
+		return (((t_cb_3)prim.fct)(get_vec3_json(json_get(v.data.obj, "a")),
+							get_vec3_json(json_get(v.data.obj, "b")),
+							get_vec3_json(json_get(v.data.obj, "c"))));
 	else
 		return (((t_cb_0)prim.fct)());
 }

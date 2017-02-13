@@ -6,14 +6,14 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/16 14:46:46 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/02/13 17:10:36 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/02/13 18:55:08 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <rt.h>
 
 /*
-** All hail Cramer's rull !
+** Cramer rules !
 */
 
 VEC2		triangle_uv(t_obj o, INTERSECT i, TRANSFORM *tr)
