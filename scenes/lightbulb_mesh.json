@@ -1,0 +1,424 @@
+{
+	"engine" :
+	{
+		"max_refr" : 4,
+		"max_refl" : 4,
+		"area_sampling" : 512,
+		"window height" : 1024,
+		"window width" : 768,
+		"internal height" : 1024,
+		"internal width" : 768
+	},
+	"scene" :
+	{
+		"camera" :
+		{
+			"fov" : 90.0,
+			"znear" : 0.001,
+			"zfar" : 1000,
+            "transform" : {
+               "position" : {
+                 "x" : 1,
+                 "y" : 4.5,
+                 "z" : 2.5
+		       },
+               "rotation" : {
+                 "x" : 0,
+                 "y" : 0,
+                 "z" : 0
+		       },
+               "scaling" : {
+                 "x" : 1,
+                 "y" : 1,
+                 "z" : 1
+		       }
+           },
+			"target" : {
+               "position" : {
+                 "x" : 0,
+                 "y" : 0,
+                 "z" : 0
+		       },
+               "rotation" : {
+                 "x" : 0,
+                 "y" : 0,
+                 "z" : 0
+		       },
+               "scaling" : {
+                 "x" : 1,
+                 "y" : 1,
+                 "z" : 1
+		       }
+			},
+            "bloom_threshold" : 1,
+            "bloom_intensity" : 1,
+            "bloom_radius" : 0.04
+		},
+		"materials" :
+		[
+			{
+				"name" : "scuffed_aluminium",
+				"base_map" : "res/scuffed_aluminium/scuffed_aluminium_base.bmp",
+				"ao_map" : "res/scuffed_aluminium/scuffed_aluminium_ao.bmp",
+				"rough_map" : "res/scuffed_aluminium/scuffed_aluminium_rough.bmp",
+				"metal_map" : "res/scuffed_aluminium/scuffed_aluminium_metal.bmp",
+				"normal_map" : "res/scuffed_aluminium/scuffed_aluminium_normal.bmp",
+				"refraction" : 1.4906,
+				"refraction_color" : {
+					"x" : 1,
+					"y" : 1,
+					"z" : 1
+				},
+				"uv_scale" : {
+					"x" : 1,
+					"y" : 1
+				},
+				"alpha" : 1
+			},
+			{
+				"name" : "stained_glass",
+				"base_map" : "res/stained_glass/stained_glass_base.bmp",
+				"ao_map" : "res/stained_glass/stained_glass_ao.bmp",
+				"rough_map" : "res/stained_glass/stained_glass_rough.bmp",
+				"metal_map" : "res/stained_glass/stained_glass_metal.bmp",
+				"normal_map" : "res/stained_glass/stained_glass_normal.bmp",
+				"height_map" : "res/stained_glass/stained_glass_height.bmp",
+				"alpha_map" : "res/stained_glass/stained_glass_alpha.bmp",
+				"parallax" : 0.01,
+				"refraction" : 1.25,
+				"refraction_color" : {
+					"x" : 1,
+					"y" : 1,
+					"z" : 1
+				},
+				"uv_scale" : {
+					"x" : 5,
+					"y" : 5
+				},
+				"alpha" : 1,
+				"roughness" : 0.03
+			},
+			{
+				"name" : "bamboo",
+				"base_map" : "res/bamboo/bamboo_base.bmp",
+				"rough_map" : "res/bamboo/bamboo_rough.bmp",
+				"normal_map" : "res/bamboo/bamboo_normal.bmp",
+				"refraction" : 3,
+				"metalness" : 0.3,
+				"refraction_color" : {
+					"x" : 1,
+					"y" : 1,
+					"z" : 1
+				},
+				"uv_scale" : {
+					"x" : 1,
+					"y" : 1
+				},
+				"alpha" : 1
+			}
+		],
+		"primitives" :
+		[
+			{
+				"type" : "SPHERE",
+                "radius" : 0.5,
+                "transform" : {
+                  "position" : {
+                    "x" : 0,
+                    "y" : 5,
+                    "z" : 0
+				  },
+                  "rotation" : {
+                    "x" : 0,
+                    "y" : 1,
+                    "z" : 0
+				  },
+                  "scaling" : {
+                    "x" : 1,
+                    "y" : 1,
+                    "z" : 1
+				  }
+                },
+				"material" : "stained_glass"
+			},
+			{
+				"type" : "MESH",
+				"vectors" :
+				[
+					{"x" : -1.0, "y" : -1.0, "z" : -1.0},
+					{"x" : -1.0, "y" : -1.0, "z" : 1.0},
+					{"x" : -1.0, "y" : 1.0, "z" : 1.0},
+
+					{"x" : 1.0, "y" : 1.0, "z" : -1.0},
+					{"x" : -1.0, "y" : -1.0, "z" : -1.0},
+					{"x" : -1.0, "y" : 1.0, "z" : -1.0},
+
+					{"x" : 1.0, "y" : -1.0, "z" : 1.0},
+					{"x" : -1.0, "y" : -1.0, "z" : -1.0},
+					{"x" : 1.0, "y" : -1.0, "z" : -1.0},
+
+					{"x" : 1.0, "y" : 1.0, "z" : -1.0},
+					{"x" : 1.0, "y" : -1.0, "z" : -1.0},
+					{"x" : -1.0, "y" : -1.0, "z" : -1.0},
+
+					{"x" : -1.0, "y" : -1.0, "z" : -1.0},
+					{"x" : -1.0, "y" : 1.0, "z" : 1.0},
+					{"x" : -1.0, "y" : 1.0, "z" : -1.0},
+
+					{"x" : 1.0, "y" : -1.0, "z" : 1.0},
+					{"x" : -1.0, "y" : -1.0, "z" : 1.0},
+					{"x" : -1.0, "y" : -1.0, "z" : -1.0},
+
+					{"x" : -1.0, "y" : 1.0, "z" : 1.0},
+					{"x" : -1.0, "y" : -1.0, "z" : 1.0},
+					{"x" : 1.0, "y" : -1.0, "z" : 1.0},
+
+					{"x" : 1.0, "y" : 1.0, "z" : 1.0},
+					{"x" : -1.0, "y" : 1.0, "z" : 1.0},
+					{"x" : 1.0, "y" : -1.0, "z" : 1.0},
+
+					{"x" : 1.0, "y" : 1.0, "z" : 1.0},
+					{"x" : 1.0, "y" : -1.0, "z" : -1.0},
+					{"x" : 1.0, "y" : 1.0, "z" : -1.0},
+
+					{"x" : 1.0, "y" : -1.0, "z" : -1.0},
+					{"x" : 1.0, "y" : 1.0, "z" : 1.0},
+					{"x" : 1.0, "y" : -1.0, "z" : 1.0},
+
+					{"x" : 1.0, "y" : 1.0, "z" : 1.0},
+					{"x" : 1.0, "y" : 1.0, "z" : -1.0},
+					{"x" : -1.0, "y" : 1.0, "z" : -1.0},
+
+					{"x" : 1.0, "y" : 1.0, "z" : 1.0},
+					{"x" : -1.0, "y" : 1.0, "z" : -1.0},
+					{"x" : -1.0, "y" : 1.0, "z" : 1.0}
+				],
+				"transform" : {
+                  "position" : {
+                    "x" : 0,
+                    "y" : 1,
+                    "z" : -1.5
+				  },
+                  "rotation" : {
+                    "x" : 1,
+                    "y" : 1,
+                    "z" : 1
+				  },
+                  "scaling" : {
+                    "x" : 0.5,
+                    "y" : 1,
+                    "z" : 0.5
+				  }
+                },
+                "material" : "scuffed_aluminium"
+			},
+			{
+				"type" : "MESH",
+				"vectors" :
+				[
+					{"x" : 1.0, "y" : 0.0, "z" : -1.0},
+					{"x" : 1.0, "y" : 0.0, "z" : 1.0},
+					{"x" : -1.0, "y" : 0.0, "z" : -1.0},
+
+					{"x" : 1.0, "y" : 0.0, "z" : 1.0},
+					{"x" : -1.0, "y" : 0.0, "z" : 1.0},
+					{"x" : -1.0, "y" : 0.0, "z" : -1.0},
+
+					{"x" : 1.0, "y" : 0.0, "z" : -1.0},
+					{"x" : 0.0, "y" : 1.5, "z" : 0.0},
+					{"x" : 1.0, "y" : 0.0, "z" : 1.0},
+
+					{"x" : 1.0, "y" : 0.0, "z" : 1.0},
+					{"x" : 0.0, "y" : 1.5, "z" : 0.0},
+					{"x" : -1.0, "y" : 0.0, "z" : 1.0},
+
+					{"x" : -1.0, "y" : 0.0, "z" : 1.0},
+					{"x" : 0.0, "y" : 1.5, "z" : 0.0},
+					{"x" : -1.0, "y" : 0.0, "z" : -1.0},
+
+					{"x" : -1.0, "y" : 0.0, "z" : -1.0},
+					{"x" : 0.0, "y" : 1.5, "z" : 0.0},
+					{"x" : 1.0, "y" : 0.0, "z" : -1.0},
+				],
+				"transform" : {
+                  "position" : {
+                    "x" : 1.5,
+                    "y" : 0,
+                    "z" : 0
+				  },
+                  "rotation" : {
+                    "x" : 0,
+                    "y" : 1,
+                    "z" : 0
+				  },
+                  "scaling" : {
+                    "x" : 1,
+                    "y" : 1,
+                    "z" : 1
+				  }
+                },
+                "material" : "scuffed_aluminium"
+			},
+			{
+				"type" : "MESH",
+				"vectors" :
+				[
+					{"x" : 0.0, "y" : 1.0, "z" : 0.0},
+					{"x" : -0.5, "y" : 0.0, "z" : -0.5},
+					{"x" : -0.5, "y" : 0.0, "z" : 0.5},
+
+					{"x" : -0.5, "y" : 0.0, "z" : -0.5},
+					{"x" : 0.0, "y" : 1.0, "z" : 0.0},
+					{"x" : 0.5, "y" : 0.0, "z" : -0.5},
+
+					{"x" : -0.5, "y" : 0.0, "z" : 0.5},
+					{"x" : 0.5, "y" : 0.0, "z" : -0.5},
+					{"x" : 0.0, "y" : 1.0, "z" : 0.0},
+
+					{"x" : 0.5, "y" : 0.0, "z" : -0.5},
+					{"x" : -0.5, "y" : 0.0, "z" : 0.5},
+					{"x" : -0.5, "y" : 0.0, "z" : -0.5},
+				],
+				"transform" : {
+                  "position" : {
+                    "x" : -1,
+                    "y" : 0,
+                    "z" : 1
+				  },
+                  "rotation" : {
+                    "x" : 0,
+                    "y" : 1.5,
+                    "z" : 0
+				  },
+                  "scaling" : {
+                    "x" : 1,
+                    "y" : 1,
+                    "z" : 1
+				  }
+                },
+                "material" : "scuffed_aluminium"
+			},
+			{
+				"type" : "DISC",
+				"radius" : 5,
+				"material" : "bamboo",
+				"transform" : {
+                  "position" : {
+                    "x" : 0,
+                    "y" : 0,
+                    "z" : 0
+				  },
+                  "rotation" : {
+                    "x" : 0,
+                    "y" : 1,
+                    "z" : 0
+				  },
+                  "scaling" : {
+                    "x" : 1,
+                    "y" : 1,
+                    "z" : 1
+				  }
+                }
+			}
+		],
+		"lights" :
+		[
+			{
+				"type" : 2,
+				"position" : {
+					"x" : 2,
+					"y" : 0.5,
+					"z" : 2
+				},
+				"direction" : {
+					"x" : 0,
+					"y" : 0,
+					"z" : 0
+				},
+				"color" : {
+					"x" : 1,
+					"y" : 0,
+					"z" : 0
+				},
+				"cast_shadow" : true,
+				"power" : 1.5,
+				"attenuation" : 0.00002,
+				"falloff" : 10,
+				"spot_size" : 80,
+				"ambient_coef" : 0
+			},
+			{
+				"type" : 2,
+				"position" : {
+					"x" : -2,
+					"y" : 0.5,
+					"z" : 2
+				},
+				"direction" : {
+					"x" : 0,
+					"y" : 0,
+					"z" : 0
+				},
+				"color" : {
+					"x" : 0,
+					"y" : 1,
+					"z" : 0
+				},
+				"cast_shadow" : true,
+				"power" : 1.5,
+				"attenuation" : 0.00002,
+				"falloff" : 10,
+				"spot_size" : 80,
+				"ambient_coef" : 0
+			},
+			{
+				"type" : 2,
+				"position" : {
+					"x" : 0,
+					"y" : 0.5,
+					"z" : -2
+				},
+				"direction" : {
+					"x" : 0,
+					"y" : 0,
+					"z" : 0
+				},
+				"color" : {
+					"x" : 0,
+					"y" : 0,
+					"z" : 1
+				},
+				"cast_shadow" : true,
+				"power" : 1.5,
+				"attenuation" : 0.00002,
+				"falloff" : 10,
+				"spot_size" : 80,
+				"ambient_coef" : 0
+			},
+			{
+				"type" : 2,
+				"position" : {
+					"x" : 0,
+					"y" : 5,
+					"z" : 0
+				},
+				"direction" : {
+					"x" : 0,
+					"y" : 0,
+					"z" : 0
+				},
+				"color" : {
+					"x" : 1,
+					"y" : 1,
+					"z" : 1
+				},
+				"cast_shadow" : true,
+				"power" : 0.5,
+				"attenuation" : 0.00002,
+				"falloff" : 10,
+				"spot_size" : 80,
+				"ambient_coef" : 0
+			}
+		]
+	}
+}

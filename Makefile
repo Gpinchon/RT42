@@ -6,7 +6,7 @@
 #    By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/11/13 17:17:47 by gpinchon          #+#    #+#              #
-#    Updated: 2017/02/10 19:41:21 by gpinchon         ###   ########.fr        #
+#    Updated: 2017/02/12 18:05:34 by gpinchon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -78,7 +78,7 @@ LIBS	=	$(addprefix -L , $(LIBDIR)) -lezmem -lvml -ljson -lSDLframework -lSDL2mai
 INCLUDE	=	$(addprefix -I, $(INCLUDE_REP)) -I./include/
 endif
 
-CFLAGS	=	-Ofast -ffast-math -Wall -Wextra -Werror $(INCLUDE)
+CFLAGS	=	-g -ffast-math -Wall -Wextra -Werror $(INCLUDE)
 
 print-% : ; $(info $* is $(flavor $*) variable set to [$($*)]) @true
 

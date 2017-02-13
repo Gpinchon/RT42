@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   scene.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbarbari <mbarbari@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/31 11:16:20 by mbarbari          #+#    #+#             */
-/*   Updated: 2017/01/31 18:23:45 by mbarbari         ###   ########.fr       */
+/*   Updated: 2017/02/12 18:03:36 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ void			fill_camera(t_value val, void *engine);
 void			fill_materials(t_value val, int id, void *obj);
 void			fill_lights(t_value val, int i, void *obj);
 void			fill_primitive(t_value val, int i, void *obj);
+void			fill_mesh(t_value v, int i, void *obj);
 void			fill_map(t_value val, ENGINE *engine, MATERIAL *mtl);
 
 ENGINE			create_scene(t_value val);

@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/25 17:49:13 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/02/09 14:49:21 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/02/12 14:16:16 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void	*render_part(void *pth_args)
 	update_rttransform(c.transform);
 	c.ray.origin = c.transform->current.position;
 	f = args.engine->framebuffer;
-	c.m4_view = mat4_mult_mat4(c.transform->current.transform,
+	c.m4_view = mat4_mult_mat4(c.transform->current.rotate,
 	mat4_perspective(c.fov, f.size.y / (float)f.size.x, c.znear, c.zfar));
 	while (++scoord.y < args.limit.y)
 	{

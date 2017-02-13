@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/26 17:01:53 by mbarbari          #+#    #+#             */
-/*   Updated: 2017/02/08 16:34:43 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/02/12 18:02:34 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ ENGINE			create_scene(t_value v)
 	fill_camera(camera, &engine.scene);
 	json_foreach_arr(materials.data.arr, &fill_materials, &engine);
 	json_foreach_arr(p.data.arr, &fill_primitive, &engine);
+	json_foreach_arr(p.data.arr, &fill_mesh, &engine);
 	json_foreach_arr(lights.data.arr, &fill_lights, &engine);
 	return (engine);
 }
