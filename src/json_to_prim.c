@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/31 11:16:20 by mbarbari          #+#    #+#             */
-/*   Updated: 2017/02/12 17:01:03 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/02/13 18:39:02 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,16 +28,16 @@ int			get_idfct(unsigned long *key, unsigned long val)
 PRIMITIVE	create_primitive(t_value val, t_objprim prim)
 {
 	if (prim.args == args1)
-		return (((cb_1)prim.fct)(json_get(val.data.obj, "radius").data.number));
+		return (((t_cb_1)prim.fct)(json_get(val.data.obj, "radius").data.number));
 	else if (prim.args == args2)
-		return (((cb_2)prim.fct)(json_get(val.data.obj, "radius").data.number,
+		return (((t_cb_2)prim.fct)(json_get(val.data.obj, "radius").data.number,
 					json_get(val.data.obj, "size").data.number));
 	else if (prim.args == args4)
-		return (((cb_3)prim.fct)(get_vec3_json(json_get(val.data.obj, "a")),
+		return (((t_cb_3)prim.fct)(get_vec3_json(json_get(val.data.obj, "a")),
 							get_vec3_json(json_get(val.data.obj, "b")),
 							get_vec3_json(json_get(val.data.obj, "c"))));
 	else
-		return (((cb_0)prim.fct)());
+		return (((t_cb_0)prim.fct)());
 }
 
 int			key_primitive(unsigned long id)

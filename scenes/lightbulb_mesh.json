@@ -4,10 +4,10 @@
 		"max_refr" : 4,
 		"max_refl" : 4,
 		"area_sampling" : 512,
-		"window height" : 1024,
-		"window width" : 768,
-		"internal height" : 1024,
-		"internal width" : 768
+		"window height" : 1920,
+		"window width" : 1080,
+		"internal height" : 1920,
+		"internal width" : 1080
 	},
 	"scene" :
 	{
@@ -18,8 +18,8 @@
 			"zfar" : 1000,
             "transform" : {
                "position" : {
-                 "x" : 1,
-                 "y" : 4.5,
+                 "x" : 2.5,
+                 "y" : 3.5,
                  "z" : 2.5
 		       },
                "rotation" : {
@@ -200,9 +200,9 @@
                     "z" : -1.5
 				  },
                   "rotation" : {
-                    "x" : 1,
-                    "y" : 1,
-                    "z" : 1
+                    "x" : 0,
+                    "y" : 0,
+                    "z" : 0
 				  },
                   "scaling" : {
                     "x" : 0.5,
@@ -257,7 +257,7 @@
                     "z" : 1
 				  }
                 },
-                "material" : "scuffed_aluminium"
+                "material" : "bamboo"
 			},
 			{
 				"type" : "MESH",

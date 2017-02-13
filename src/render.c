@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/25 17:49:13 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/02/12 14:16:16 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/02/13 16:07:29 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ static inline void	render_pixel(t_pth_args args, CAMERA cam,
 		put_pixel_to_buffer(f, scoord, new_vec4(0, 0, 0, 1));
 }
 
-void	*render_part(void *pth_args)
+void				*render_part(void *pth_args)
 {
 	t_point2	scoord;
 	CAMERA		c;

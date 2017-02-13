@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/31 11:14:10 by mbarbari          #+#    #+#             */
-/*   Updated: 2017/02/12 18:48:48 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/02/13 16:09:49 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,50 +115,6 @@ void		fill_lights(t_value val, int i, void *obj)
 	l->falloff = (int)json_get(json, "falloff").data.number;
 	l->spot_size = (int)json_get(json, "spot_size").data.number;
 	l->ambient_coef = (int)json_get(json, "ambient_coef").data.number;
-}
-
-void		get_vectors(SCENE *scene, t_json_arr *arr[3],
-	RTTRANSFORM *t, MATERIAL *m)
-{
-	t_rtprim	*p;
-
-	while (arr[0])
-	{
-		arr[1] = arr[0]->next;
-		arr[2] = arr[1] ? arr[1]->next : NULL;
-		if (!arr[0] || !arr[1] || !arr[2])
-			return ;
-		p = new_rtprim(scene);
-		p->prim = new_triangle(get_vec3_json(arr[0]->value),
-			get_vec3_json(arr[1]->value), get_vec3_json(arr[2]->value));
-		p->transform = t;
-		p->material = m;
-		arr[0] = arr[2]->next;
-	}
-}
-
-void		fill_mesh(t_value v, int i, void *obj)
-{
-	ENGINE					*engine;
-	t_json_arr				*arr[3];
-	t_json					*j;
-	RTTRANSFORM				*t;
-	MATERIAL				*m;
-
-	(void)i;
-	if (djb2(json_get(v.data.obj, "type").data.s) != djb2("MESH"))
-		return ;
-	engine = (ENGINE *)obj;
-	arr[0] = json_get(v.data.obj, "vectors").data.arr;
-	j = json_get(v.data.obj, "transform").data.obj;
-	t = new_rttransform(&engine->scene,
-		get_vec3_json(json_get(j, "position")),
-		get_vec3_json(json_get(j, "rotation")),
-		get_vec3_json(json_get(j, "scaling")));
-	transform_update(&t->current);
-	m = get_mtl_by_name(&engine->scene,
-		json_get(v.data.obj, "material").data.s);
-	get_vectors(&engine->scene, arr, t, m);
 }
 
 void		fill_primitive(t_value v, int i, void *obj)

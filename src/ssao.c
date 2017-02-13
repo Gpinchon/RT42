@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/17 18:00:44 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/02/10 23:40:43 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/02/13 16:11:20 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ float		poisson_ssao(ENGINE *e, t_point2 p, UINT i)
 	{
 		p = (P2){CLAMP((uv.x + (d[i].x * 2 - 1) * f[0]) * s.x, 0, s.x - 1),
 			CLAMP((uv.y + (d[i].y * 2 - 1) * f[0]) * s.y, 0, s.y - 1)};
-		v[2] = vec3_sub(*((VEC3*)get_buffer_value(e->positionbuffer,p)),
+		v[2] = vec3_sub(*((VEC3*)get_buffer_value(e->positionbuffer, p)),
 			v[1]);
 		f[2] = vec3_dot(v[0], vec3_normalize(v[2]));
 		f[1] += f[2] >= 0 ? (f[2] * (2.f / (1.f + vec3_length(v[2])))) : 0;

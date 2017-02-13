@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:32:51 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/02/10 10:31:18 by mbarbari         ###   ########.fr       */
+/*   Updated: 2017/02/13 16:07:13 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,6 @@ int					main(int argc, char *argv[])
 	}
 	val = parser(argv[1]);
 	e = create_scene(val);
-	srandom(time(NULL));
 	json_free(val);
 	set_onexit_hook(e.framework, new_callback(destroy_engine, &e));
 	add_post_treatments(&e);

@@ -6,47 +6,58 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/08 18:03:45 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/02/10 09:44:02 by mbarbari         ###   ########.fr       */
+/*   Updated: 2017/02/13 17:34:38 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <rt.h>
 
-VEC3	compute_area_lighting(ENGINE *engine, CAST_RETURN *ret)
+static inline VEC3	intersect_area_primitive(ENGINE *e, CAST_RETURN *ret,
+	RAY r)
 {
-	UINT	i;
-	UINT	max;
-	VEC3	col;
-	RAY		r;
-	CAST_RETURN	castret;
+	CAST_RETURN	lret;
+	RAY			lray;
 
-	i = 0;
-	col = new_vec3(0, 0, 0);
-	r.origin = vec3_add(ret->intersect.position, vec3_scale(ret->intersect.normal, 0.0001f));
-	RAY		lray = new_ray(engine->active_scene->active_camera->transform->current.position, new_vec3(0, 1, 0));
-	VEC3	ndir = ret->intersect.normal;
-	UINT	hits = 0;
-	max = engine->area_sampling;
-	while (i < max)
+	lret = cast_light_ray(e, e->active_scene, r);
+	if (lret.intersect.intersects && lret.mtl.alpha > 0.0001
+	&& lret.mtl.emitting.power)
 	{
-		castret = cast_light_ray(engine, engine->active_scene, r);
-		if (castret.intersect.intersects && castret.mtl.alpha > 0.0001 && castret.mtl.emitting.power)
-		{
-			hits++;
-			castret.mtl.emitting.position = castret.intersect.position;
-			lray.direction = vec3_negate(r.direction);
-			col = vec3_add(col, compute_point_color(castret.mtl.emitting, ret->mtl, ret->intersect, lray));
-		}
-		ndir = new_vec3(frand_a_b(-1, 1), frand_a_b(-1, 1), frand_a_b(-1, 1));
-		r.direction = vec3_normalize(mat3_mult_vec3(ret->tbn, ndir));
-		i++;
+		lret.mtl.emitting.position = lret.intersect.position;
+		lray.origin = ret->ray.origin;
+		lray.direction = vec3_negate(r.direction);
+		return (compute_point_color(lret.mtl.emitting,
+			ret->mtl, ret->intersect, lray));
 	}
-	if (hits)
-		return (vec3_fdiv(col, hits));
-	else return (col);
+	return (new_vec3(-1, 0, 0));
 }
 
-BOOL	scene_contains_area_light(SCENE *scene)
+VEC3				compute_area_lighting(ENGINE *engine, CAST_RETURN *ret)
+{
+	UINT		max;
+	VEC3		col;
+	VEC3		tcol;
+	RAY			r;
+	UINT		hits;
+
+	col = new_vec3(0, 0, 0);
+	r.origin = vec3_add(ret->intersect.position,
+		vec3_scale(ret->intersect.normal, 0.0001f));
+	hits = 0;
+	max = engine->area_sampling;
+	while (--max)
+	{
+		r.direction = vec3_normalize(mat3_mult_vec3(ret->tbn,
+			new_vec3(frand_a_b(-1, 1), frand_a_b(-1, 1), frand_a_b(-1, 1))));
+		if ((tcol = intersect_area_primitive(engine, ret, r)).x != -1)
+		{
+			hits++;
+			col = vec3_add(col, tcol);
+		}
+	}
+	return (hits ? vec3_fdiv(col, hits) : col);
+}
+
+BOOL				scene_contains_area_light(SCENE *scene)
 {
 	UINT		i;
 	ARRAY		primitives;

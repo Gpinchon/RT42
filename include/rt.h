@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:06:34 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/02/10 12:02:06 by mbarbari         ###   ########.fr       */
+/*   Updated: 2017/02/13 18:37:25 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,14 +48,14 @@
 
 typedef struct	s_rttransform
 {
-	RTTRANSFORM	*parent;
-	RTTRANSFORM	*target;
+	struct s_rttransform	*parent;
+	struct s_rttransform	*target;
 	TRANSFORM	current;
 }				t_rttransform;
 
 typedef struct	s_light
 {
-	RTTRANSFORM	*target;
+	struct s_rttransform	*target;
 	UCHAR		type;
 	UCHAR		cast_shadow;
 	float		power;
@@ -94,7 +94,7 @@ typedef struct	s_mtl
 typedef struct	s_rtprim
 {
 	UCHAR		transformed;
-	RTTRANSFORM	*transform;
+	struct s_rttransform	*transform;
 	MATERIAL	*material;
 	PRIMITIVE	prim;
 }				t_rtprim;
@@ -111,7 +111,7 @@ typedef struct	s_cast_return
 
 typedef struct	s_camera
 {
-	RTTRANSFORM	*transform;
+	struct s_rttransform	*transform;
 	float		fov;
 	float		znear;
 	float		zfar;
@@ -211,6 +211,7 @@ float			frand_a_b(float a, float b);
 /*
 ** Post treatment functions
 */
+
 void			gamma_correction(ENGINE *engine, t_point2 coord);
 void			depth_of_field(ENGINE *engine, t_point2 coord);
 void			bloom(ENGINE *engine, t_point2 coord);
@@ -220,6 +221,7 @@ VEC4			blur_sample_with_threshold(ENGINE *engine, t_point2 p,
 					float intensity, float threshold);
 BOOL			do_post_treatment(ENGINE *engine, t_callback *callback);
 
+VEC2			triangle_uv(t_obj o, INTERSECT i, TRANSFORM *tr);
 VEC2			sphere_uv(t_obj sphere, INTERSECT inter, TRANSFORM *transform);
 VEC2			cylinder_uv(t_obj cylinder, INTERSECT inter, TRANSFORM *transform);
 VEC2			plane_uv(t_obj plane, INTERSECT inter, TRANSFORM *transform);

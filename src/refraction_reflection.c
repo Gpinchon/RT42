@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/02 22:50:09 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/02/10 11:20:25 by mbarbari         ###   ########.fr       */
+/*   Updated: 2017/02/13 18:04:26 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,11 +40,10 @@ VEC3	compute_refraction(ENGINE *e, CAST_RETURN *re, RAY *r, float a)
 	return (c);
 }
 
-VEC3	compute_reflection(ENGINE *e, CAST_RETURN *re, RAY *r)
+VEC3	compute_reflection(ENGINE *e, CAST_RETURN *re, RAY *ra)
 {
 	VEC3		c;
-	RAY			ray;
-	CAST_RETURN	cr;
+	CAST_RETURN	r;
 	float		ro;
 	INTERSECT	i;
 
@@ -54,17 +53,17 @@ VEC3	compute_reflection(ENGINE *e, CAST_RETURN *re, RAY *r)
 	c = (VEC3){0, 0, 0};
 	ro = re->mtl.roughness;
 	i = re->intersect;
-	ray = new_ray(vec3_add(i.position, vec3_scale(i.normal, 0.0001)),
-		vec3_normalize(vec3_fadd(vec3_reflect(r->direction, i.normal),
+	r.ray = new_ray(vec3_add(i.position, vec3_scale(i.normal, 0.0001)),
+		vec3_normalize(vec3_fadd(vec3_reflect(ra->direction, i.normal),
 		frand_a_b(-ro, ro) * ro)));
-	if ((cr = cast_ray(e, e->active_scene, ray)).intersect.intersects && ro < 1)
+	if ((r = cast_ray(e, e->active_scene, r.ray)).intersect.intersects && ro < 1)
 	{
-		get_ret_mtl(&cr);
-		c = vec3_mult(vec3_add(compute_lighting(e, &cr),
-		vec3_add(compute_reflection(e, &cr, &ray),
-		compute_refraction(e, &cr, &ray, 1.f))), re->mtl.reflection_color);
-		c = vec3_interp(interp_linear, c, (VEC3){0, 0, 0}, ro);
-		c = vec3_interp(interp_linear, c, (VEC3){0, 0, 0}, fmax(1 - re->mtl.metalness, 0.2));
+		get_ret_mtl(&r);
+		c = vec3_mult(vec3_add(compute_lighting(e, &r),
+		vec3_add(compute_reflection(e, &r, &r.ray),
+		compute_refraction(e, &r, &r.ray, 1.f))), re->mtl.reflection_color);
+		c = vec3_interp(interp_linear, c, (VEC3){0, 0, 0},
+		(ro + (1 - re->mtl.alpha) + fmax(1 - re->mtl.metalness, 0.2)) / 3.f);
 	}
 	e->refl_iteration = 0;
 	return (c);
