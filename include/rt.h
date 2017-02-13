@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:06:34 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/02/13 18:37:25 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/02/13 19:30:35 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,6 +183,16 @@ typedef struct	s_engine
 	SCENE		scene;
 	VEC2		poisson_disc[64];
 }				t_engine;
+
+typedef struct	s_pdisc
+{
+	t_vec2	point;
+	t_vec2	*disc;
+	UINT	dsize;
+	float	mdist;
+	int		*grid;
+	t_vec2	limits;
+}				t_pdisc;
 
 typedef struct	s_pth_args
 {

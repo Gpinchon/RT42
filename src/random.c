@@ -6,21 +6,20 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/16 11:24:55 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/02/13 18:31:48 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/02/13 19:30:55 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <rt.h>
 
-static char	point_is_too_close(VEC2 p, VEC2 *d, UINT dsize,
-	float mdist, int *grid)
+static char		point_is_too_close(t_pdisc ds)
 {
 	UINT	i;
 
 	i = 0;
-	while (i < dsize)
+	while (i < ds.dsize)
 	{
-		if (grid[i] && vec2_distance(p, d[i]) < mdist)
+		if (ds.grid[i] && vec2_distance(ds.point, ds.disc[i]) < ds.mdist)
 			return (true);
 		i++;
 	}
@@ -32,7 +31,7 @@ inline float	frand_a_b(float a, float b)
 	return ((random() / (float)RAND_MAX) * (b - a) + a);
 }
 
-static VEC2		new_point_around(float mdist, VEC2 p, VEC2 limits)
+static t_vec2	new_point_around(float mdist, t_vec2 p, t_vec2 limits)
 {
 	float	radius;
 	float	angle;
@@ -45,14 +44,36 @@ static VEC2		new_point_around(float mdist, VEC2 p, VEC2 limits)
 	return (p);
 }
 
-void			generate_poisson_disc(VEC2 *d, UINT dsize, float mdist,
-		VEC2 l)
+int				generate_point(t_pdisc ds)
 {
-	UINT	i;
-	UINT	index;
 	UINT	attempts;
+	UINT	index;
+
+	attempts = 0;
+	if (!ds.grid[(index = frand_a_b(0, ds.dsize))])
+		while (++attempts < 1000000)
+		{
+			ds.point = new_point_around(ds.mdist, ds.point, ds.limits);
+			if ((ds.grid[index] = (!point_is_too_close(ds)
+			&& ds.point.x >= ds.limits.x && ds.point.x <= ds.limits.y
+			&& ds.point.y >= ds.limits.x && ds.point.y <= ds.limits.y)))
+			{
+				ds.disc[index] = ds.point;
+				return (1);
+			}
+		}
+	if (attempts >= 1000000)
+		return (-1);
+	return (0);
+}
+
+void			generate_poisson_disc(t_vec2 *d, UINT dsize, float mdist,
+		t_vec2 l)
+{
 	int		g[dsize];
-	VEC2	p;
+	t_vec2	p;
+	int		r;
+	UINT	i;
 
 	i = 1;
 	memset(g, 0, dsize * sizeof(int));
@@ -62,20 +83,9 @@ void			generate_poisson_disc(VEC2 *d, UINT dsize, float mdist,
 	g[0] = 1;
 	while (i < dsize)
 	{
-		attempts = 0;
-		if (!g[(index = frand_a_b(0, dsize))])
-			while (++attempts < 1000000)
-			{
-				p = new_point_around(mdist, p, l);
-				if ((g[index] = (!point_is_too_close(p, d, dsize, mdist, g)
-				&& p.x >= l.x && p.x <= l.y && p.y >= l.x && p.y <= l.y)))
-				{
-					d[index] = p;
-					i++;
-					break ;
-				}
-			}
-		if (attempts >= 1000000)
+		if ((r = generate_point((t_pdisc){p, d, dsize, mdist, g, l})) == 1)
+			i++;
+		else if (r == -1)
 		{
 			generate_poisson_disc(d, dsize, mdist, l);
 			return ;
