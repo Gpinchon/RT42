@@ -6,7 +6,7 @@
 #    By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/11/13 17:17:47 by gpinchon          #+#    #+#              #
-#    Updated: 2017/02/13 16:10:07 by gpinchon         ###   ########.fr        #
+#    Updated: 2017/02/14 17:43:02 by gpinchon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -101,9 +101,7 @@ $(NAME): $(LIBFILE) $(OBJ)
 all: $(NAME)
 
 pull:
-	git pull
-	git submodule update --init --recursive
-	git submodule foreach git pull origin master
+	git fetch --all && git pull origin master
 
 clean:
 	rm -rf $(OBJ)
