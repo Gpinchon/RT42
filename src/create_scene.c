@@ -6,13 +6,20 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/26 17:01:53 by mbarbari          #+#    #+#             */
-/*   Updated: 2017/02/12 18:02:34 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/02/14 19:10:48 by mbarbari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <rt.h>
 #include "scene.h"
 #include "parser.h"
+
+static int		test_jsonclass(t_value val, const char *str)
+{
+	if (json_get(val.data.obj, (char *)str).error == TYPE_ERROR)
+		return (1);
+	return (0);
+}
 
 unsigned long	djb2(const char *str)
 {
@@ -48,23 +55,36 @@ ENGINE			set_engine(t_value val)
 	return (new_engine(options));
 }
 
-ENGINE			create_scene(t_value v)
+ENGINE			fill_scene(t_value val, t_value scene)
 {
 	ENGINE		engine;
-	t_value		camera;
-	t_value		materials;
-	t_value		p;
-	t_value		lights;
 
-	engine = set_engine(v);
-	camera = json_get(json_get(v.data.obj, "scene").data.obj, "camera");
-	materials = json_get(json_get(v.data.obj, "scene").data.obj, "materials");
-	p = json_get(json_get(v.data.obj, "scene").data.obj, "primitives");
-	lights = json_get(json_get(v.data.obj, "scene").data.obj, "lights");
-	fill_camera(camera, &engine.scene);
-	json_foreach_arr(materials.data.arr, &fill_materials, &engine);
-	json_foreach_arr(p.data.arr, &fill_primitive, &engine);
-	json_foreach_arr(p.data.arr, &fill_mesh, &engine);
-	json_foreach_arr(lights.data.arr, &fill_lights, &engine);
+	engine = set_engine(val);
+	if (test_jsonclass(scene, "camera") == 0)
+		fill_camera(json_get(scene.data.obj, "camera"), &engine.scene);
+	if (test_jsonclass(scene, "materials") == 0)
+		json_foreach_arr(json_get(scene.data.obj, "materials").data.arr,
+				&fill_materials, &engine);
+	if (test_jsonclass(scene, "primitives") == 0)
+	{
+		json_foreach_arr(json_get(scene.data.obj, "primitives").data.arr,
+				&fill_primitive, &engine);
+		json_foreach_arr(json_get(scene.data.obj, "primitives").data.arr,
+				&fill_mesh, &engine);
+	}
+	if (test_jsonclass(scene, "lights") == 0)
+		json_foreach_arr(json_get(scene.data.obj, "lights").data.arr,
+				&fill_lights, &engine);
 	return (engine);
+}
+
+ENGINE			create_scene(t_value v)
+{
+	if (test_jsonclass(v, "engine") == 1 || test_jsonclass(v, "scene") == 1)
+	{
+		write(1, "Engine or scene class in json file missing\n", 43);
+		json_free(v);
+		exit(0);
+	}
+	return (fill_scene(v, json_get(v.data.obj, "scene")));
 }
