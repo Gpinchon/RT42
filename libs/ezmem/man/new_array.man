@@ -1,0 +1,21 @@
+.TH man 3 "3 November 2016" "new_ezarray man page"
+.SH NAME
+new_ezarray \- creates a new ezarray of the specified type and size
+.SH PROTOTYPE
+t_ezarray new_ezarray(const TYPE datatype, UINT length, ... [Optional type size if the data is of "other" type])
+.SH DESCRIPTION
+.BR new_ezarray (3)
+creates a new ezarray of the specified type and size. Unlike new_ezarray_dirty,
+.BR new_ezarray (3)
+always returns a 0 filled space.
+.BR new_ezarray_dirty (3)
+is faster but be aware that the newly allocated space may contain any data.
+.SH OPTIONS
+If the data type is not an integer or floating type (a custom structure for instance), use "other" as the data type and specify its size using the variadic argument.
+.SH KNOWN ISSUES
+Creating an ezarray of "other" type without specifying the data size is undefined behavior.
+.B (DON'T DO THIS ! REALLY !)
+.SH SEEL ALSO
+.BR new_ezstring (3), destroy_ezarray (3), destroy_ezstring (3)
+.SH AUTHOR
+PINCHON Guillaume (gpinchon@student.42.fr)

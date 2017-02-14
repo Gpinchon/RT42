@@ -1,0 +1,15 @@
+.TH man 3 "3 November 2016" "ezarray_realloc man page"
+.SH NAME
+ezarray_realloc -\ reallocates the specified ezarray
+.SH PROTOTYPE
+void ezarray_realloc(ARRAY *ezarray, UINT new_length)
+.SH DESCRIPTION
+Reallocates the specified ARRAY (defined t_ezarray) to the new length. All previously stored values are copied to the new ezarray.
+.SH OPTIONS
+None.
+.SH KNOWN ISSUES
+Specifying an ARRAY allocated on the stack without filling it first may result in undefined behavior.
+.SH SEEL ALSO
+.BR new_ezarray (3), ezarray_destroy (3)
+.SH AUTHOR
+PINCHON Guillaume (gpinchon@student.42.fr)

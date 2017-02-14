@@ -1,0 +1,19 @@
+.TH man 3 "3 November 2016" "destroy_ezstring man page"
+.SH NAME
+destroy_ezstring \- destroys the specified ezstring
+.SH PROTOTYPE
+void destroy_ezstring(STRING *str)
+.SH DESCRIPTION
+Destroys the specified STRING (defined t_ezstring). .data is destroyed using
+.BR destroy_ezarray (3)
+the structure is then filled with 0.
+.SH OPTIONS
+None.
+.SH KNOWN ISSUES
+Specifying an STRING allocated on the stack without filling it first may result in undefined behavior and make
+.BR free (3)
+fail.
+.SH SEEL ALSO
+.BR new_ezarray (3), new_ezstring (3), destroy_ezarray (3)
+.SH AUTHOR
+PINCHON Guillaume (gpinchon@student.42.fr)

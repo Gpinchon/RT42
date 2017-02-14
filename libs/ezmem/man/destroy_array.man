@@ -1,0 +1,19 @@
+.TH man 3 "3 November 2016" "destroy_ezarray man page"
+.SH NAME
+destroy_ezarray \- destroys the specified ezarray
+.SH PROTOTYPE
+void destroy_ezarray(ARRAY *ezarray)
+.SH DESCRIPTION
+Destroys the specified ARRAY (defined t_ezarray). Before attempting to 
+.BR free(3)
+the functions first tries to detect if the ARRAY was allocated by checking the value of .total_size. The structure is then filled with 0.
+.SH OPTIONS
+None.
+.SH KNOWN ISSUES
+Specifying an ARRAY allocated on the stack without filling it first may result in undefined behavior and make 
+.BR free (3)
+fail.
+.SH SEEL ALSO
+.BR new_ezarray (3), new_ezstring (3), destroy_ezstring (3), free (3)
+.SH AUTHOR
+PINCHON Guillaume (gpinchon@student.42.fr)

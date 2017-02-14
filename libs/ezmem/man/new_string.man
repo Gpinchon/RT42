@@ -1,0 +1,17 @@
+.TH man 3 "3 November 2016" "new_ezstring man page"
+.SH NAME
+new_ezstring \- creates a new ezstring using specified source
+.SH PROTOTYPE
+t_ezstring new_ezstring(const char *src)
+.SH DESCRIPTION
+Creates and returns a new ezstring using the char *src as the source. The source is then copied to a freshly allocated space using
+.BR new_ezarray_dirty (3)
+with the signed_char type. The returned ezstring contains a pointer to the allocated space named .tostring (basicaly a char* pointer to the allocated void*).
+.SH OPTIONS
+None.
+.SH KNOWN ISSUES
+Directly manipulating the contained ezstring using .tostring won't update .ezarray and .length and could cause issues later on if the length of the ezstring was changed.
+.SH SEEL ALSO
+.BR new_ezarray (3), destroy_ezarray (3), destroy_ezstring (3)
+.SH AUTHOR
+PINCHON Guillaume (gpinchon@student.42.fr)
