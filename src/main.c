@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:32:51 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/02/13 16:07:13 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/02/14 18:20:10 by mbarbari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,11 +57,15 @@ int					main(int argc, char *argv[])
 		write(1, "Cannot find file !\n", 20);
 		exit(0);
 	}
-	val = parser(argv[1]);
-	e = create_scene(val);
-	json_free(val);
-	set_onexit_hook(e.framework, new_callback(destroy_engine, &e));
-	add_post_treatments(&e);
-	init_rendering(&e);
+	if ((val = parser(argv[1])).error == TYPE_ERROR)
+		write(1, "File is not json type\n", 22);
+	else
+	{
+		e = create_scene(val);
+		json_free(val);
+		set_onexit_hook(e.framework, new_callback(destroy_engine, &e));
+		add_post_treatments(&e);
+		init_rendering(&e);
+	}
 	return (0);
 }
