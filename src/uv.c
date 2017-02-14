@@ -6,14 +6,14 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/16 14:46:46 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/02/13 19:00:48 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/02/14 17:01:31 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <rt.h>
 
 /*
-** Cramer rules !
+** Cramer rules ! (boys, they wanna have pun)
 */
 
 VEC2		triangle_uv(t_obj o, INTERSECT i, TRANSFORM *tr)
@@ -96,40 +96,29 @@ VEC2		cylinder_uv(t_obj o, INTERSECT inter, TRANSFORM *t)
 	return (uv);
 }
 
-VEC2	plane_uv(t_obj plane, INTERSECT i, TRANSFORM *tr)
+VEC2	plane_uv(t_obj plane, INTERSECT i, TRANSFORM *t)
 {
-	VEC2	uv;
-	VEC3	t;
-	VEC3	dir;
-	VEC3	b;
-	VEC3	npos;
+	VEC3	tb[2];
+	VEC3	d;
+	VEC3	p;
 	float	alpha;
-	float 	d;
+	float 	l;
 
-	uv = new_vec2(0, 0);
-	t = vec3_normalize(vec3_cross(i.normal, vec3_orthogonal(tr->rotation)));
-	b = vec3_normalize(vec3_negate(vec3_cross(t, i.normal)));
-	d = vec3_distance(i.position, tr->position);
-	dir = vec3_normalize(vec3_sub(tr->position, i.position));
-	alpha = vec3_dot(t, dir);
-	npos = tr->position;
-	while ((alpha = vec3_dot(t, dir)) < 0)
+	tb[0] = vec3_normalize(vec3_cross(i.normal, vec3_orthogonal(t->rotation)));
+	tb[1] = vec3_normalize(vec3_negate(vec3_cross(tb[0], i.normal)));
+	d = vec3_normalize(vec3_sub(t->position, i.position));
+	p = t->position;
+	while ((alpha = vec3_dot(tb[0], d)) < 0)
 	{
-		npos = vec3_add(npos, vec3_scale(t, 10.f));
-		d = vec3_distance(i.position, npos);
-		dir = vec3_normalize(vec3_sub(npos, i.position));
+		p = vec3_add(p, vec3_scale(tb[0], 10.f));
+		d = vec3_normalize(vec3_sub(p, i.position));
 	}
-	npos = tr->position;
-	while (vec3_dot(b, dir) < 0)
-	{
-		npos = vec3_add(npos, vec3_scale(b, 10.f));
-		d = vec3_distance(i.position, npos);
-		dir = vec3_normalize(vec3_sub(npos, i.position));
-		alpha = vec3_dot(t, dir);
-	}
-	if (alpha < 1)
-		uv = new_vec2(fract(cos(acosf(alpha)) * d / 5.f + 1),
-		fract(sin(acosf(alpha)) * d / 5.f + 1));
-	return (uv);
+	while (vec3_dot(tb[1], (d = vec3_normalize(vec3_sub(p, i.position)))) < 0)
+		p = vec3_add(p, vec3_scale(tb[1], 10.f));
+	l = vec3_distance(i.position, p);
+	if ((alpha = vec3_dot(tb[0], d)) < 1)
+		return (new_vec2(fract(cos(acosf(alpha)) * l / 5.f + 1),
+				fract(sin(acosf(alpha)) * l / 5.f + 1)));
+	return (new_vec2(0, 0));
 	(void)plane;
 }
