@@ -16,65 +16,46 @@
 			"fov" : 90.0,
 			"znear" : 0.001,
 			"zfar" : 1000,
-            "transform" : {
-               "position" : {
-                 "x" : 1,
-                 "y" : 2.5,
-                 "z" : 2.5
-		       },
-               "rotation" : {
-                 "x" : 0,
-                 "y" : 0,
-                 "z" : 0
-		       },
-               "scaling" : {
-                 "x" : 1,
-                 "y" : 1,
-                 "z" : 1
-		       }
-           },
-			"target" : {
-               "position" : {
-                 "x" : 0,
-                 "y" : 0,
-                 "z" : 0
-		       },
-               "rotation" : {
-                 "x" : 0,
-                 "y" : 0,
-                 "z" : 0
-		       },
-               "scaling" : {
-                 "x" : 1,
-                 "y" : 1,
-                 "z" : 1
-		       }
-			},
-            "bloom_threshold" : 1,
-            "bloom_intensity" : 1,
-            "bloom_radius" : 0.04
-		},
-		"materials" :
-		[
-			{
-				"name" : "scuffed_plastic_red",
-				"base_map" : "res/scuffed_plastic/scuffed_plastic_red_base.bmp",
-				"ao_map" : "res/scuffed_plastic/scuffed_plastic_ao.bmp",
-				"rough_map" : "res/scuffed_plastic/scuffed_plastic_rough.bmp",
-				"metal_map" : "res/scuffed_plastic/scuffed_plastic_metal.bmp",
-				"normal_map" : "res/scuffed_plastic/scuffed_plastic_normal.bmp",
-				"refraction" : 1.4906,
-				"refraction_color" : {
+			"transform" : {
+				"position" : {
+					"x" : 1,
+					"y" : 2.5,
+					"z" : 2.5
+				},
+				"rotation" : {
+					"x" : 0,
+					"y" : 0,
+					"z" : 0
+				},
+				"scaling" : {
 					"x" : 1,
 					"y" : 1,
 					"z" : 1
-				},
-				"uv_scale" : {
-					"x" : 1,
-					"y" : 1
-				},
-				"alpha" : 1
+				}
 			},
+			"target" : {
+				"position" : {
+					"x" : 0,
+					"y" : 0,
+					"z" : 0
+				},
+				"rotation" : {
+					"x" : 0,
+					"y" : 0,
+					"z" : 0
+				},
+				"scaling" : {
+					"x" : 1,
+					"y" : 1,
+					"z" : 1
+				}
+			},
+			"bloom_threshold" : 1,
+			"bloom_intensity" : 1,
+			"bloom_radius" : 0.04
+		},
+		"materials" :
+		[
 			{
 				"name" : "scuffed_aluminium",
 				"base_map" : "res/scuffed_aluminium/scuffed_aluminium_base.bmp",
@@ -91,25 +72,6 @@
 				"uv_scale" : {
 					"x" : 1,
 					"y" : 1
-				},
-				"alpha" : 1
-			},
-			{
-				"name" : "greasy_metal",
-				"base_map" : "res/greasy_metal/greasy_metal_base.bmp",
-				"ao_map" : "res/greasy_metal/greasy_metal_ao.bmp",
-				"rough_map" : "res/greasy_metal/greasy_metal_rough.bmp",
-				"metal_map" : "res/greasy_metal/greasy_metal_metal.bmp",
-				"normal_map" : "res/greasy_metal/greasy_metal_normal.bmp",
-				"refraction" : 1.5,
-				"refraction_color" : {
-					"x" : 1,
-					"y" : 1,
-					"z" : 1
-				},
-				"uv_scale" : {
-					"x" : 4,
-					"y" : 4
 				},
 				"alpha" : 1
 			},
@@ -159,456 +121,456 @@
 		[
 			{
 				"type" : "SPHERE",
-                "radius" : 0.5,
-                "transform" : {
-                  "position" : {
-                    "x" : 0,
-                    "y" : 5,
-                    "z" : 0
-				  },
-                  "rotation" : {
-                    "x" : 0,
-                    "y" : 1,
-                    "z" : 0
-				  },
-                  "scaling" : {
-                    "x" : 1,
-                    "y" : 1,
-                    "z" : 1
-				  }
-                },
+				"radius" : 0.5,
+				"transform" : {
+					"position" : {
+						"x" : 0,
+						"y" : 5,
+						"z" : 0
+					},
+					"rotation" : {
+						"x" : 0,
+						"y" : 1,
+						"z" : 0
+					},
+					"scaling" : {
+						"x" : 1,
+						"y" : 1,
+						"z" : 1
+					}
+				},
 				"material" : "stained_glass"
 			},
 			{
 				"type" : "TRIANGLE",
 				"a" : {
 					"x" : -1.0,
-                    "y" : -1.0,
-                    "z" : -1.0
+					"y" : -1.0,
+					"z" : -1.0
 				},
 				"b" : {
 					"x" : -1.0,
-                    "y" : -1.0,
-                    "z" : 1.0
+					"y" : -1.0,
+					"z" : 1.0
 				},
 				"c" : {
 					"x" : -1.0,
-                    "y" : 1.0,
-                    "z" : 1.0
+					"y" : 1.0,
+					"z" : 1.0
 				},
-                "transform" : {
-                  "position" : {
-                    "x" : 0,
-                    "y" : 0.5,
-                    "z" : 0
-				  },
-                  "rotation" : {
-                    "x" : 0,
-                    "y" : 0,
-                    "z" : 0
-				  },
-                  "scaling" : {
-                    "x" : 0.5,
-                    "y" : 0.5,
-                    "z" : 0.5
-				  }
-                },
+				"transform" : {
+					"position" : {
+						"x" : 0,
+						"y" : 0.5,
+						"z" : 0
+					},
+					"rotation" : {
+						"x" : 0,
+						"y" : 1,
+						"z" : 0
+					},
+					"scaling" : {
+						"x" : 0.5,
+						"y" : 0.5,
+						"z" : 0.5
+					}
+				},
 				"material" : "scuffed_aluminium"
 			},
 			{
 				"type" : "TRIANGLE",
 				"a" : {
 					"x" : 1.0,
-                    "y" : 1.0,
-                    "z" : -1.0
+					"y" : 1.0,
+					"z" : -1.0
 				},
 				"b" : {
 					"x" : -1.0,
-                    "y" : -1.0,
-                    "z" : -1.0
+					"y" : -1.0,
+					"z" : -1.0
 				},
 				"c" : {
 					"x" : -1.0,
-                    "y" : 1.0,
-                    "z" : -1.0
+					"y" : 1.0,
+					"z" : -1.0
 				},
-                "transform" : {
-                  "position" : {
-                    "x" : 0,
-                    "y" : 0.5,
-                    "z" : 0
-				  },
-                  "rotation" : {
-                    "x" : 0,
-                    "y" : 0,
-                    "z" : 0
-				  },
-                  "scaling" : {
-                    "x" : 0.5,
-                    "y" : 0.5,
-                    "z" : 0.5
-				  }
-                },
+				"transform" : {
+					"position" : {
+						"x" : 0,
+						"y" : 0.5,
+						"z" : 0
+					},
+					"rotation" : {
+						"x" : 0,
+						"y" : 1,
+						"z" : 0
+					},
+					"scaling" : {
+						"x" : 0.5,
+						"y" : 0.5,
+						"z" : 0.5
+					}
+				},
 				"material" : "scuffed_aluminium"
 			},
 			{
 				"type" : "TRIANGLE",
 				"a" : {
 					"x" : 1.0,
-                    "y" : -1.0,
-                    "z" : 1.0
+					"y" : -1.0,
+					"z" : 1.0
 				},
 				"b" : {
 					"x" : -1.0,
-                    "y" : -1.0,
-                    "z" : -1.0
+					"y" : -1.0,
+					"z" : -1.0
 				},
 				"c" : {
 					"x" : 1.0,
-                    "y" : -1.0,
-                    "z" : -1.0
+					"y" : -1.0,
+					"z" : -1.0
 				},
-                "transform" : {
-                  "position" : {
-                    "x" : 0,
-                    "y" : 0.5,
-                    "z" : 0
-				  },
-                  "rotation" : {
-                    "x" : 0,
-                    "y" : 0,
-                    "z" : 0
-				  },
-                  "scaling" : {
-                    "x" : 0.5,
-                    "y" : 0.5,
-                    "z" : 0.5
-				  }
-                },
+				"transform" : {
+					"position" : {
+						"x" : 0,
+						"y" : 0.5,
+						"z" : 0
+					},
+					"rotation" : {
+						"x" : 0,
+						"y" : 1,
+						"z" : 0
+					},
+					"scaling" : {
+						"x" : 0.5,
+						"y" : 0.5,
+						"z" : 0.5
+					}
+				},
 				"material" : "scuffed_aluminium"
 			},
 			{
 				"type" : "TRIANGLE",
 				"a" : {
 					"x" : 1.0,
-                    "y" : 1.0,
-                    "z" : -1.0
+					"y" : 1.0,
+					"z" : -1.0
 				},
 				"b" : {
 					"x" : 1.0,
-                    "y" : -1.0,
-                    "z" : -1.0
+					"y" : -1.0,
+					"z" : -1.0
 				},
 				"c" : {
 					"x" : -1.0,
-                    "y" : -1.0,
-                    "z" : -1.0
+					"y" : -1.0,
+					"z" : -1.0
 				},
-                "transform" : {
-                  "position" : {
-                    "x" : 0,
-                    "y" : 0.5,
-                    "z" : 0
-				  },
-                  "rotation" : {
-                    "x" : 0,
-                    "y" : 0,
-                    "z" : 0
-				  },
-                  "scaling" : {
-                    "x" : 0.5,
-                    "y" : 0.5,
-                    "z" : 0.5
-				  }
-                },
+				"transform" : {
+					"position" : {
+						"x" : 0,
+						"y" : 0.5,
+						"z" : 0
+					},
+					"rotation" : {
+						"x" : 0,
+						"y" : 1,
+						"z" : 0
+					},
+					"scaling" : {
+						"x" : 0.5,
+						"y" : 0.5,
+						"z" : 0.5
+					}
+				},
 				"material" : "scuffed_aluminium"
 			},
 			{
 				"type" : "TRIANGLE",
 				"a" : {
 					"x" : -1.0,
-                    "y" : -1.0,
-                    "z" : -1.0
+					"y" : -1.0,
+					"z" : -1.0
 				},
 				"b" : {
 					"x" : -1.0,
-                    "y" : 1.0,
-                    "z" : 1.0
+					"y" : 1.0,
+					"z" : 1.0
 				},
 				"c" : {
 					"x" : -1.0,
-                    "y" : 1.0,
-                    "z" : -1.0
+					"y" : 1.0,
+					"z" : -1.0
 				},
-                "transform" : {
-                  "position" : {
-                    "x" : 0,
-                    "y" : 0.5,
-                    "z" : 0
-				  },
-                  "rotation" : {
-                    "x" : 0,
-                    "y" : 0,
-                    "z" : 0
-				  },
-                  "scaling" : {
-                    "x" : 0.5,
-                    "y" : 0.5,
-                    "z" : 0.5
-				  }
-                },
+				"transform" : {
+					"position" : {
+						"x" : 0,
+						"y" : 0.5,
+						"z" : 0
+					},
+					"rotation" : {
+						"x" : 0,
+						"y" : 1,
+						"z" : 0
+					},
+					"scaling" : {
+						"x" : 0.5,
+						"y" : 0.5,
+						"z" : 0.5
+					}
+				},
 				"material" : "scuffed_aluminium"
 			},
 			{
 				"type" : "TRIANGLE",
 				"a" : {
 					"x" : 1.0,
-                    "y" : -1.0,
-                    "z" : 1.0
+					"y" : -1.0,
+					"z" : 1.0
 				},
 				"b" : {
 					"x" : -1.0,
-                    "y" : -1.0,
-                    "z" : 1.0
+					"y" : -1.0,
+					"z" : 1.0
 				},
 				"c" : {
 					"x" : -1.0,
-                    "y" : -1.0,
-                    "z" : -1.0
+					"y" : -1.0,
+					"z" : -1.0
 				},
-                "transform" : {
-                  "position" : {
-                    "x" : 0,
-                    "y" : 0.5,
-                    "z" : 0
-				  },
-                  "rotation" : {
-                    "x" : 0,
-                    "y" : 0,
-                    "z" : 0
-				  },
-                  "scaling" : {
-                    "x" : 0.5,
-                    "y" : 0.5,
-                    "z" : 0.5
-				  }
-                },
+				"transform" : {
+					"position" : {
+						"x" : 0,
+						"y" : 0.5,
+						"z" : 0
+					},
+					"rotation" : {
+						"x" : 0,
+						"y" : 1,
+						"z" : 0
+					},
+					"scaling" : {
+						"x" : 0.5,
+						"y" : 0.5,
+						"z" : 0.5
+					}
+				},
 				"material" : "scuffed_aluminium"
 			},
 			{
 				"type" : "TRIANGLE",
 				"a" : {
 					"x" : -1.0,
-                    "y" : 1.0,
-                    "z" : 1.0
+					"y" : 1.0,
+					"z" : 1.0
 				},
 				"b" : {
 					"x" : -1.0,
-                    "y" : -1.0,
-                    "z" : 1.0
+					"y" : -1.0,
+					"z" : 1.0
 				},
 				"c" : {
 					"x" : 1.0,
-                    "y" : -1.0,
-                    "z" : 1.0
+					"y" : -1.0,
+					"z" : 1.0
 				},
-                "transform" : {
-                  "position" : {
-                    "x" : 0,
-                    "y" : 0.5,
-                    "z" : 0
-				  },
-                  "rotation" : {
-                    "x" : 0,
-                    "y" : 0,
-                    "z" : 0
-				  },
-                  "scaling" : {
-                    "x" : 0.5,
-                    "y" : 0.5,
-                    "z" : 0.5
-				  }
-                },
+				"transform" : {
+					"position" : {
+						"x" : 0,
+						"y" : 0.5,
+						"z" : 0
+					},
+					"rotation" : {
+						"x" : 0,
+						"y" : 1,
+						"z" : 0
+					},
+					"scaling" : {
+						"x" : 0.5,
+						"y" : 0.5,
+						"z" : 0.5
+					}
+				},
 				"material" : "scuffed_aluminium"
 			},
 			{
 				"type" : "TRIANGLE",
 				"a" : {
 					"x" : 1.0,
-                    "y" : 1.0,
-                    "z" : 1.0
+					"y" : 1.0,
+					"z" : 1.0
 				},
 				"b" : {
 					"x" : -1.0,
-                    "y" : 1.0,
-                    "z" : 1.0
+					"y" : 1.0,
+					"z" : 1.0
 				},
 				"c" : {
 					"x" : 1.0,
-                    "y" : -1.0,
-                    "z" : 1.0
+					"y" : -1.0,
+					"z" : 1.0
 				},
-                "transform" : {
-                  "position" : {
-                    "x" : 0,
-                    "y" : 0.5,
-                    "z" : 0
-				  },
-                  "rotation" : {
-                    "x" : 0,
-                    "y" : 0,
-                    "z" : 0
-				  },
-                  "scaling" : {
-                    "x" : 0.5,
-                    "y" : 0.5,
-                    "z" : 0.5
-				  }
-                },
+				"transform" : {
+					"position" : {
+						"x" : 0,
+						"y" : 0.5,
+						"z" : 0
+					},
+					"rotation" : {
+						"x" : 0,
+						"y" : 1,
+						"z" : 0
+					},
+					"scaling" : {
+						"x" : 0.5,
+						"y" : 0.5,
+						"z" : 0.5
+					}
+				},
 				"material" : "scuffed_aluminium"
 			},
 			{
 				"type" : "TRIANGLE",
 				"a" : {
 					"x" : 1.0,
-                    "y" : 1.0,
-                    "z" : 1.0
+					"y" : 1.0,
+					"z" : 1.0
 				},
 				"b" : {
 					"x" : 1.0,
-                    "y" : -1.0,
-                    "z" : -1.0
+					"y" : -1.0,
+					"z" : -1.0
 				},
 				"c" : {
 					"x" : 1.0,
-                    "y" : 1.0,
-                    "z" : -1.0
+					"y" : 1.0,
+					"z" : -1.0
 				},
-                "transform" : {
-                  "position" : {
-                    "x" : 0,
-                    "y" : 0.5,
-                    "z" : 0
-				  },
-                  "rotation" : {
-                    "x" : 0,
-                    "y" : 0,
-                    "z" : 0
-				  },
-                  "scaling" : {
-                    "x" : 0.5,
-                    "y" : 0.5,
-                    "z" : 0.5
-				  }
-                },
+				"transform" : {
+					"position" : {
+						"x" : 0,
+						"y" : 0.5,
+						"z" : 0
+					},
+					"rotation" : {
+						"x" : 0,
+						"y" : 1,
+						"z" : 0
+					},
+					"scaling" : {
+						"x" : 0.5,
+						"y" : 0.5,
+						"z" : 0.5
+					}
+				},
 				"material" : "scuffed_aluminium"
 			},
 			{
 				"type" : "TRIANGLE",
 				"a" : {
 					"x" : 1.0,
-                    "y" : -1.0,
-                    "z" : -1.0
+					"y" : -1.0,
+					"z" : -1.0
 				},
 				"b" : {
 					"x" : 1.0,
-                    "y" : 1.0,
-                    "z" : 1.0
+					"y" : 1.0,
+					"z" : 1.0
 				},
 				"c" : {
 					"x" : 1.0,
-                    "y" : -1.0,
-                    "z" : 1.0
+					"y" : -1.0,
+					"z" : 1.0
 				},
-                "transform" : {
-                  "position" : {
-                    "x" : 0,
-                    "y" : 0.5,
-                    "z" : 0
-				  },
-                  "rotation" : {
-                    "x" : 0,
-                    "y" : 0,
-                    "z" : 0
-				  },
-                  "scaling" : {
-                    "x" : 0.5,
-                    "y" : 0.5,
-                    "z" : 0.5
-				  }
-                },
+				"transform" : {
+					"position" : {
+						"x" : 0,
+						"y" : 0.5,
+						"z" : 0
+					},
+					"rotation" : {
+						"x" : 0,
+						"y" : 1,
+						"z" : 0
+					},
+					"scaling" : {
+						"x" : 0.5,
+						"y" : 0.5,
+						"z" : 0.5
+					}
+				},
 				"material" : "scuffed_aluminium"
 			},
 			{
 				"type" : "TRIANGLE",
 				"a" : {
 					"x" : 1.0,
-                    "y" : 1.0,
-                    "z" : 1.0
+					"y" : 1.0,
+					"z" : 1.0
 				},
 				"b" : {
 					"x" : 1.0,
-                    "y" : 1.0,
-                    "z" : -1.0
+					"y" : 1.0,
+					"z" : -1.0
 				},
 				"c" : {
 					"x" : -1.0,
-                    "y" : 1.0,
-                    "z" : -1.0
+					"y" : 1.0,
+					"z" : -1.0
 				},
-                "transform" : {
-                  "position" : {
-                    "x" : 0,
-                    "y" : 0.5,
-                    "z" : 0
-				  },
-                  "rotation" : {
-                    "x" : 0,
-                    "y" : 0,
-                    "z" : 0
-				  },
-                  "scaling" : {
-                    "x" : 0.5,
-                    "y" : 0.5,
-                    "z" : 0.5
-				  }
-                },
+				"transform" : {
+					"position" : {
+						"x" : 0,
+						"y" : 0.5,
+						"z" : 0
+					},
+					"rotation" : {
+						"x" : 0,
+						"y" : 1,
+						"z" : 0
+					},
+					"scaling" : {
+						"x" : 0.5,
+						"y" : 0.5,
+						"z" : 0.5
+					}
+				},
 				"material" : "scuffed_aluminium"
 			},
 			{
 				"type" : "TRIANGLE",
 				"a" : {
 					"x" : 1.0,
-                    "y" : 1.0,
-                    "z" : 1.0
+					"y" : 1.0,
+					"z" : 1.0
 				},
 				"b" : {
 					"x" : -1.0,
-                    "y" : 1.0,
-                    "z" : -1.0
+					"y" : 1.0,
+					"z" : -1.0
 				},
 				"c" : {
 					"x" : -1.0,
-                    "y" : 1.0,
-                    "z" : 1.0
+					"y" : 1.0,
+					"z" : 1.0
 				},
-                "transform" : {
-                  "position" : {
-                    "x" : 0,
-                    "y" : 0.5,
-                    "z" : 0
-				  },
-                  "rotation" : {
-                    "x" : 0,
-                    "y" : 0,
-                    "z" : 0
-				  },
-                  "scaling" : {
-                    "x" : 0.5,
-                    "y" : 0.5,
-                    "z" : 0.5
-				  }
-                },
+				"transform" : {
+					"position" : {
+						"x" : 0,
+						"y" : 0.5,
+						"z" : 0
+					},
+					"rotation" : {
+						"x" : 0,
+						"y" : 1,
+						"z" : 0
+					},
+					"scaling" : {
+						"x" : 0.5,
+						"y" : 0.5,
+						"z" : 0.5
+					}
+				},
 				"material" : "scuffed_aluminium"
 			},
 			{
@@ -616,122 +578,122 @@
 				"radius" : 5,
 				"material" : "bamboo",
 				"transform" : {
-                  "position" : {
-                    "x" : 0,
-                    "y" : 0,
-                    "z" : 0
-				  },
-                  "rotation" : {
-                    "x" : 0,
-                    "y" : 1,
-                    "z" : 0
-				  },
-                  "scaling" : {
-                    "x" : 1,
-                    "y" : 1,
-                    "z" : 1
-				  }
-                }
+					"position" : {
+						"x" : 0,
+						"y" : 0,
+						"z" : 0
+					},
+					"rotation" : {
+						"x" : 0,
+						"y" : 1,
+						"z" : 0
+					},
+					"scaling" : {
+						"x" : 1,
+						"y" : 1,
+						"z" : 1
+					}
+				}
 			}
 		],
-		"lights" :
-		[
-			{
-				"type" : 2,
-				"position" : {
-					"x" : 2,
-					"y" : 0.5,
-					"z" : 2
-				},
-				"direction" : {
-					"x" : 0,
-					"y" : 0,
-					"z" : 0
-				},
-				"color" : {
-					"x" : 1,
-					"y" : 0,
-					"z" : 0
-				},
-				"cast_shadow" : true,
-				"power" : 1.5,
-				"attenuation" : 0.00002,
-				"falloff" : 10,
-				"spot_size" : 80,
-				"ambient_coef" : 0
-			},
-			{
-				"type" : 2,
-				"position" : {
-					"x" : -2,
-					"y" : 0.5,
-					"z" : 2
-				},
-				"direction" : {
-					"x" : 0,
-					"y" : 0,
-					"z" : 0
-				},
-				"color" : {
-					"x" : 0,
-					"y" : 1,
-					"z" : 0
-				},
-				"cast_shadow" : true,
-				"power" : 1.5,
-				"attenuation" : 0.00002,
-				"falloff" : 10,
-				"spot_size" : 80,
-				"ambient_coef" : 0
-			},
-			{
-				"type" : 2,
-				"position" : {
-					"x" : 0,
-					"y" : 0.5,
-					"z" : -2
-				},
-				"direction" : {
-					"x" : 0,
-					"y" : 0,
-					"z" : 0
-				},
-				"color" : {
-					"x" : 0,
-					"y" : 0,
-					"z" : 1
-				},
-				"cast_shadow" : true,
-				"power" : 1.5,
-				"attenuation" : 0.00002,
-				"falloff" : 10,
-				"spot_size" : 80,
-				"ambient_coef" : 0
-			},
-			{
-				"type" : 2,
-				"position" : {
-					"x" : 0,
-					"y" : 5,
-					"z" : 0
-				},
-				"direction" : {
-					"x" : 0,
-					"y" : 0,
-					"z" : 0
-				},
-				"color" : {
-					"x" : 1,
-					"y" : 1,
-					"z" : 1
-				},
-				"cast_shadow" : true,
-				"power" : 1,
-				"attenuation" : 0.00002,
-				"falloff" : 10,
-				"spot_size" : 80,
-				"ambient_coef" : 0
-			}
-		]
+"lights" :
+[
+	{
+		"type" : 2,
+		"position" : {
+			"x" : 2,
+			"y" : 0.5,
+			"z" : 2
+		},
+		"direction" : {
+			"x" : 0,
+			"y" : 0,
+			"z" : 0
+		},
+		"color" : {
+			"x" : 1,
+			"y" : 0,
+			"z" : 0
+		},
+		"cast_shadow" : true,
+		"power" : 1.5,
+		"attenuation" : 0.00002,
+		"falloff" : 10,
+		"spot_size" : 80,
+		"ambient_coef" : 0
+	},
+	{
+		"type" : 2,
+		"position" : {
+			"x" : -2,
+			"y" : 0.5,
+			"z" : 2
+		},
+		"direction" : {
+			"x" : 0,
+			"y" : 0,
+			"z" : 0
+		},
+		"color" : {
+			"x" : 0,
+			"y" : 1,
+			"z" : 0
+		},
+		"cast_shadow" : true,
+		"power" : 1.5,
+		"attenuation" : 0.00002,
+		"falloff" : 10,
+		"spot_size" : 80,
+		"ambient_coef" : 0
+	},
+	{
+		"type" : 2,
+		"position" : {
+			"x" : 0,
+			"y" : 0.5,
+			"z" : -2
+		},
+		"direction" : {
+			"x" : 0,
+			"y" : 0,
+			"z" : 0
+		},
+		"color" : {
+			"x" : 0,
+			"y" : 0,
+			"z" : 1
+		},
+		"cast_shadow" : true,
+		"power" : 1.5,
+		"attenuation" : 0.00002,
+		"falloff" : 10,
+		"spot_size" : 80,
+		"ambient_coef" : 0
+	},
+	{
+		"type" : 2,
+		"position" : {
+			"x" : 0,
+			"y" : 5,
+			"z" : 0
+		},
+		"direction" : {
+			"x" : 0,
+			"y" : 0,
+			"z" : 0
+		},
+		"color" : {
+			"x" : 1,
+			"y" : 1,
+			"z" : 1
+		},
+		"cast_shadow" : true,
+		"power" : 1,
+		"attenuation" : 0.00002,
+		"falloff" : 10,
+		"spot_size" : 80,
+		"ambient_coef" : 0
 	}
+]
+}
 }
