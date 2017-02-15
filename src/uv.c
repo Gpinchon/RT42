@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/16 14:46:46 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/02/14 17:01:31 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/02/15 15:31:01 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 ** Cramer rules ! (boys, they wanna have pun)
 */
 
-VEC2		triangle_uv(t_obj o, INTERSECT i, TRANSFORM *tr)
+VEC2	triangle_uv(t_obj o, INTERSECT i, TRANSFORM *tr)
 {
 	VEC3		tp[3];
 	VEC2		uv;
@@ -42,7 +42,7 @@ VEC2		triangle_uv(t_obj o, INTERSECT i, TRANSFORM *tr)
 	return (uv);
 }
 
-VEC2		sphere_uv(t_obj sphere, INTERSECT inter, TRANSFORM *t)
+VEC2	sphere_uv(t_obj sphere, INTERSECT inter, TRANSFORM *t)
 {
 	float	phi;
 	VEC2	uv;
@@ -67,7 +67,7 @@ VEC2		sphere_uv(t_obj sphere, INTERSECT inter, TRANSFORM *t)
 	(void)sphere;
 }
 
-VEC2		cylinder_uv(t_obj o, INTERSECT inter, TRANSFORM *t)
+VEC2	cylinder_uv(t_obj o, INTERSECT inter, TRANSFORM *t)
 {
 	VEC2	uv;
 	VEC3	vp;
@@ -102,7 +102,7 @@ VEC2	plane_uv(t_obj plane, INTERSECT i, TRANSFORM *t)
 	VEC3	d;
 	VEC3	p;
 	float	alpha;
-	float 	l;
+	float	l;
 
 	tb[0] = vec3_normalize(vec3_cross(i.normal, vec3_orthogonal(t->rotation)));
 	tb[1] = vec3_normalize(vec3_negate(vec3_cross(tb[0], i.normal)));
@@ -117,8 +117,10 @@ VEC2	plane_uv(t_obj plane, INTERSECT i, TRANSFORM *t)
 		p = vec3_add(p, vec3_scale(tb[1], 10.f));
 	l = vec3_distance(i.position, p);
 	if ((alpha = vec3_dot(tb[0], d)) < 1)
+	{
 		return (new_vec2(fract(cos(acosf(alpha)) * l / 5.f + 1),
 				fract(sin(acosf(alpha)) * l / 5.f + 1)));
+	}
 	return (new_vec2(0, 0));
 	(void)plane;
 }
