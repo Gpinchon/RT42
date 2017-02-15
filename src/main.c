@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/13 17:32:51 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/02/14 18:20:10 by mbarbari         ###   ########.fr       */
+/*   Updated: 2017/02/15 16:37:14 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int					main(int argc, char *argv[])
 	ENGINE			e;
 	t_value			val;
 
-	if (argc < 2 || (argc == 2 && access(argv[1], 0 | F_OK | R_OK) != 0))
+	if (argc < 2 || (argc == 2 && access(argv[1], F_OK | R_OK) != 0))
 	{
 		write(1, "Cannot find file !\n", 20);
 		exit(0);

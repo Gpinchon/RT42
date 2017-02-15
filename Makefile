@@ -6,7 +6,7 @@
 #    By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/11/13 17:17:47 by gpinchon          #+#    #+#              #
-#    Updated: 2017/02/14 17:43:02 by gpinchon         ###   ########.fr        #
+#    Updated: 2017/02/15 17:08:20 by gpinchon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -83,22 +83,12 @@ CFLAGS	=	-Ofast -ffast-math -Wall -Wextra -Werror $(INCLUDE)
 
 print-% : ; $(info $* is $(flavor $*) variable set to [$($*)]) @true
 
-$(NAME): $(LIBFILE) $(OBJ)
+all: $(NAME)
+
+$(NAME): $(OBJ)
+	$(foreach dir, $(LIBDIR), $(MAKE) -C $(dir) && ) true
 	$(CC) $(CFLAGS) $(OBJ) $(LIBS) -o $(NAME)
 
-./libs/json/libjson.a:
-	$(MAKE) -C ./libs/json/
-
-./libs/ezmem/libezmem.a:
-	$(MAKE) -C ./libs/ezmem/
-
-./libs/sdl_framework/libSDLframework.a:
-	$(MAKE) -C ./libs/sdl_framework/
-
-./libs/vml/libvml.a:
-	$(MAKE) -C ./libs/vml/
-
-all: $(NAME)
 
 pull:
 	git fetch --all && git pull origin master

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbarbari <mbarbari@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/10/28 12:50:55 by mbarbari          #+#    #+#             */
-/*   Updated: 2017/02/08 16:45:45 by mbarbari         ###   ########.fr       */
+/*   Updated: 2017/02/15 16:48:13 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,15 +34,18 @@ t_json		*parse_obj2(char **json, t_json *value)
 
 t_json		*parse_obj(char **json)
 {
-	t_json *value;
+	t_json	*value;
+	size_t	size;
 
-	value = (t_json*)ft_memalloc(sizeof(t_json));
 	skip_blanks(json);
 	if (**json != '"')
 		return (NULL);
 	*json += 1;
-	value->key = ft_strsub(*json, 0, sub_pointer(ft_strchr(*json + 1, '"'),
-		*json));
+	size = sub_pointer(ft_strchr(*json + 1, '"'), *json);
+	if (size >= 5242880)
+		return (NULL);
+	value = (t_json*)ft_memalloc(sizeof(t_json));
+	value->key = ft_strsub(*json, 0, size);
 	*json = *json + ft_strlen(value->key) + 1;
 	skip_blanks(json);
 	if (**json != ':')
@@ -89,7 +92,7 @@ t_value		parser(char *file_name)
 	value = (t_value){.type = 0, .error = 0};
 	fd = open(file_name, O_RDONLY);
 	create_stream(fd, &stream);
-	while (read_until(&stream, &line, '\0') > 0)
+	while (!value.error && read_until(&stream, &line, '\0') > 0)
 	{
 		linetofree = line;
 		if (*line == '{')
