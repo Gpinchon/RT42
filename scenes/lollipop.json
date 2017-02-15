@@ -233,7 +233,7 @@
 					"z" : 0
 				},
 				"cast_shadow" : true,
-				"power" : 1,
+				"power" : 1.5,
 				"attenuation" : 0.0002,
 				"falloff" : 10,
 				"spot_size" : 80,
@@ -257,7 +257,7 @@
 					"z" : 0
 				},
 				"cast_shadow" : true,
-				"power" : 1,
+				"power" : 1.5,
 				"attenuation" : 0.0002,
 				"falloff" : 10,
 				"spot_size" : 80,
@@ -281,7 +281,7 @@
 					"z" : 1
 				},
 				"cast_shadow" : true,
-				"power" : 1,
+				"power" : 1.5,
 				"attenuation" : 0.0002,
 				"falloff" : 10,
 				"spot_size" : 80,

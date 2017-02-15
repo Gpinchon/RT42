@@ -6,7 +6,7 @@
 /*   By: gpinchon <gpinchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/02 22:50:09 by gpinchon          #+#    #+#             */
-/*   Updated: 2017/02/13 18:53:45 by gpinchon         ###   ########.fr       */
+/*   Updated: 2017/02/15 18:20:37 by gpinchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,8 @@ VEC3	compute_refraction(ENGINE *e, CAST_RETURN *re, RAY *r, float a)
 		get_ret_mtl(&cr);
 		c = vec3_add(c, compute_refraction(e, &cr, &ray, re->mtl.refraction));
 		c = vec3_add(c, compute_lighting(e, &cr));
-		c = vec3_interp(interp_linear, c, (VEC3){0, 0, 0}, re->mtl.alpha);
-		c = vec3_interp(interp_linear, c, (VEC3){0, 0, 0}, re->mtl.roughness);
+		c = vec3_interp(interp_linear, c, (VEC3){0, 0, 0},
+			fmax(re->mtl.alpha, re->mtl.roughness));
 		c = vec3_mult(c, re->mtl.refraction_color);
 	}
 	e->refr_iteration = 0;
@@ -63,7 +63,7 @@ VEC3	compute_reflection(ENGINE *e, CAST_RETURN *re, RAY *ra)
 		vec3_add(compute_reflection(e, &r, &r.ray),
 		compute_refraction(e, &r, &r.ray, 1.f))), re->mtl.reflection_color);
 		c = vec3_interp(interp_linear, c, (VEC3){0, 0, 0},
-		(ro + (1 - re->mtl.alpha) + fmax(1 - re->mtl.metalness, 0.2)) / 3.f);
+		fmax(fmax(ro, 1 - re->mtl.alpha), fmax(1 - re->mtl.metalness, 0.03)));
 	}
 	e->refl_iteration = 0;
 	return (c);
