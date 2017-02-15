@@ -158,7 +158,7 @@
 					"z" : 0
 				},
 				"cast_shadow" : true,
-				"power" : 1,
+				"power" : 1.5,
 				"attenuation" : 0.00002,
 				"falloff" : 10,
 				"spot_size" : 80,
@@ -178,11 +178,11 @@
 				},
 				"color" : {
 					"x" : 0,
-					"y" : 1,
-					"z" : 0
+					"y" : 0,
+					"z" : 1
 				},
 				"cast_shadow" : true,
-				"power" : 1,
+				"power" : 1.5,
 				"attenuation" : 0.00002,
 				"falloff" : 10,
 				"spot_size" : 80,
@@ -202,11 +202,11 @@
 				},
 				"color" : {
 					"x" : 0,
-					"y" : 0,
-					"z" : 1
+					"y" : 1,
+					"z" : 0
 				},
 				"cast_shadow" : true,
-				"power" : 1,
+				"power" : 1.5,
 				"attenuation" : 0.00002,
 				"falloff" : 10,
 				"spot_size" : 80,
