@@ -1,7 +1,9 @@
 # RT42
 Ray Tracer de l'école 42
-# Compilating and running the project
+
+# Compiling and running the project
 Git clone the repository
+
 "Make pull" the latest versions of the modules
 
 "Make" the executable
