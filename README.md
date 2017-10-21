@@ -13,11 +13,11 @@ run RT ./scenes/[SceneName].json
 Enjoy.
 
 # Previews
-![Steep Parallax mapping](/previews/cube.png)
-![Emitting Materials](/previews/area256.png)
-![PBR Materials](/previews/la_golden_boule.png)
-![Transparent Materials Projection](/previews/lightbulb.png)
-![Additive Lights](/previews/pingpong.png)
+![Steep Parallax mapping](/previews/cube.png "Steep Parallax mapping")
+![Emitting Materials](/previews/area256.png "Emitting Materials")
+![PBR Materials](/previews/la_golden_boule.png "PBR Materials")
+![Transparent Materials Projection](/previews/lightbulb.png "Transparent Materials Projection")
+![Additive Lights](/previews/pingpong.png "Additive Lights")
 
 # [CREDITS]
 Thanks to BarbareBzhdev for the JSON parser, Makefile corrections
